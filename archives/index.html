@@ -9,7 +9,7 @@
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
 <title>赵悦岑&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1644799293176">
+<link rel="shortcut icon" href="/favicon.ico?v=1644801198352">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -551,15 +551,15 @@
 &lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
 using namespace std;
 int n;
-bool a[1000][1000],b[1000];		//a是邻接矩阵，b判断是否遍历过 
+bool a[1000][1000],b[1000];     //a是邻接矩阵，b判断是否遍历过 
 void dfs(int m)
 {
-    b[m]=true;					//标记已走过 
+    b[m]=true;      //标记已走过 
     for(int i=1;i&amp;lt;=n;++i) 
     {
-        if(a[m][i]&amp;amp;&amp;amp;!b[i])		//如果有一条边从x到达i且i没有被遍历过 
+        if(a[m][i]&amp;amp;&amp;amp;!b[i])      //如果有一条边从x到达i且i没有被遍历过 
         {
-            dfs(i);				//走到i	
+            dfs(i);     //走到i	
         }
     }
 }
@@ -570,14 +570,14 @@ int main()
     {
         for(int j=1;j&amp;lt;=n;++j)
         {
-            scanf(&amp;quot;%d&amp;quot;,&amp;amp;a[i][j]);	//输入 
+            scanf(&amp;quot;%d&amp;quot;,&amp;amp;a[i][j]);       //输入 
         }
     }
     for(int i=1;i&amp;lt;=n;++i)
     {
-        if(!b[i])				//寻找还没有遍历过的点 
+        if(!b[i])       //寻找还没有遍历过的点 
         {
-            dfs(i);				//从这个点开始遍历 
+            dfs(i);     //从这个点开始遍历 
         }
     }
     return 0;
@@ -599,10 +599,10 @@ int main()
 &lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
 #include&amp;lt;algorithm&amp;gt;
 using namespace std;
-int n,m=0,q=0,s=0,	//n是点的个数，m是已搜索的点数，q是栈长度 
-a[1001][1001],b[1001],c[1001],d[1001];	//意义见前文描述 
-bool e[1001];							//意义见前文描述 
-void dfs(int x)							//搜索
+int n,m=0,q=0,s=0,  //n是点的个数，m是已搜索的点数，q是栈长度 
+a[1001][1001],b[1001],c[1001],d[1001];  //意义见前文描述 
+bool e[1001];       //意义见前文描述 
+void dfs(int x)         //搜索
 {
     ++m;
     b[x]=m;
@@ -613,27 +613,27 @@ void dfs(int x)							//搜索
     {
     	if(a[x][i]==true)
     	{
-            if(b[i]==0)				//点i没有被遍历过 
+            if(b[i]==0)     //点i没有被遍历过 
             {
-                dfs(i);				//搜索i 
-                c[x]=min(c[x],c[i]);//更新c[x] 
+                dfs(i);     //搜索i 
+                c[x]=min(c[x],c[i]);        //更新c[x] 
             }
-            else if(e[i]==false)	//如果点i没有在强连通分量中 
+            else if(e[i]==false)        //如果点i没有在强连通分量中 
             {
-                c[x]=min(c[x],c[i]);//更新c[x] 
+                c[x]=min(c[x],c[i]);        //更新c[x] 
             }
     	}
     }
-    if(b[x]==c[x])					//如果已经发现强连通分量 
+    if(b[x]==c[x])      //如果已经发现强连通分量 
     {
-    	++s;						//计数器加一 
-    	while(d[q]!=x)				//扫描栈 
+    	++s;        //计数器加一 
+    	while(d[q]!=x)      //扫描栈 
     	{
-            e[d[q]]=true;			//标记这些点已经在强连通分量中 
-            --q;					//把这些点移出栈 
+            e[d[q]]=true;       //标记这些点已经在强连通分量中 
+            --q;        //把这些点移出栈 
     	}
     	e[x]=true;
-    	--q;						//把点x移出栈 
+    	--q;        //把点x移出栈 
     }
 }
 int main()
@@ -643,14 +643,14 @@ int main()
     {
         for(int j=1;j&amp;lt;=n;++j)
         {
-            scanf(&amp;quot;%d&amp;quot;,&amp;amp;a[i][j]);	//输入 
+            scanf(&amp;quot;%d&amp;quot;,&amp;amp;a[i][j]);       //输入 
         }
     }
     for(int i=1;i&amp;lt;=n;++i)
     {
-        if(b[i]==0)					//寻找还没有遍历过的点 
+        if(b[i]==0)     //寻找还没有遍历过的点 
         {
-            dfs(i);					//从这个点开始遍历 
+            dfs(i);     //从这个点开始遍历 
         }
     }
     printf(&amp;quot;%d&amp;quot;,s);
@@ -774,8 +774,8 @@ struct str
     int m,q;
 }a[100001];
 int n,m=0,q=0,s=0,b[1001],c[1001],d[1001],
-r[1001],t[1001];		//r[i]表示点i所在的强连通分量
-bool e[1001],l[1001];	//l[i]表示强连通分量i的入度是否为0 
+r[1001],t[1001];        //r[i]表示点i所在的强连通分量
+bool e[1001],l[1001];       //l[i]表示强连通分量i的入度是否为0 
 void dfs(int x)
 {
     ++m;
@@ -801,7 +801,7 @@ void dfs(int x)
     	while(d[q]!=x)
     	{
             e[d[q]]=true;
-            r[d[q]]=s;					//把这个强连通分量中的点都标记 
+            r[d[q]]=s;      //把这个强连通分量中的点都标记 
             --q;
     	}
     	e[x]=true;
@@ -837,18 +837,18 @@ int main()
     {
         for(int j=t[i];j!=0;j=a[j].q)
         {
-            if(r[i]!=r[a[j].m])			//枚举连接两个强连通分量的点 
+            if(r[i]!=r[a[j].m])     //枚举连接两个强连通分量的点 
             {
-                l[r[a[j].m]]=true;		//标记这个强连通分量入度不为0 
+                l[r[a[j].m]]=true;      //标记这个强连通分量入度不为0 
             }
         }
     }
     int w=0;
     for(int i=1;i&amp;lt;=s;++i)
     {
-        if(l[i]==false)					//枚举入度为0的强连通分量 
+        if(l[i]==false)     //枚举入度为0的强连通分量 
         {
-            ++w;						//更新所需光盘数 
+            ++w;        //更新所需光盘数 
         }
     }
     printf(&amp;quot;%d&amp;quot;,w);

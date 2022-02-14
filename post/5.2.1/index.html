@@ -9,7 +9,7 @@
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
 <title>5.2.1图的连通性 | 赵悦岑&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1644819827407">
+<link rel="shortcut icon" href="/favicon.ico?v=1644823756202">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -205,13 +205,13 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">1</span>
+        <span class="site-item-stat-count">2</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">1</span>
+        <span class="site-item-stat-count">2</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -963,6 +963,10 @@ int main()
   <div class="nav">
     <div class="nav-prev">
       
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="AC自动机" href="https://2745518585.github.io/post/Aho-Corasick-automaton/">AC自动机</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="AC自动机" href="https://2745518585.github.io/post/Aho-Corasick-automaton/">上一篇</a>
+      
     </div>
     <div class="nav-next">
       
@@ -1473,6 +1477,171 @@ int main()
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/Aho-Corasick-automaton/"" data-c="
+          &lt;h2 id=&#34;基本思路&#34;&gt;基本思路&lt;/h2&gt;
+&lt;p&gt;  我们已经知道了&lt;strong&gt;Trie&lt;/strong&gt;和&lt;strong&gt;KMP&lt;/strong&gt;，一个是用于储存多个字符串，另一个是在一个文本串中查找一个模式串。而AC自动机需要实现在一个文本串中查找多个模式串，所以我们只需要将上面两者结合即可。&lt;br&gt;
+  在KMP中，每一个节点都有一个&lt;strong&gt;失配指针&lt;/strong&gt;，&lt;strong&gt;在文本串与模式串失配后跳转到模式串的对应位置&lt;/strong&gt;。如果我们把Trie上的每一个节点都配上一个&lt;strong&gt;失配指针&lt;/strong&gt;，只要文本串与字典树在此&lt;strong&gt;失配后跳转到字典树对应节点&lt;/strong&gt;即可。失配指针指向的节点对应的字符串一定是适配节点对应的字符串的后缀，这样这个节点才能与文本串匹配。&lt;br&gt;
+  但是字典树上不只有一个模式串，在一个位置&lt;strong&gt;可能有多个模式串可以匹配上文本串&lt;/strong&gt;。但是在这个字符串已经与文本串匹配的时候，下一个可以匹配的字符串一定也可以和这个字符串匹配，所以&lt;strong&gt;下一个字符串一定是这一个字符串的后缀&lt;/strong&gt;。刚好，失配指针也是要找到对应字符串的后缀，所以我们在找更多可以匹配的模式串时只需要跳转到&lt;strong&gt;失配指针&lt;/strong&gt;对应的节点即可，&lt;s&gt;虽然并没有失配&lt;/s&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;实现方法&#34;&gt;实现方法&lt;/h2&gt;
+&lt;p&gt;  AC自动机的实现大概分为以下三步：&lt;strong&gt;建字典树&lt;/strong&gt;、&lt;strong&gt;求失配指针指针&lt;/strong&gt;、&lt;strong&gt;跑AC自动机&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;建字典树&#34;&gt;建字典树&lt;/h3&gt;
+&lt;p&gt;  字典树的建立和平常没有什么区别，只是要注意不仅要存每个节点是否有结束的模式串，还要记录有多少个。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;void build(char *x)
+{
+    int k=1;    //表示当前节点
+    for(int i=1;x[i];++i)   //依次匹配模式串的每个字符
+    {
+        if(a[k][x[i]-&#39;a&#39;]==0) a[k][x[i]-&#39;a&#39;]=++q;
+        //如果没有当前字符对应的节点，就新建一个节点。
+        k=a[k][x[i]-&#39;a&#39;];//跳转到下一个节点
+    }
+    ++g[k]; //记录当前节点的模式串个数
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;求失配指针&#34;&gt;求失配指针&lt;/h3&gt;
+&lt;p&gt;  这个部分相当于是AC自动机的核心，也是最难理解的地方。&lt;br&gt;
+  在建好字典树后，我们一般用bfs遍历整棵树。注意在遍历过程中数组f储存的是已配指针。同样，失配指针是储存在数组f中的。在求一个点的失配指针时，共有2种情况。&lt;br&gt;
+  不过在求失配指针时，我们还会用到一些不存在的节点。这些点存在的意义就是让程序在匹配时知道如果文本串对应到这个点就会失配，并直接给出失配指针，这样可以更加的方便。&lt;br&gt;
+  在开始前，我们还要将0号节点的所有儿子设为根节点，因为如果有一个点对应的字符串无法在字典树中找到它的后缀，它的失配指针就会指向0的儿子x，但是实际上它应该跳转到根节点，所以把0号点所有儿子都指向根节点即可。&lt;/p&gt;
+&lt;h4 id=&#34;第一种点i存在&#34;&gt;第一种，点i存在&lt;/h4&gt;
+&lt;p&gt;  当我们搜索到点i，它对应的字符为x，父节点为k。当点i存在时，它的失配指针就是点k的失配指针指向的节点的儿子x。什么意思，见下图：&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/udw2lc47.png?x-oss-process=image/resize,m_lfit,h_170,w_225&#34; alt=&#34;1&#34; width=&#34;300&#34; height=&#34;200&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/jae281vb.png?x-oss-process=image/resize,m_lfit,h_170,w_225&#34; alt=&#34;2&#34; width=&#34;300&#34; height=&#34;200&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+（图片来自网络）&lt;br&gt;
+  第一幅图就是第一步建立出来的字典树，第二幅图表示每个节点的失配指针。举个例子，我们现在在访问最左侧的节点c，它的父节点是上面的点b，点b的失配指针指向根节点的儿子b。点c对应的字符串是abc。我们先找到b的失配节点，也就是中间的b，然后再找到b位置对应的儿子c，也就是中间的点c，这样我们就找到了它对应的失配指针。&lt;br&gt;
+  如果点k的失配指针指向的节点没有儿子节点x怎么办？其实是一样的，由于这个点不存在，所以这个位置就不存在原字符串的后缀，它的失配指针其实就直接指向了这个点的失配指针，所以它总会指向一个存在的点。&lt;br&gt;
+  在求完失配指针后，我们还要讲这个点入队来继续bfs。&lt;/p&gt;
+&lt;h4 id=&#34;第二种点i不存在&#34;&gt;第二种，点i不存在&lt;/h4&gt;
+&lt;p&gt;  当我们搜索到点i，它对应的字符为x，父节点为k。当点i不存在时，点k的儿子x就是点k的失配指针指向的节点的儿子x。&lt;br&gt;
+  因为点i不存在，所以文本串如果匹配到此处必然失配，所以我们可以简单地将点k的儿子x指向点i的失配节点。点i的失配指针的求法同上，就是点k的失配节点的儿子x。如图：&lt;br&gt;
+&lt;img src=&#34;https://cdn.luogu.com.cn/upload/image_hosting/z4n1xw48.png?x-oss-process=image/resize,m_lfit,h_170,w_225&#34; alt=&#34;3&#34; width=&#34;300&#34; height=&#34;200&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  由于这个点实际上不存在，所以不需要入队。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;void bfs()
+{
+    queue&amp;lt;int&amp;gt; Q;   //搜索时用的队列
+    for(int i=0;i&amp;lt;=25;++i)  //将节点0的所有儿子设为1
+    {
+        a[0][i]=1;
+    }
+    f[1]=0; //根节点的失配指针只用于求其它点的失配指针
+    Q.push(1);  //根节点入队
+    while(!Q.empty())   //bfs
+    {
+        int k=Q.front();    //提取队首节点
+        Q.pop();
+        for(int i=0;i&amp;lt;=25;++i)  //访问所有儿子节点
+        {
+            if(a[k][i]!=0)  //这个点存在
+            {
+                Q.push(a[k][i]);    //入队
+                f[a[k][i]]=a[f[k]][i];  //求失配指针
+            }
+            else    //这个点不存在
+            {
+                a[k][i]=a[f[k]][i]; //求失配指针
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;跑ac自动机&#34;&gt;跑AC自动机&lt;/h3&gt;
+&lt;p&gt;  在求完失配指针后，我们就可以跑AC自动机了。&lt;br&gt;
+  首先我们需要定义一个变量x记录当前匹配到的字典树节点，初始值为1，还有一个变量s储存出现过的模式串个数。&lt;br&gt;
+  然后我们要依次访问整个文本串。每一次访问都将x更新为节点x对应文本串当前字符的儿子。如果节点x有这个儿子，那么x就会指向这一个儿子节点；如果没有，它就会自动跳转到节点x的失配指针指向的节点。然后我们要新定义一个变量k=x，循环访问节点k的失配指针指向的节点，找到的这些都是可以与文本串匹配的字符串，所以我们要在这时记录个数，不过还要用一个数组来判断一个模式串是否已经被记录过。如果某一次节点k已经被记录过，那么之前一定也记录过点k之后所有可以与文本串匹配的模式串，所以可以直接退出循环。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;char c[1000001];
+    cin&amp;gt;&amp;gt;c+1;
+    int m=strlen(c+1);
+    int s=0,x=1;
+    for(int i=1;i&amp;lt;=m;++i)   //依次访问文本串
+    {
+        x=a[x][c[i]-&#39;a&#39;];   //更新当前的点
+        int k=x;
+        while(k!=0&amp;amp;&amp;amp;h[k]==false)//记录所有可以匹配的模式串
+        {
+            s+=g[k];    //计数
+            h[k]=true;  //标记
+            k=f[k];     //跳转至下一个
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;iostream&amp;gt;
+#include&amp;lt;cstring&amp;gt;
+#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+int n,q=1,a[10000001][26],g[10000001],f[10000001];
+bool h[1000001];
+void build(char *x)
+{
+    int k=1;    //表示当前节点
+    for(int i=1;x[i];++i)   //依次匹配模式串的每个字符
+    {
+        if(a[k][x[i]-&#39;a&#39;]==0) a[k][x[i]-&#39;a&#39;]=++q;
+        //如果没有当前字符对应的节点，就新建一个节点。
+        k=a[k][x[i]-&#39;a&#39;];//跳转到下一个节点
+    }
+    ++g[k]; //记录当前节点的模式串个数
+}
+void bfs()
+{
+    queue&amp;lt;int&amp;gt; Q;   //搜索时用的队列
+    for(int i=0;i&amp;lt;=25;++i)  //将节点0的所有儿子设为1
+    {
+        a[0][i]=1;
+    }
+    f[1]=0; //根节点的失配指针只用于求其它点的失配指针
+    Q.push(1);  //根节点入队
+    while(!Q.empty())   //bfs
+    {
+        int k=Q.front();    //提取队首节点
+        Q.pop();
+        for(int i=0;i&amp;lt;=25;++i)  //访问所有儿子节点
+        {
+            if(a[k][i]!=0)  //这个点存在
+            {
+                Q.push(a[k][i]);    //入队
+                f[a[k][i]]=a[f[k]][i];  //求失配指针
+            }
+            else    //这个点不存在
+            {
+                a[k][i]=a[f[k]][i]; //求失配指针
+            }
+        }
+    }
+}
+int main()
+{
+    scanf(&amp;quot;%d&amp;quot;,&amp;amp;n);
+    for(int i=1;i&amp;lt;=n;++i) //输入并建立字典树
+    {
+        char x[1000001];
+        cin&amp;gt;&amp;gt;x+1;
+        build(x);
+    }
+    bfs();  //求出失配指针
+    char c[1000001];
+    cin&amp;gt;&amp;gt;c+1;
+    int m=strlen(c+1);
+    int s=0,x=1;
+    for(int i=1;i&amp;lt;=m;++i)   //依次访问文本串
+    {
+        x=a[x][c[i]-&#39;a&#39;];   //更新当前的点
+        int k=x;
+        while(k!=0&amp;amp;&amp;amp;h[k]==false)//记录所有可以匹配的模式串
+        {
+            s+=g[k];    //计数
+            h[k]=true;  //标记
+            k=f[k];     //跳转至下一个
+        }
+    }
+    printf(&amp;quot;%d&amp;quot;,s); //输出
+}
+&lt;/code&gt;&lt;/pre&gt;
+">AC自动机</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/5.2.1/"" data-c="

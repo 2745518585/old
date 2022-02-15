@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-02-15T04:04:26.624Z</updated>
+    <updated>2022-02-15T06:05:16.665Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -22,15 +22,16 @@
   最大流问题有很多种解法，而Dinic是一种简单又比较实用的方法，但是多数解法都有一个思想：残留网络。</p>
 <h2 id="残留网络">残留网络</h2>
 <p>  增广路指的就是一条从源点到汇点，且经过的边最小流量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量。但是这种算法是错误的，见下图：<br>
-<img src="https://images0.cnblogs.com/blog/464052/201403/291452172978153.jpg" alt="1" loading="lazy"><br>
+<img src="https://2745518585.github.io/post-images/1644904878284.png" alt="1" width="300" height="250" loading="lazy"><br>
   （图片来自网络）<br>
   如果我们按照上述算法，可能就会找到这个路径：<br>
-<img src="https://images0.cnblogs.com/blog/464052/201403/291452182343766.jpg" alt="2" loading="lazy"><br>
+<img src="https://2745518585.github.io/post-images/1644904897886.png" alt="2" width="300" height="250" loading="lazy"><br>
   这样找出来的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，而真实的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>，显然不正确。这是因为我们第一次找到的增广路影响了后面寻找更多增广路。如果我们让后续寻找更多增广路时可以“反悔”，也就是修改之前的增广路，这个问题就解决了。为了实现这个方案，残留网络就出现了。<br>
   我们对于每一条边都增加一条流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 反向边，找到增广路后经过的边流量要减去此增广路的流量，其反向边的流量还要加上此增广路的流量。所有反向边组成的图就是残留网络。于是刚刚的图就变成了这个图：<br>
-<img src="https://images0.cnblogs.com/blog/464052/201403/291452192813580.jpg" alt="3" loading="lazy"><br>
+<img src="https://2745518585.github.io/post-images/1644904912038.png" alt="3" width="300" height="250" loading="lazy"><br>
+<img src="https://2745518585.github.io/post-images/1644904927153.png" alt="4" width="300" height="250" loading="lazy"><br>
   对于这个图，我们还可以找到一条增广路：<br>
-<img src="https://images0.cnblogs.com/blog/464052/201403/291452202505651.jpg" alt="4" loading="lazy"><br>
+<img src="https://2745518585.github.io/post-images/1644904941056.png" alt="5" width="300" height="250" loading="lazy"><br>
   于是我们就正确求解出了这个图的最大流。<br>
   残留网络并不是简单地增加了一条运输流量的边，它是让之后寻找增广路时可以使水流沿着这条边流回去，也就是将之前的增广路“反悔”了。所以这种思想是正确的。</p>
 <h2 id="dinic">Dinic</h2>

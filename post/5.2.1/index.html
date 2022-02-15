@@ -9,7 +9,7 @@
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
 <title>5.2.1图的连通性 | 赵悦岑&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1644887880318">
+<link rel="shortcut icon" href="/favicon.ico?v=1644897859648">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -192,13 +192,13 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">3</span>
+        <span class="site-item-stat-count">4</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">4</span>
+        <span class="site-item-stat-count">6</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -1464,6 +1464,111 @@ int main()
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/maximum flow Dinic/"" data-c="
+          &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;  模板题：&lt;a href=&#34;https://www.luogu.com.cn/problem/P3376&#34;&gt;P3376 【模板】网络最大流&lt;/a&gt;&lt;br&gt;
+  一个图中，每条边都有一定的承载能力，也就是流量，流过这条边的流量不得超过这条边的最大流量，从源点到汇点的最大流量就叫做最大流。&lt;br&gt;
+  最大流问题有很多种解法，而Dinic是一种简单又比较实用的方法，但是多数解法都有一个思想：残留网络。&lt;/p&gt;
+&lt;h2 id=&#34;残留网络&#34;&gt;残留网络&lt;/h2&gt;
+&lt;p&gt;  增广路指的就是一条从源点到汇点，且经过的边最小流量不为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量。但是这种算法是错误的，见下图：&lt;br&gt;
+&lt;img src=&#34;https://images0.cnblogs.com/blog/464052/201403/291452172978153.jpg&#34; alt=&#34;1&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  （图片来自网络）&lt;br&gt;
+  如果我们按照上述算法，可能就会找到这个路径：&lt;br&gt;
+&lt;img src=&#34;https://images0.cnblogs.com/blog/464052/201403/291452182343766.jpg&#34; alt=&#34;2&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  这样找出来的最大流为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;1&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，而真实的最大流为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;2&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，显然不正确。这是因为我们第一次找到的增广路影响了后面寻找更多增广路。如果我们让后续寻找更多增广路时可以“反悔”，也就是修改之前的增广路，这个问题就解决了。为了实现这个方案，残留网络就出现了。&lt;br&gt;
+  我们对于每一条边都增加一条流量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 反向边，找到增广路后经过的边流量要减去此增广路的流量，其反向边的流量还要加上此增广路的流量。所有反向边组成的图就是残留网络。于是刚刚的图就变成了这个图：&lt;br&gt;
+&lt;img src=&#34;https://images0.cnblogs.com/blog/464052/201403/291452192813580.jpg&#34; alt=&#34;3&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  对于这个图，我们还可以找到一条增广路：&lt;br&gt;
+&lt;img src=&#34;https://images0.cnblogs.com/blog/464052/201403/291452202505651.jpg&#34; alt=&#34;4&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  于是我们就正确求解出了这个图的最大流。&lt;br&gt;
+  残留网络并不是简单地增加了一条运输流量的边，它是让之后寻找增广路时可以使水流沿着这条边流回去，也就是将之前的增广路“反悔”了。所以这种思想是正确的。&lt;/p&gt;
+&lt;h2 id=&#34;dinic&#34;&gt;Dinic&lt;/h2&gt;
+&lt;p&gt;  Dinic算法就成功实现了这种思想。寻找增广路就是寻找一条可行解，而不是最优解，若使用bfs会几乎遍历整张图，而dfs就可以很快找到一条增广路。但是dfs也容易被卡，因为可能会绕远路甚至流回已经过的点，就会浪费时间。所以Dinic结合了bfs与dfs，新增了分层图这个概念。&lt;br&gt;
+  DInic算法会首先进行一次bfs，按照搜索的先后顺序分层，构建分层图。然后进行dfs，此时dfs有一个限制，就是流量只会从上一层流到下一层。这样可能已经找不到增广路了，但实际上还有许多增广路没被发现。这时就需要再一次进行bfs，注意bfs不会经过流量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的边，这样就会构建一个新的分层图，再进行dfs。最后直到一次bfs无法到达汇点，即不存在增广路，Dinic结束。此时的总流量就是最大流。&lt;br&gt;
+  Dinic成功解决了之前dfs被卡的问题，因为流量只能从高的点向低的点流，并且bfs次数较少。不过Dinic还是要进行数次bfs，所以出现了更优的算法 ISAP，可以只进行一次bfs。&lt;/p&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;queue&amp;gt;
+#include&amp;lt;algorithm&amp;gt;
+using namespace std;
+typedef long long ll;
+int n,m,p=1,s,r,t[100001],f[100001];
+struct str
+{
+    int m,q;
+    ll w;
+}a[10000001];
+void road(int x,int y,ll w)
+{
+    a[++p].m=y;
+    a[p].w=w;
+    a[p].q=t[x];
+    t[x]=p;
+}
+bool bfs()
+{
+    queue&amp;lt;int&amp;gt; q;
+    q.push(s);
+    for(int i=1;i&amp;lt;=n;++i) f[i]=0;
+    f[s]=1;
+    while(!q.empty())
+    {
+        int k=q.front();
+        q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;amp;&amp;amp;a[i].w&amp;gt;0)
+            {
+                f[a[i].m]=f[k]+1;
+                q.push(a[i].m);
+            }
+        }
+    }
+    if(f[r]!=0) return true;
+    return false;
+}
+ll dfs(int x,ll w)
+{
+    if(x==r) return w;
+    ll v=0;
+    for(int i=t[x];i!=0&amp;amp;&amp;amp;w!=0;i=a[i].q)
+    {
+        if(f[a[i].m]==f[x]+1&amp;amp;&amp;amp;a[i].w&amp;gt;0)
+        {
+            ll z=dfs(a[i].m,min(w,a[i].w));
+            a[i].w-=z;
+            a[i^1].w+=z;
+            w-=z;
+            v+=z;
+        }
+    }
+    if(v==0) f[x]=0;
+    return v;
+}
+int main()
+{
+    scanf(&amp;quot;%d%d%d%d&amp;quot;,&amp;amp;n,&amp;amp;m,&amp;amp;s,&amp;amp;r);
+    for(int i=1;i&amp;lt;=m;++i)
+    {
+        int x,y;
+        ll w;
+        scanf(&amp;quot;%d%d%lld&amp;quot;,&amp;amp;x,&amp;amp;y,&amp;amp;w);
+        road(x,y,w);
+        road(y,x,0);
+    }
+    ll w=0;
+    while(bfs()==true)
+    {
+        w+=dfs(s,1e18);
+    }
+    printf(&amp;quot;%lld&amp;quot;,w);
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+">最大流Dinic</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/Monotone queue Knapsack/"" data-c="

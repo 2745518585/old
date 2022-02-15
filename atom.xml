@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-02-15T01:18:08.747Z</updated>
+    <updated>2022-02-15T04:04:26.624Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -10,6 +10,114 @@
     <logo>https://2745518585.github.io/images/avatar.png</logo>
     <icon>https://2745518585.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[最大流Dinic]]></title>
+        <id>https://2745518585.github.io/post/maximum flow Dinic/</id>
+        <link href="https://2745518585.github.io/post/maximum flow Dinic/">
+        </link>
+        <updated>2022-02-15T03:15:34.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>  模板题：<a href="https://www.luogu.com.cn/problem/P3376">P3376 【模板】网络最大流</a><br>
+  一个图中，每条边都有一定的承载能力，也就是流量，流过这条边的流量不得超过这条边的最大流量，从源点到汇点的最大流量就叫做最大流。<br>
+  最大流问题有很多种解法，而Dinic是一种简单又比较实用的方法，但是多数解法都有一个思想：残留网络。</p>
+<h2 id="残留网络">残留网络</h2>
+<p>  增广路指的就是一条从源点到汇点，且经过的边最小流量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量。但是这种算法是错误的，见下图：<br>
+<img src="https://images0.cnblogs.com/blog/464052/201403/291452172978153.jpg" alt="1" loading="lazy"><br>
+  （图片来自网络）<br>
+  如果我们按照上述算法，可能就会找到这个路径：<br>
+<img src="https://images0.cnblogs.com/blog/464052/201403/291452182343766.jpg" alt="2" loading="lazy"><br>
+  这样找出来的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，而真实的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>，显然不正确。这是因为我们第一次找到的增广路影响了后面寻找更多增广路。如果我们让后续寻找更多增广路时可以“反悔”，也就是修改之前的增广路，这个问题就解决了。为了实现这个方案，残留网络就出现了。<br>
+  我们对于每一条边都增加一条流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 反向边，找到增广路后经过的边流量要减去此增广路的流量，其反向边的流量还要加上此增广路的流量。所有反向边组成的图就是残留网络。于是刚刚的图就变成了这个图：<br>
+<img src="https://images0.cnblogs.com/blog/464052/201403/291452192813580.jpg" alt="3" loading="lazy"><br>
+  对于这个图，我们还可以找到一条增广路：<br>
+<img src="https://images0.cnblogs.com/blog/464052/201403/291452202505651.jpg" alt="4" loading="lazy"><br>
+  于是我们就正确求解出了这个图的最大流。<br>
+  残留网络并不是简单地增加了一条运输流量的边，它是让之后寻找增广路时可以使水流沿着这条边流回去，也就是将之前的增广路“反悔”了。所以这种思想是正确的。</p>
+<h2 id="dinic">Dinic</h2>
+<p>  Dinic算法就成功实现了这种思想。寻找增广路就是寻找一条可行解，而不是最优解，若使用bfs会几乎遍历整张图，而dfs就可以很快找到一条增广路。但是dfs也容易被卡，因为可能会绕远路甚至流回已经过的点，就会浪费时间。所以Dinic结合了bfs与dfs，新增了分层图这个概念。<br>
+  DInic算法会首先进行一次bfs，按照搜索的先后顺序分层，构建分层图。然后进行dfs，此时dfs有一个限制，就是流量只会从上一层流到下一层。这样可能已经找不到增广路了，但实际上还有许多增广路没被发现。这时就需要再一次进行bfs，注意bfs不会经过流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的边，这样就会构建一个新的分层图，再进行dfs。最后直到一次bfs无法到达汇点，即不存在增广路，Dinic结束。此时的总流量就是最大流。<br>
+  Dinic成功解决了之前dfs被卡的问题，因为流量只能从高的点向低的点流，并且bfs次数较少。不过Dinic还是要进行数次bfs，所以出现了更优的算法 ISAP，可以只进行一次bfs。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;queue&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+int n,m,p=1,s,r,t[100001],f[100001];
+struct str
+{
+    int m,q;
+    ll w;
+}a[10000001];
+void road(int x,int y,ll w)
+{
+    a[++p].m=y;
+    a[p].w=w;
+    a[p].q=t[x];
+    t[x]=p;
+}
+bool bfs()
+{
+    queue&lt;int&gt; q;
+    q.push(s);
+    for(int i=1;i&lt;=n;++i) f[i]=0;
+    f[s]=1;
+    while(!q.empty())
+    {
+        int k=q.front();
+        q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;&amp;a[i].w&gt;0)
+            {
+                f[a[i].m]=f[k]+1;
+                q.push(a[i].m);
+            }
+        }
+    }
+    if(f[r]!=0) return true;
+    return false;
+}
+ll dfs(int x,ll w)
+{
+    if(x==r) return w;
+    ll v=0;
+    for(int i=t[x];i!=0&amp;&amp;w!=0;i=a[i].q)
+    {
+        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].w&gt;0)
+        {
+            ll z=dfs(a[i].m,min(w,a[i].w));
+            a[i].w-=z;
+            a[i^1].w+=z;
+            w-=z;
+            v+=z;
+        }
+    }
+    if(v==0) f[x]=0;
+    return v;
+}
+int main()
+{
+    scanf(&quot;%d%d%d%d&quot;,&amp;n,&amp;m,&amp;s,&amp;r);
+    for(int i=1;i&lt;=m;++i)
+    {
+        int x,y;
+        ll w;
+        scanf(&quot;%d%d%lld&quot;,&amp;x,&amp;y,&amp;w);
+        road(x,y,w);
+        road(y,x,0);
+    }
+    ll w=0;
+    while(bfs()==true)
+    {
+        w+=dfs(s,1e18);
+    }
+    printf(&quot;%lld&quot;,w);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[多重背包（单调队列优化）]]></title>
         <id>https://2745518585.github.io/post/Monotone queue Knapsack/</id>

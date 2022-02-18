@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-02-15T06:05:16.665Z</updated>
+    <updated>2022-02-18T05:01:23.845Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -10,6 +10,103 @@
     <logo>https://2745518585.github.io/images/avatar.png</logo>
     <icon>https://2745518585.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[最大流ISAP]]></title>
+        <id>https://2745518585.github.io/post/zui-da-liu-isap/</id>
+        <link href="https://2745518585.github.io/post/zui-da-liu-isap/">
+        </link>
+        <updated>2022-02-18T04:35:04.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>  Dinic算法已经能够很好地解决最大流问题了，但是它还是有一个弊端：会进行多次且次数不确定的bfs，就会浪费时间，还可能被毒瘤出题人卡。Dinic中，bfs的作用就是将这个图分层，如果我们只在一开始时将图分层，在之后的dfs中调整每个点的高度，就可以大大减少bfs次数。</p>
+<h2 id="isap">ISAP</h2>
+<p>  ISAP就成功地优化了Dinic。不过ISAP是将汇点的高度设为1，源点最高，流量会从高度较高的点流到高度较低的点，原因会在后面解释。在dfs过程中，如果一个点仍有剩余流量却流不出去了，那么就把这个点的高度加一，这样它才能流到更多的点。如果汇点高度最高，就需要其它点的高度减一，就可能出现负数，最好避免这种情况。这样就可以避免多次分层浪费时间。<br>
+  但是ISAP不是在找不到汇点的时候结束，而是在出现断层的时候停止。断层指的是汇点的高度到源点的高度之间有一个高度没有点。由于流量都是从一层流向下一层，如果有一个高度没有点，流量就无法到达下一层，也就无法到达汇点，就可以直接停止算法。由于一开始高度是连续的，只要有剩余流量，就会增加高度，没有流量就不会，所以这个图在出现断层时一定是上一个层的所有点没有剩余流量了。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+int n,m,p=1,s1,s2,t[10001],f[10001],g[10001];
+bool u=true;
+struct str
+{
+    int m,q,r;
+}a[1000001];
+void road(int x,int y,int r)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+}
+void bfs()
+{
+    queue&lt;int&gt; Q;
+    Q.push(s2);
+    f[s2]=1;
+    g[1]=1;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;&amp;a[i].r==0)
+            {
+                f[a[i].m]=f[k]+1;
+                ++g[f[a[i].m]];
+                Q.push(a[i].m);
+            }
+        }
+    }
+}
+int dfs(int x,int r)
+{
+    if(x==s2) return r;
+    int s=0;
+    for(int i=t[x];i!=0;i=a[i].q)
+    {
+        if(f[x]==f[a[i].m]+1&amp;&amp;a[i].r!=0)
+        {
+            int z=dfs(a[i].m,min(r,a[i].r));
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+            }
+            if(r==0) return s;
+        }
+    }
+    --g[f[x]];
+    if(g[f[x]]==0) u=false;
+    ++f[x];
+    ++g[f[x]];
+    return s;
+}
+int main()
+{
+    scanf(&quot;%d%d%d%d&quot;,&amp;n,&amp;m,&amp;s1,&amp;s2);
+    for(int i=1;i&lt;=m;++i)
+    {
+        int x,y,r;
+        scanf(&quot;%d%d%d&quot;,&amp;x,&amp;y,&amp;r);
+        road(x,y,r);
+        road(y,x,0);
+    }
+    bfs();
+    int r=0;
+    while(u==true)
+    {
+        r+=dfs(s1,1e9);
+    }
+    printf(&quot;%d&quot;,r);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[最大流Dinic]]></title>
         <id>https://2745518585.github.io/post/maximum flow Dinic/</id>
@@ -23,7 +120,6 @@
 <h2 id="残留网络">残留网络</h2>
 <p>  增广路指的就是一条从源点到汇点，且经过的边最小流量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量。但是这种算法是错误的，见下图：<br>
 <img src="https://2745518585.github.io/post-images/1644904878284.png" alt="1" width="300" height="250" loading="lazy"><br>
-  （图片来自网络）<br>
   如果我们按照上述算法，可能就会找到这个路径：<br>
 <img src="https://2745518585.github.io/post-images/1644904897886.png" alt="2" width="300" height="250" loading="lazy"><br>
   这样找出来的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，而真实的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>，显然不正确。这是因为我们第一次找到的增广路影响了后面寻找更多增广路。如果我们让后续寻找更多增广路时可以“反悔”，也就是修改之前的增广路，这个问题就解决了。为了实现这个方案，残留网络就出现了。<br>

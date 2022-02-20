@@ -9,7 +9,7 @@
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
 <title>赵悦岑&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1645332500587">
+<link rel="shortcut icon" href="/favicon.ico?v=1645333422638">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1123,69 +1123,69 @@ using namespace std;
 int p[100]={&#39;t&#39;,&#39;a&#39;,&#39;s&#39;,&#39;k&#39;,&#39;k&#39;,&#39;i&#39;,&#39;l&#39;,&#39;l&#39;,&#39; &#39;,&#39;/&#39;,&#39;f&#39;,&#39; &#39;,&#39;/&#39;,&#39;p&#39;,&#39;i&#39;,&#39;d&#39;,&#39; &#39;,&#39;.&#39;,&#39;e&#39;,&#39;x&#39;,&#39;e&#39;};
 int main()
 {
-	char c[1001],d[1001],e[1001];
-	cin&amp;gt;&amp;gt;c;
-	freopen(&amp;quot;run_time.txt&amp;quot;,&amp;quot;r&amp;quot;,stdin);
-	int x;
-	scanf(&amp;quot;%d&amp;quot;,&amp;amp;x);
-	freopen(&amp;quot;run_name.in&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-	cout&amp;lt;&amp;lt;c;
-	printf(&amp;quot; %d&amp;quot;,x);
-	freopen(&amp;quot;run_result.txt&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-	if(system(&amp;quot;run_complain.exe&amp;quot;))
-	{
-		freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
-		printf(&amp;quot;\nComplain Error\n\n&amp;quot;);
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-		return 0;
+    char c[1001],d[1001],e[1001];
+    cin&amp;gt;&amp;gt;c;
+    freopen(&amp;quot;run_time.txt&amp;quot;,&amp;quot;r&amp;quot;,stdin);
+    int x;
+    scanf(&amp;quot;%d&amp;quot;,&amp;amp;x);
+    freopen(&amp;quot;run_name.in&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+    cout&amp;lt;&amp;lt;c;
+    printf(&amp;quot; %d&amp;quot;,x);
+    freopen(&amp;quot;run_result.txt&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+    if(system(&amp;quot;run_complain.exe&amp;quot;))
+    {
+        freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
+        printf(&amp;quot;\nComplain Error\n\n&amp;quot;);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+        return 0;
+    }
+    int m=strlen(c);
+    for(int i=0;i&amp;lt;17;++i)
+    {
+        d[i]=p[i];
+    }
+    for(int i=0;i&amp;lt;m;++i)
+    {
+        d[i+17]=c[i];
+    }
+    for(int i=0;i&amp;lt;4;++i)
+    {
+        d[m+17+i]=p[i+17];
+    }
+    system(&amp;quot;start /b run_runner.exe&amp;quot;);
+    Sleep(x/10);
+    if(system(d))
+    {
+        system(&amp;quot;run_check.exe&amp;quot;);
+        return 0;
 	}
-	int m=strlen(c);
-	for(int i=0;i&amp;lt;17;++i)
+    system(&amp;quot;start /b run_runner.exe&amp;quot;);
+    Sleep(x/2);
+    if(system(d))
 	{
-		d[i]=p[i];
-	}
-	for(int i=0;i&amp;lt;m;++i)
-	{
-		d[i+17]=c[i];
-	}
-	for(int i=0;i&amp;lt;4;++i)
-	{
-		d[m+17+i]=p[i+17];
-	}
-	system(&amp;quot;start /b run_runner.exe&amp;quot;);
-	Sleep(x/10);
-	if(system(d))
-	{
-		system(&amp;quot;run_check.exe&amp;quot;);
-		return 0;
-	}
-	system(&amp;quot;start /b run_runner.exe&amp;quot;);
-	Sleep(x/2);
-	if(system(d))
-	{
-		system(&amp;quot;run_check.exe&amp;quot;);
-		return 0;
-	}
-	system(&amp;quot;start /b run_runner.exe&amp;quot;);
+        system(&amp;quot;run_check.exe&amp;quot;);
+        return 0;
+    }
+    system(&amp;quot;start /b run_runner.exe&amp;quot;);
 	Sleep(x);
-	if(system(d))
-	{
-		system(&amp;quot;run_check.exe&amp;quot;);
-		return 0;
-	}
-	system(&amp;quot;start /b run_runner.exe&amp;quot;);
-	Sleep(x*2);
-	if(system(d))
-	{
-		system(&amp;quot;run_check.exe&amp;quot;);
-		return 0;
-	}
-	freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-	printf(&amp;quot;\nTime Limit Error\nover %dms\n\n&amp;quot;,x*2);
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-	return 0;
+    if(system(d))
+    {
+        system(&amp;quot;run_check.exe&amp;quot;);
+        return 0;
+    }
+    system(&amp;quot;start /b run_runner.exe&amp;quot;);
+    Sleep(x*2);
+    if(system(d))
+    {
+        system(&amp;quot;run_check.exe&amp;quot;);
+        return 0;
+    }
+    freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
+    printf(&amp;quot;\nTime Limit Error\nover %dms\n\n&amp;quot;,x*2);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+    return 0;
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;run_complain.cpp:&lt;/p&gt;
@@ -1232,13 +1232,13 @@ int main()
     freopen(&amp;quot;run_name.in&amp;quot;,&amp;quot;r&amp;quot;,stdin);
     char c[100001];
     cin&amp;gt;&amp;gt;c;
-	int m=strlen(c);
-	for(int i=0;i&amp;lt;24;++i)
-	{
-		c[m+i]=p[i];
-	}
-	system(c);
-	return 0;
+    int m=strlen(c);
+    for(int i=0;i&amp;lt;24;++i)
+    {
+        c[m+i]=p[i];
+    }
+    system(c);
+    return 0;
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;run_check.cpp:&lt;/p&gt;
@@ -1250,57 +1250,57 @@ int main()
 {
     freopen(&amp;quot;run_name.in&amp;quot;,&amp;quot;r&amp;quot;,stdin);
     char c[1001];
-	int x;
+    int x;
     cin&amp;gt;&amp;gt;c&amp;gt;&amp;gt;x;
-	int m=strlen(c);
-	for(int i=0;i&amp;lt;24;++i)
-	{
-		c[m+i]=p[i];
-	}
-	double t0=clock();
-	if(system(c))
+    int m=strlen(c);
+    for(int i=0;i&amp;lt;24;++i)
     {
-		freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
-		printf(&amp;quot;\nRuntime Error\n\n&amp;quot;);
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-		return 0;
+        c[m+i]=p[i];
     }
-	double t1=clock();
+    double t0=clock();
+    if(system(c))
+    {
+        freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
+        printf(&amp;quot;\nRuntime Error\n\n&amp;quot;);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+        return 0;
+    }
+    double t1=clock();
     if(t1-t0&amp;gt;=x)
-	{
-		if(system(&amp;quot;fc /a /w run.out data.out&amp;quot;))
-		{
-			freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-			printf(&amp;quot;\nTime Limit Error\n%dms\n&amp;quot;,int(t1-t0));
-			printf(&amp;quot;\nWrong Answer\n\n&amp;quot;);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-			return 0;
-		}
-		else
-		{
-			freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-			printf(&amp;quot;\nTime Limit Error\n%dms\n&amp;quot;,int(t1-t0));
-			printf(&amp;quot;\nCorrect Answer\n\n&amp;quot;);
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-			return 0;
-		}
-	}
+    {
+        if(system(&amp;quot;fc /a /w run.out data.out&amp;quot;))
+        {
+            freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
+            printf(&amp;quot;\nTime Limit Error\n%dms\n&amp;quot;,int(t1-t0));
+            printf(&amp;quot;\nWrong Answer\n\n&amp;quot;);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+            return 0;
+        }
+        else
+        {
+            freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
+            printf(&amp;quot;\nTime Limit Error\n%dms\n&amp;quot;,int(t1-t0));
+            printf(&amp;quot;\nCorrect Answer\n\n&amp;quot;);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+            return 0;
+        }
+    }
     if(system(&amp;quot;fc /a /w run.out data.out&amp;quot;))
     {
-		freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED);
-		printf(&amp;quot;\nWrong Answer\n%dms\n\n&amp;quot;,int(t1-t0));
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-		return 0;
-	}
-	freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_GREEN);
-	printf(&amp;quot;\nAccepted\n%dms\n\n&amp;quot;,int(t1-t0));
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-	return 0;
+        freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED);
+        printf(&amp;quot;\nWrong Answer\n%dms\n\n&amp;quot;,int(t1-t0));
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+        return 0;
+    }
+    freopen(&amp;quot;CON.out&amp;quot;,&amp;quot;w&amp;quot;,stdout);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_GREEN);
+    printf(&amp;quot;\nAccepted\n%dms\n\n&amp;quot;,int(t1-t0));
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+    return 0;
 }
 &lt;/code&gt;&lt;/pre&gt;
 ">对拍器</a>

@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
-<title>最大流ISAP | 赵悦岑&#39;s Blog</title>
+<title>面积并扫描线 | 赵悦岑&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1645336946766">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -41,8 +41,8 @@
 
 
 
-  <meta name="description" content="最大流ISAP" />
-  <meta name="keywords" content="网络流,最大流" />
+  <meta name="description" content="面积并扫描线" />
+  <meta name="keywords" content="" />
 </head>
 
 <body>
@@ -220,7 +220,9 @@
 <li>
 <ul>
 <li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
-<li><a href="#isap">ISAP</a></li>
+<li><a href="#%E7%BA%BF%E6%AE%B5%E6%A0%91">线段树</a></li>
+<li><a href="#%E6%8E%92%E5%BA%8F">排序</a></li>
+<li><a href="#%E6%89%AB%E6%8F%8F%E7%BA%BF">扫描线</a></li>
 <li><a href="#code">code</a></li>
 </ul>
 </li>
@@ -489,33 +491,21 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://2745518585.github.io/post/maximum flow ISAP/"> 最大流ISAP </a>
+    <a class="post-title-link" href="https://2745518585.github.io/post/mian-ji-bing-sao-miao-xian/"> 面积并扫描线 </a>
   </h1>
   <div class="post-meta">
     
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2022-02-18 12:35:04">2022-02-18</span>
+      <span class="publish-time" data-t="2022-02-20 13:13:41">2022-02-20</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">标签:</span>
-       
-      <a href="https://2745518585.github.io/tag/network-flows/"> <span>网络流</span> </a>、   
-      <a href="https://2745518585.github.io/tag/maximum flow/">
-        <span>最大流</span>
-      </a>
-       
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
       <i class="fa fa-clock-o"></i>
       <span
-        >4<span class="language" data-lan="minute"
+        >8<span class="language" data-lan="minute"
           >分钟</span
         ></span
       >
@@ -524,7 +514,7 @@
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
       <span
-        >716<span class="pc-show language" data-lan="words"
+        >1542<span class="pc-show language" data-lan="words"
           >字数</span
         ></span
       >
@@ -535,92 +525,166 @@
 
             <div class="post-body next-md-body" id="post_body">
               <h2 id="前言">前言</h2>
-<p>  模板题：<a href="https://www.luogu.com.cn/problem/P3376">P3376 【模板】网络最大流</a><br>
-  Dinic算法已经能够很好地解决最大流问题了，但是它还是有一个弊端：会进行多次且次数不确定的bfs，就会浪费时间，还可能被毒瘤出题人卡。Dinic中，bfs的作用就是将这个图分层，如果我们只在一开始时将图分层，在之后的dfs中调整每个点的高度，就可以大大减少bfs次数。</p>
-<h2 id="isap">ISAP</h2>
-<p>  ISAP就成功地优化了Dinic。不过ISAP是将汇点的高度设为1，源点最高，流量会从高度较高的点流到高度较低的点，原因会在后面解释。在dfs过程中，如果一个点仍有剩余流量却流不出去了，那么就把这个点的高度加一，这样它才能流到更多的点。如果汇点高度最高，就需要其它点的高度减一，就可能出现负数，最好避免这种情况。这样就可以避免多次分层浪费时间。<br>
-  但是ISAP不是在找不到汇点的时候结束，而是在出现断层的时候停止。断层指的是汇点的高度到源点的高度之间有一个高度没有点。由于流量都是从一层流向下一层，如果有一个高度没有点，流量就无法到达下一层，也就无法到达汇点，就可以直接停止算法。由于一开始高度是连续的，只要有剩余流量，就会增加高度，没有流量就不会，所以这个图在出现断层时一定是上一个层的所有点没有剩余流量了。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-int n,m,p=1,s1,s2,t[10001],f[10001],g[10001];
-bool u=true;
-struct str
+<p>  模板题：<a href="https://www.luogu.com.cn/problem/P5490">P5490 【模板】扫描线</a><br>
+  这是一道经典的题目，需要求出 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个矩形的面积并，直接开数组显然会炸，数学方法也很难，这时候就需要使用神奇的扫描线算法来解决了。<br>
+  扫描线算法的基本思想就是用一条线从下往上扫过图形，计算出相邻两条横边之间的面积，然后求和即可。扫描线的过程中需要知道相邻两个横边之间的距离，以及这当前位置图形的宽度。我们只需要将横边排序就可以知道相邻两个横边之间的距离，而当前位置图形的宽度可以用线段树来维护。</p>
+<h2 id="线段树">线段树</h2>
+<p>  线段树需要求出当前位置图形的宽度，我们要如何修改当前位置图形的宽度呢？我们看下图：<br>
+<img src="https://img.ffis.me/images/2019/08/10/image.png" alt="1" loading="lazy"><br>
+<img src="https://img.ffis.me/images/2019/08/10/image1cba39d5beb42edc.png" alt="2" loading="lazy"><br>
+  （图片来自网络）<br>
+  我们可以发现，扫过一个矩形的下边就会增加图形的宽度，而遇到一个图形的上边就会减少图形的宽度。我们可以拿括号序列来举例：如果一个位置前面的左括号个数等于右括号个数，那么这个位置就不在任何括号中。同理：如果一个位置扫过的矩形下边个数等于矩形上边个数，那么这个位置当前没有被图形覆盖，反之则被图形覆盖。我们只需要记录一个位置当前已扫过的矩形下边个数减去已扫过的矩形上边个数，我们就可以通过这个数是否为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 来判断这个位置是否被图形覆盖。<br>
+  现在我们要记录一条横线上的每个位置的值，并且我们每次需要求出有多少个值不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的位置，我们就可以用线段树来实现，线段树维护当前区间值不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的位置个数：<br>
+<img src="https://img.ffis.me/images/2019/08/10/image0a03aa15aca4877e.png" alt="3" loading="lazy"><br>
+  不过我们需要维护的是两个相邻 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 之间扫过的个数，而不是端点，是两个端点之间的线段，所以总共 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个点，只有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个线段，线段树只需要维护 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个值。由于这些点之间可能间隔很大，所以还需要进行离散化，用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 数组记录离散化后的点原来的值，那么一个区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mi mathvariant="normal">.</mi><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l.r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 的长度就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi><mo>[</mo><mi>T</mi><mo>[</mo><mi>x</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>r</mi><mo>+</mo><mn>1</mn><mo>]</mo><mo>−</mo><mi>b</mi><mo>[</mo><mi>T</mi><mo>[</mo><mi>x</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>l</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">b[T[x].r+1]-b[T[x].l]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">b</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">b</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mclose">]</span></span></span></span>。我们用一个变量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span> 来记录此区间被扫过的次数，如果不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 那么此区间已经整体被覆盖。<br>
+  这样我们就可以写出线段树了。</p>
+<pre><code class="language-cpp">void pushup(int x)
 {
-    int m,q,r;
-}a[1000001];
-void road(int x,int y,int r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
+    if(T[x].t) T[x].s=b[T[x].r+1]-b[T[x].l];
+    else T[x].s=T[x&lt;&lt;1].s+T[x&lt;&lt;1|1].s;
 }
-void bfs()
+void build(int x,int l,int r)
 {
-    queue&lt;int&gt; Q;
-    Q.push(s2);
-    f[s2]=1;
-    g[1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r==0)
-            {
-                f[a[i].m]=f[k]+1;
-                ++g[f[a[i].m]];
-                Q.push(a[i].m);
-            }
-        }
-    }
+    T[x].l=l;
+    T[x].r=r;
+    T[x].t=T[x].s=0;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    build(x&lt;&lt;1,l,z);
+    build(x&lt;&lt;1|1,z+1,r);
 }
-int dfs(int x,int r)
+void add(int x,ll l,ll r,int k)
 {
-    if(x==s2) return r;
-    int s=0;
-    for(int i=t[x];i!=0;i=a[i].q)
+	if(b[T[x].l]&gt;=r||b[T[x].r+1]&lt;=l) return;
+    if(b[T[x].l]&gt;=l&amp;&amp;b[T[x].r+1]&lt;=r)
     {
-        if(f[x]==f[a[i].m]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-            if(r==0) return s;
-        }
+        T[x].t+=k;
+        pushup(x);
+        return;
     }
-    --g[f[x]];
-    if(g[f[x]]==0) u=false;
-    ++f[x];
-    ++g[f[x]];
-    return s;
+    add(x&lt;&lt;1,l,r,k);
+    add(x&lt;&lt;1|1,l,r,k);
+    pushup(x);
+}
+</code></pre>
+<h2 id="排序">排序</h2>
+<p>  在扫描线算法中，我们总共需要两次排序：将端点的横坐标排序和横线的纵坐标排序。在进行排序之后，我们还需要将端点横坐标离散化和去重，用stl的unique函数就可以了。</p>
+<pre><code class="language-cpp">struct str
+{
+    ll l,r,h;
+    int k;
+}a[10000001];
+struct tree
+{
+    int l,r,t;
+    ll s;
+}T[10000001];
+bool cmp(str a,str b)
+{
+    return a.h&lt;b.h;
 }
 int main()
 {
-    scanf(&quot;%d%d%d%d&quot;,&amp;n,&amp;m,&amp;s1,&amp;s2);
-    for(int i=1;i&lt;=m;++i)
+    scanf(&quot;%d&quot;,&amp;n);
+    for(int i=1;i&lt;=n;++i)
     {
-        int x,y,r;
-        scanf(&quot;%d%d%d&quot;,&amp;x,&amp;y,&amp;r);
-        road(x,y,r);
-        road(y,x,0);
+        ll x1,y1,x2,y2;
+        scanf(&quot;%lld%lld%lld%lld&quot;,&amp;x1,&amp;y1,&amp;x2,&amp;y2);
+        a[i*2-1]=(str){x1,x2,y1,1};
+        a[i*2]=(str){x1,x2,y2,-1};
+        b[i*2-1]=x1;
+        b[i*2]=x2;
     }
-    bfs();
-    int r=0;
-    while(u==true)
+    n&lt;&lt;=1;
+    sort(a+1,a+n+1,cmp);
+    sort(b+1,b+n+1);
+    m=unique(b+1,b+n+1)-(b+1);
+}
+</code></pre>
+<h2 id="扫描线">扫描线</h2>
+<p>  有了上面的所有准备，我们就可以写出扫描线了。我们只需要从第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个横边扫到第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>∗</mo><mn>2</mn><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n*2-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.46528em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>  个横边即可，每一个区间的面积就是当前图形的宽度乘上这个横线到下一根横线的距离。用一个变量统计这些面积的和，最终的答案就是这个变量。</p>
+<pre><code class="language-cpp">build(1,1,m-1);
+ll s=0;
+for(int i=1;i&lt;n;++i)
+{   
+    add(1,a[i].l,a[i].r,a[i].k);
+    s+=T[1].s*(a[i+1].h-a[i].h);
+}
+printf(&quot;%lld&quot;,s);
+</code></pre>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+int n,m;
+ll b[10000001];
+struct str
+{
+    ll l,r,h;
+    int k;
+}a[10000001];
+struct tree
+{
+    int l,r,t;
+    ll s;
+}T[10000001];
+bool cmp(str a,str b)
+{
+    return a.h&lt;b.h;
+}
+void pushup(int x)
+{
+    if(T[x].t) T[x].s=b[T[x].r+1]-b[T[x].l];
+    else T[x].s=T[x&lt;&lt;1].s+T[x&lt;&lt;1|1].s;
+}
+void build(int x,int l,int r)
+{
+    T[x].l=l;
+    T[x].r=r;
+    T[x].t=T[x].s=0;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    build(x&lt;&lt;1,l,z);
+    build(x&lt;&lt;1|1,z+1,r);
+}
+void add(int x,ll l,ll r,int k)
+{
+	if(b[T[x].l]&gt;=r||b[T[x].r+1]&lt;=l) return;
+    if(b[T[x].l]&gt;=l&amp;&amp;b[T[x].r+1]&lt;=r)
     {
-        r+=dfs(s1,1e9);
+        T[x].t+=k;
+        pushup(x);
+        return;
     }
-    printf(&quot;%d&quot;,r);
+    add(x&lt;&lt;1,l,r,k);
+    add(x&lt;&lt;1|1,l,r,k);
+    pushup(x);
+}
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;n);
+    for(int i=1;i&lt;=n;++i)
+    {
+        ll x1,y1,x2,y2;
+        scanf(&quot;%lld%lld%lld%lld&quot;,&amp;x1,&amp;y1,&amp;x2,&amp;y2);
+        a[i*2-1]=(str){x1,x2,y1,1};
+        a[i*2]=(str){x1,x2,y2,-1};
+        b[i*2-1]=x1;
+        b[i*2]=x2;
+    }
+    n&lt;&lt;=1;
+    sort(a+1,a+n+1,cmp);
+    sort(b+1,b+n+1);
+    m=unique(b+1,b+n+1)-(b+1);
+    build(1,1,m-1);
+    ll s=0;
+    for(int i=1;i&lt;n;++i)
+    {   
+        add(1,a[i].l,a[i].r,a[i].k);
+        s+=T[1].s*(a[i+1].h-a[i].h);
+    }
+    printf(&quot;%lld&quot;,s);
     return 0;
 }
 </code></pre>
@@ -640,7 +704,7 @@ int main()
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://2745518585.github.io/post/maximum flow ISAP/" title="最大流ISAP">https://2745518585.github.io/post/maximum flow ISAP/</a>
+      <a href="https://2745518585.github.io/post/mian-ji-bing-sao-miao-xian/" title="面积并扫描线">https://2745518585.github.io/post/mian-ji-bing-sao-miao-xian/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -649,23 +713,19 @@ int main()
   </ul>
   <div class="tags">
     
-      <a href="https://2745518585.github.io/tag/network-flows/"># 网络流</a>
-    
-      <a href="https://2745518585.github.io/tag/maximum flow/"># 最大流</a>
-    
   </div>
   <div class="nav">
     <div class="nav-prev">
       
         <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="最小费用最大流" href="https://2745518585.github.io/post/minimum cost maximum flow/">最小费用最大流</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="最小费用最大流" href="https://2745518585.github.io/post/minimum cost maximum flow/">上一篇</a>
+        <a class="nav-pc-next" title="面积并扫描线" href="https://2745518585.github.io/post/Scan line/">面积并扫描线</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="面积并扫描线" href="https://2745518585.github.io/post/Scan line/">上一篇</a>
       
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="最大流Dinic" href="https://2745518585.github.io/post/maximum flow Dinic/">最大流Dinic</a>
-        <a class="nav-mobile-next" title="最大流Dinic" href="https://2745518585.github.io/post/maximum flow Dinic/">下一篇</a>
+        <a class="nav-pc-next" title="对拍器" href="https://2745518585.github.io/post/Beat counter/">对拍器</a>
+        <a class="nav-mobile-next" title="对拍器" href="https://2745518585.github.io/post/Beat counter/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

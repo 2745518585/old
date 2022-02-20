@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-02-19T04:29:53.540Z</updated>
+    <updated>2022-02-20T04:56:50.308Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -10,6 +10,297 @@
     <logo>https://2745518585.github.io/images/avatar.png</logo>
     <icon>https://2745518585.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[对拍器]]></title>
+        <id>https://2745518585.github.io/post/Beat counter/</id>
+        <link href="https://2745518585.github.io/post/Beat counter/">
+        </link>
+        <updated>2022-02-20T04:24:31.000Z</updated>
+        <content type="html"><![CDATA[<p>run.cpp:</p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+#include&lt;windows.h&gt;
+using namespace std;
+int p[100]={'t','a','s','k','k','i','l','l',' ','/','f',' ','/','p','i','d',' ','.','e','x','e'};
+int main()
+{
+	char c[1001],d[1001],e[1001];
+	cin&gt;&gt;c;
+	freopen(&quot;run_time.txt&quot;,&quot;r&quot;,stdin);
+	int x;
+	scanf(&quot;%d&quot;,&amp;x);
+	freopen(&quot;run_name.in&quot;,&quot;w&quot;,stdout);
+	cout&lt;&lt;c;
+	printf(&quot; %d&quot;,x);
+	freopen(&quot;run_result.txt&quot;,&quot;w&quot;,stdout);
+	if(system(&quot;run_complain.exe&quot;))
+	{
+		freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
+		printf(&quot;\nComplain Error\n\n&quot;);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+		return 0;
+	}
+	int m=strlen(c);
+	for(int i=0;i&lt;17;++i)
+	{
+		d[i]=p[i];
+	}
+	for(int i=0;i&lt;m;++i)
+	{
+		d[i+17]=c[i];
+	}
+	for(int i=0;i&lt;4;++i)
+	{
+		d[m+17+i]=p[i+17];
+	}
+	system(&quot;start /b run_runner.exe&quot;);
+	Sleep(x/10);
+	if(system(d))
+	{
+		system(&quot;run_check.exe&quot;);
+		return 0;
+	}
+	system(&quot;start /b run_runner.exe&quot;);
+	Sleep(x/2);
+	if(system(d))
+	{
+		system(&quot;run_check.exe&quot;);
+		return 0;
+	}
+	system(&quot;start /b run_runner.exe&quot;);
+	Sleep(x);
+	if(system(d))
+	{
+		system(&quot;run_check.exe&quot;);
+		return 0;
+	}
+	system(&quot;start /b run_runner.exe&quot;);
+	Sleep(x*2);
+	if(system(d))
+	{
+		system(&quot;run_check.exe&quot;);
+		return 0;
+	}
+	freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
+	printf(&quot;\nTime Limit Error\nover %dms\n\n&quot;,x*2);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+	return 0;
+}
+</code></pre>
+<p>run_complain.cpp:</p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+#include&lt;windows.h&gt;
+using namespace std;
+char p[100]=&quot;g++ .cpp -o .exe -Wall -std=c++11 -O2 -Wl,--stack=2147483647&quot;;
+int main()
+{
+    char c[1001],d[1001];
+    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
+    cin&gt;&gt;c;
+    int m=strlen(c);
+    for(int i=0;i&lt;4;++i)
+    {
+        d[i]=p[i];
+    }
+    for(int i=0;i&lt;m;++i)
+    {
+        d[i+4]=c[i];
+    }
+    for(int i=4;i&lt;12;++i)
+    {
+        d[i+m]=p[i];
+    }
+    for(int i=0;i&lt;m;++i)
+    {
+        d[i+m+12]=c[i];
+    }
+    for(int i=12;i&lt;61;++i)
+    {
+        d[i+m*2]=p[i];
+    }
+    return system(d);
+}
+</code></pre>
+<p>run_runner:</p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+#include&lt;windows.h&gt;
+using namespace std;
+int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
+int main()
+{
+    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
+    char c[100001];
+    cin&gt;&gt;c;
+	int m=strlen(c);
+	for(int i=0;i&lt;24;++i)
+	{
+		c[m+i]=p[i];
+	}
+	system(c);
+	return 0;
+}
+</code></pre>
+<p>run_check.cpp:</p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+#include&lt;windows.h&gt;
+using namespace std;
+int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
+int main()
+{
+    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
+    char c[1001];
+	int x;
+    cin&gt;&gt;c&gt;&gt;x;
+	int m=strlen(c);
+	for(int i=0;i&lt;24;++i)
+	{
+		c[m+i]=p[i];
+	}
+	double t0=clock();
+	if(system(c))
+    {
+		freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
+		printf(&quot;\nRuntime Error\n\n&quot;);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+		return 0;
+    }
+	double t1=clock();
+    if(t1-t0&gt;=x)
+	{
+		if(system(&quot;fc /a /w run.out data.out&quot;))
+		{
+			freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
+			printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
+			printf(&quot;\nWrong Answer\n\n&quot;);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+			return 0;
+		}
+		else
+		{
+			freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
+			printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
+			printf(&quot;\nCorrect Answer\n\n&quot;);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+			return 0;
+		}
+	}
+    if(system(&quot;fc /a /w run.out data.out&quot;))
+    {
+		freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED);
+		printf(&quot;\nWrong Answer\n%dms\n\n&quot;,int(t1-t0));
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+		return 0;
+	}
+	freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_GREEN);
+	printf(&quot;\nAccepted\n%dms\n\n&quot;,int(t1-t0));
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+	return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[最小费用最大流]]></title>
+        <id>https://2745518585.github.io/post/minimum cost maximum flow/</id>
+        <link href="https://2745518585.github.io/post/minimum cost maximum flow/">
+        </link>
+        <updated>2022-02-19T05:14:26.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>  最小费用最大流问题，简称费用流。费用流问题是在最大流的基础上给每条边添加一个边权，也就是费用，总费用就是流过每条边的流量乘上费用的和，在保证流量最大的情况下，求出这个最小费用。<br>
+  最大流问题可以使用每次dfs找增广路来解决，费用流就可以用SPFA来寻找增广路，这样就可以保证每一次的增广路的费用最小。由于最大流算法可以“反悔”，所以即使当前的增广路并不是全局最优的，也可以在之后的增广中“反悔”，所以最后找到的一定是最优解。不过SPFA在搜索过程中不知道最优解，所以要记录最优路线，搜索完成后再更新所有边的流量。</p>
+<h2 id="spfa">SPFA</h2>
+<p>  SPFA的过程中总共需要维护 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span> 个数组：到达每个点的流量，到达每个点的费用，与这个点是由哪个点更新来的。不过SPFA是找到费用最小的增广路，而不是流量最大，因为可以进行多次SPFA增加流量。如果当前边的流量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> ，到达每个点的最小费用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>g</mi></mrow><annotation encoding="application/x-tex">g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span></span></span></span> 的就可以做如下更新： <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>g</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo><mo>=</mo><mi>max</mi><mo>⁡</mo><mo>(</mo><mi>g</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo><mo separator="true">,</mo><mi>g</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">g[a[i].m]=\max(g[a[i].m],g[x]))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">max</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span>。如果最小费用更新成功，流量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[a[i].m]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span></span></span></span> 也要更新为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mi>f</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>)</mo><mo separator="true">,</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">min(f[x]),a[i].r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> ，这个点的父亲 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">r[a[i].m]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span></span></span></span> 则更新为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>。这样就可以找到当前费用最小的增广路。当汇点没有被走到的时候，就说明不存在增广路了。<br>
+  进行完一次SPFA后，最大流量就要加上汇点的流量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>t</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[t]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span></span></span></span>，费用加上汇点的流量与到达汇点的费用之积 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>t</mi><mo>]</mo><mo>×</mo><mi>g</mi><mo>[</mo><mi>t</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[t] \times g[t]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span></span></span></span><br>
+  在进行了SPFA之后，我们就需要更新每条边的流量。从汇点开始，每一次都到达当前点的父亲，并把经过的所有边的流量减去 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>t</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[t]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span></span></span></span>，其相反边的流量加上 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>s</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[s]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">s</span><span class="mclose">]</span></span></span></span>。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+int n,m,s1,s2,p=1,t[10001],f[10001],g[10001],r[10001];
+bool h[10001];
+struct str
+{
+    int x,m,q,r,w;
+}a[100001];
+void road(int x,int y,int r,int w)
+{
+    a[++p].x=x;
+    a[p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+    a[p].w=w;
+}
+bool SPFA()
+{
+    queue&lt;int&gt; q;
+    q.push(s1);
+    for(int i=1;i&lt;=n;++i)
+    {
+        f[i]=1e9;
+        g[i]=1e9;
+        h[i]=false;
+        r[i]=0;
+    }
+    g[s1]=0;
+    h[s1]=true;
+    while(!q.empty())
+    {
+        int k=q.front();
+        q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r&gt;0&amp;&amp;g[k]+a[i].w&lt;g[a[i].m])
+            {
+                f[a[i].m]=min(f[k],a[i].r);
+                g[a[i].m]=g[k]+a[i].w;
+                r[a[i].m]=i;
+                q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e9) return true;
+    return false;
+}
+int main()
+{
+    scanf(&quot;%d%d%d%d&quot;,&amp;n,&amp;m,&amp;s1,&amp;s2);
+    for(int i=1;i&lt;=m;++i)
+    {
+        int x,y,r,w;
+        scanf(&quot;%d%d%d%d&quot;,&amp;x,&amp;y,&amp;r,&amp;w);
+        road(x,y,r,w);
+        road(y,x,0,-w);
+    }
+    int s=0,w=0;
+    while(SPFA())
+    {
+        s+=f[s2];
+        w+=f[s2]*g[s2];
+        int x=s2;
+        while(x!=s1)
+        {
+            a[r[x]].r-=f[s2];
+            a[r[x]^1].r+=f[s2];
+            x=a[r[x]].x;
+        }
+    }
+    printf(&quot;%d %d&quot;,s,w);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[最大流ISAP]]></title>
         <id>https://2745518585.github.io/post/maximum flow ISAP/</id>

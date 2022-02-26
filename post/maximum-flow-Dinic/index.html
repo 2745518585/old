@@ -9,7 +9,7 @@
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
 <title>最大流Dinic | 赵悦岑&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1645605497998">
+<link rel="shortcut icon" href="/favicon.ico?v=1645878837504">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -205,13 +205,13 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">8</span>
+        <span class="site-item-stat-count">9</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">12</span>
+        <span class="site-item-stat-count">14</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -539,7 +539,7 @@
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
       <span
-        >1353<span class="pc-show language" data-lan="words"
+        >1416<span class="pc-show language" data-lan="words"
           >字数</span
         ></span
       >
@@ -551,27 +551,27 @@
             <div class="post-body next-md-body" id="post_body">
               <h2 id="前言">前言</h2>
 <p>  模板题：<a href="https://www.luogu.com.cn/problem/P3376">P3376 【模板】网络最大流</a><br>
-  一个图中，每条边都有一定的承载能力，也就是流量，流过这条边的流量不得超过这条边的最大流量，从源点到汇点的最大流量就叫做最大流。<br>
+  一个图中，每条边都有一定的承载能力，也就是容量，流过这条边的流量不得超过这条边的最大流量，从源点到汇点的最大流量就叫做最大流。<br>
   最大流问题有很多种解法，而Dinic是一种简单又比较实用的方法，但是多数解法都有一个思想：残留网络。</p>
 <h2 id="残留网络">残留网络</h2>
-<p>  增广路指的就是一条从源点到汇点，且经过的边最小流量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量。但是这种算法是错误的，见下图：<br>
+<p>  增广路指的就是一条从源点到汇点，且经过的边最小容量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量，这条增广路的流量就是经过的所有边的容量的最小值。但是这种算法是错误的，见下图：<br>
 <img src="https://2745518585.github.io/post-images/1644904878284.png" alt="1" width="300" height="250" loading="lazy"><br>
   如果我们按照上述算法，可能就会找到这个路径：<br>
 <img src="https://2745518585.github.io/post-images/1644904897886.png" alt="2" width="300" height="250" loading="lazy"><br>
   这样找出来的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，而真实的最大流为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>，显然不正确。这是因为我们第一次找到的增广路影响了后面寻找更多增广路。如果我们让后续寻找更多增广路时可以“反悔”，也就是修改之前的增广路，这个问题就解决了。为了实现这个方案，残留网络就出现了。<br>
-  我们对于每一条边都增加一条流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 反向边，找到增广路后经过的边流量要减去此增广路的流量，其反向边的流量还要加上此增广路的流量。所有反向边组成的图就是残留网络。于是刚刚的图就变成了这个图：<br>
+  我们对于每一条边都增加一条容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 反向边，找到增广路后经过的边流量要减去此增广路的流量，其反向边的流量还要加上此增广路的流量。所有反向边组成的图就是残留网络。于是刚刚的图就变成了这个图：<br>
 <img src="https://2745518585.github.io/post-images/1644904912038.png" alt="3" width="300" height="250" loading="lazy"><br>
 <img src="https://2745518585.github.io/post-images/1644904927153.png" alt="4" width="300" height="250" loading="lazy"><br>
   对于这个图，我们还可以找到一条增广路：<br>
 <img src="https://2745518585.github.io/post-images/1644904941056.png" alt="5" width="300" height="250" loading="lazy"><br>
   于是我们就正确求解出了这个图的最大流。<br>
-  残留网络并不是简单地增加了一条运输流量的边，它是让之后寻找增广路时可以使水流沿着这条边流回去，也就是将之前的增广路“反悔”了。所以这种思想是正确的。</p>
+  残留网络并不是简单地增加了一条运输流量的边，它是让之后寻找增广路时可以使水流沿着这条边流回去，也就是将之前的增广路“反悔”了。所以这种思想是正确的。为什么反边的容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 呢？因为只有再原边有流量的时候才能反悔，原边流量多少才能反悔多少。</p>
 <h2 id="dinic">Dinic</h2>
 <p>  Dinic算法就成功实现了这种思想。寻找增广路就是寻找一条可行解，而不是最优解，若使用bfs会几乎遍历整张图，而dfs就可以很快找到一条增广路。但是dfs也容易被卡，因为可能会绕远路甚至流回已经过的点，就会浪费时间。所以Dinic结合了bfs与dfs，新增了分层图这个概念。<br>
-  DInic算法会首先进行一次bfs，按照搜索的先后顺序分层，构建分层图。然后进行dfs，此时dfs有一个限制，就是流量只会从上一层流到下一层。这样可能已经找不到增广路了，但实际上还有许多增广路没被发现。这时就需要再一次进行bfs，注意bfs不会经过流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的边，这样就会构建一个新的分层图，再进行dfs。最后直到一次bfs无法到达汇点，即不存在增广路，Dinic结束。此时的总流量就是最大流。<br>
+  DInic算法会首先进行一次bfs，按照搜索的先后顺序分层，构建分层图。然后进行dfs，此时dfs有一个限制，就是流量只会从上一层流到下一层。这样可能已经找不到增广路了，但实际上还有许多增广路没被发现。这时就需要再一次进行bfs，注意bfs不会经过容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的边，这样就会构建一个新的分层图，再进行dfs。最后直到一次bfs无法到达汇点，即不存在增广路，Dinic结束。此时的总流量就是最大流。<br>
   Dinic成功解决了之前dfs被卡的问题，因为流量只能从高的点向低的点流，并且bfs次数较少。不过Dinic还是要进行数次bfs，所以出现了更优的算法ISAP，可以只进行一次bfs。</p>
 <h2 id="优化">优化</h2>
-<p>  dfs过程中我们会一直流直到把一条边流完再转到下一条边，如果一条边有流量但是却没有增广路，说明这条边的下一个点已经没有更多流量了，我们就可以把连接的这个点的高度标记为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> ，下一次就不会再搜索到这个点了。<br>
+<p>  dfs过程中我们会一直流直到把一条边流完再转到下一条边，如果一条边有容量但是却没有增广路，说明这条边的下一个点已经没有更多容量了，我们就可以把连接的这个点的高度标记为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> ，下一次就不会再搜索到这个点了。<br>
   不过Dinic还是很慢，甚至比EK还慢，这时候我们就需要拯救Dinic的当前弧优化。上面说到，dfs过程中会一直流直到把一条边流完再转到下一条边，当搜索到一条边的时候说明这条边之前的所有边都已经没有增广路了，我们就可以直接将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span> 指向这条边，这样下一次就不会再次搜索已经没有流量的边了。</p>
 <h2 id="code">code</h2>
 <pre><code class="language-cpp">#include&lt;cstdio&gt;
@@ -1207,6 +1207,310 @@ int main()
     <div class="result" id="result">
       
       <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/Balanced-tree-Treap/"" data-c="
+          &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;  模板题：&lt;a href=&#34;https://www.luogu.com.cn/problem/P3369&#34;&gt;P3369 【模板】普通平衡树&lt;/a&gt;&lt;br&gt;
+  在一堆元素中查找一个元素，线性查找需要 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;O&lt;/mi&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;O(n)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的时间，于是人们就发明了BST二叉搜索树，一个节点左子树上的元素的值总小于此节点的值，此节点的右子树上的元素的值总小于此节点的值。这样根据一个元素的值就可以快速（&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;O&lt;/mi&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;log&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;O(\log n)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mop&#34;&gt;lo&lt;span style=&#34;margin-right:0.01389em;&#34;&gt;g&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;）在BST上查找到一个元素。BST有一个特点，就是它的中序遍历序列就是所有元素排序后的结果。不过同样的一些元素组成的BST两个BST记录的是同一组数。&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1645420993668.png&#34; alt=&#34;1&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  不过这样还是容易被卡，比如所有元素按照大小顺序加入BST，这个BST就会退化为一个链，复杂度就退化为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;O&lt;/mi&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;O(n)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 了，如下图。&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1645421150258.png&#34; alt=&#34;2&#34; width=&#34;300&#34; height=&#34;300&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  这时候我们就需要适当调整这个BST的形状，让这个BST更加平衡，于是又出现了平衡树，这里介绍一种较简单的平衡树，它就是Treap。&lt;/p&gt;
+&lt;h2 id=&#34;基本思想&#34;&gt;基本思想&lt;/h2&gt;
+&lt;p&gt;  Treap其实是一个合成词“Tree+Heap”，翻译过来就是树堆，它既有BST的性质，也有堆的性质。Treap会在插入元素的时候给每个元素一个随机的优先级，然后通过旋转操作，使得它满足BST的同时，还要满足一个节点的优先级小于它的所有儿子的优先级。由于优先级是随机的，所以这个BST的形状是随机的，就不会出现被卡成一条链的情况（只要人品正常）。&lt;/p&gt;
+&lt;h2 id=&#34;treap的储存及更新&#34;&gt;Treap的储存及更新&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;struct treap
+{
+    int x,l,r,s,k,t;
+}T[1000001];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;  平衡树的储存如上。Treap的每个节点总共需要储存这几个值：这个节点的元素的值，这个节点的左、右儿子，这个节点的子树上总共的元素个数，这个节点的优先级和这个节点的元素个数。&lt;br&gt;
+  平衡树需要动态更新当前子树的节点个数，我们就需要一个类似线段树的pushup函数，代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s+T[x].t;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;旋转操作&#34;&gt;旋转操作&lt;/h2&gt;
+&lt;p&gt;  Treap中非常难懂的一部分就是它的旋转操作，它可以改变BST的形状。旋转分为左旋与右旋。右旋操作其实就是将这个节点的父节点变为这个点的右子节点，这个点调整到原父节点的位置，并将这个点的右节点调整为其原父节点的左节点。如下图，从左图到右图的操作就是将 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;2&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 号节点进行右旋。&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1645530952402.png&#34; alt=&#34;3&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  左旋的操作刚好和右旋相反。我们可以发现，第一个BST的中序遍历为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;4,2,5,1,3&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; ，而第二个 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;4,2,5,1,3&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，这两个BST实质上记录的东西实质上是一样的，但是它的形状已经改变了。我们就可以通过旋转操作改变一个BST的形状。&lt;br&gt;
+  由于旋转操作要改变指向当前节点的指针，所以我们要使用传址的方法，这样在旋转改变当前节点的时候在调用它的函数中的指针也会改变。&lt;br&gt;
+  旋转操作的代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;void rotate_l(int &amp;amp;x)
+{
+    int p=T[x].r;
+    T[x].r=T[p].l;
+    T[p].l=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].l);
+}
+void rotate_r(int &amp;amp;x)
+{
+    int p=T[x].l;
+    T[x].l=T[p].r;
+    T[p].r=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].r);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;插入操作&#34;&gt;插入操作&lt;/h2&gt;
+&lt;p&gt;  Treap的插入操作很简单，只需要一直找到对应元素值与插入值相等的位置或者发现不存在值相等的元素即可。如果我们要插入的元素值为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;k&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.69444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，每到一个节点，如果对应元素值等于 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;k&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.69444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，就把这个点的元素个数加一；如果 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;k&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.69444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 小于这个点的元素值，那么就进入这个点的左子节点；如果 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;k&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.69444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 大于这个点的元素值，那么就进入这个点的右子节点；如果这个点的编号为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，那么表明不存在与 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;k&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.69444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03148em;&#34;&gt;k&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 相等的元素，就新建一个节点，并随机赋优先级。&lt;br&gt;
+  插入操作看似很简单，但是这样有可能不满足堆的性质，我们就需要进行旋转操作。如果左节点的优先级比这个节点小，那么就将这个节点右旋；如果右子节点的优先级比这个节点小，那么就将这个节点左旋。并且更新Treap的状态。&lt;br&gt;
+  同样，插入操作由于要旋转，也要通过传址的方法传参。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;void add(int &amp;amp;x,int k)
+{
+    if(x==0)
+    {
+        x=++q;
+        T[x].l=T[x].r=0;
+        T[x].s=T[x].t=1;
+        T[x].k=k;
+        T[x].h=rand()*rand()%1000000+1;
+        return;
+    }
+    if(k==T[x].k) ++T[x].t;
+    else if(k&amp;lt;T[x].k) add(T[x].l,k);
+    else if(k&amp;gt;T[x].k) add(T[x].r,k);
+    if(T[x].l!=0&amp;amp;&amp;amp;T[x].h&amp;gt;T[T[x].l].h) rotate_r(x);
+    if(T[x].r!=0&amp;amp;&amp;amp;T[x].h&amp;gt;T[T[x].r].h) rotate_l(x);
+    pushup(x);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;删除操作&#34;&gt;删除操作&lt;/h2&gt;
+&lt;p&gt;  Treap的删除操作和插入操作相似，要一直找到对应元素值与删除值相等的位置，然后把这个位置的元素个数减一，如果个数为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 了，就删除这个节点，并将优先级较小的子节点放在这个位置，不过这时需要注意左右子节点是否存在。如果不存在这个节点，就说明没有这个元素。同样，最后的时候要更新结点个数。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;void remove(int &amp;amp;x,int k)
+{
+    if(x==0) return;
+    if(k==T[x].k)
+    {
+        if(T[x].t&amp;gt;1)
+        {
+        	--T[x].t;
+            pushup(x);
+            return;
+        }
+        if(T[x].l==0&amp;amp;&amp;amp;T[x].r==0)
+        {
+            x=0;
+            return;
+        }
+        if(T[x].l!=0&amp;amp;&amp;amp;(T[x].r==0||T[T[x].l].h&amp;lt;T[T[x].r].h))
+        {
+            rotate_r(x);
+            remove(T[x].r,k);
+        }
+        else
+        {   
+            rotate_l(x);
+            remove(T[x].l,k);
+        }
+        pushup(x);
+        return;
+    }
+    if(k&amp;lt;T[x].k) remove(T[x].l,k);
+    else remove(T[x].r,k);
+    pushup(x);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;查询一个元素的排名&#34;&gt;查询一个元素的排名&lt;/h2&gt;
+&lt;p&gt;  在Treap中查询一个元素的排名，只需要像之前一样一直访问直到找到这个元素即可。根节点在当前子树的排名就是左子树的大小加一，而左子树的所有节点的排名就是这个节点在左子树中的排名，右子树的所有节点的排名就是这个节点在右子树的排名加上左子树以及根节点的大小。由于访问不需要修改节点，就不需要再传址了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;int num(int x,int k)
+{
+    if(x==0) return 1;
+    if(k==T[x].k) return T[T[x].l].s+1;
+    if(k&amp;lt;T[x].k) return num(T[x].l,k);
+    return T[T[x].l].s+T[x].t+num(T[x].r,k);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;查询相应排名的元素&#34;&gt;查询相应排名的元素&lt;/h2&gt;
+&lt;p&gt;  要查询相应排名的元素，只需要在每一次判断这个元素在当前节点的根节点、左子树还是右子树上。如果当前子树中的排名小于左子树的大小，那么这个元素就在左子树中，这个元素在左子树中的排名就是当前子树中的排名；如果不在左子树中但是排名小于等于左子树大小加上根节点的大小，那么这个元素就是根节点的元素值；否则就在右子树中，在右子树中的排名就是在当前子树中的排名减去左子树的大小和根节点的大小。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;int sum(int x,int k)
+{
+    if(x==0) return 1e9;
+    if(k&amp;lt;T[T[x].l].s+1) return sum(T[x].l,k);
+    if(k&amp;lt;=T[T[x].l].s+T[x].t) return T[x].k;
+    return sum(T[x].r,k-T[T[x].l].s-T[x].t);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;查询一个元素的前驱和后继&#34;&gt;查询一个元素的前驱和后继&lt;/h2&gt;
+&lt;p&gt;  一个点的前驱指的是小于这个元素值的最大的元素，后继指的是大于这个元素值的最小的元素。要找到一个点的前驱，当这个点在这个子树中时，如果要找的元素值小于等于根节点的元素值，说明这个元素在左子树中，就搜索左子树，否则在右子树中或者就是根节点，就搜索右子树。如果在左子树中但是最后没有找到，也就是返回了 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，说明这个节点没有在这个子树中，返回 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;。如果在右子树中没有找到，说明这个元素的前驱就是根节点。最后，返回找到的元素或者 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;。后继的查询操作刚好相反。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;int find_f(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&amp;lt;=T[x].k) return find_f(T[x].l,k);
+    int p=find_f(T[x].r,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+int find_b(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&amp;gt;=T[x].k) return find_b(T[x].r,k);
+    int p=find_b(T[x].l,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;treap函数的调用&#34;&gt;Treap函数的调用&lt;/h2&gt;
+&lt;p&gt;  我们总共学习了 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;6&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;6&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;6&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 个Treap的相关函数。调用的时候我们需要调用Treap的根节点。由于Treap的形状在时刻变化，所以我们需要用一个变量 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;r&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.43056em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 来记录根节点，初始值为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;int main()
+{
+    srand(time(NULL));
+    scanf(&amp;quot;%d&amp;quot;,&amp;amp;m);
+    for(int i=1;i&amp;lt;=m;++i)
+    {
+        int z,k;
+        scanf(&amp;quot;%d%d&amp;quot;,&amp;amp;z,&amp;amp;k);
+        if(z==1) add(r,k);
+        else if(z==2) remove(r,k);
+        else if(z==3) printf(&amp;quot;%d\n&amp;quot;,num(r,k));
+        else if(z==4) printf(&amp;quot;%d\n&amp;quot;,sum(r,k));
+        else if(z==5) printf(&amp;quot;%d\n&amp;quot;,find_f(r,k));
+        else if(z==6) printf(&amp;quot;%d\n&amp;quot;,find_b(r,k));
+    }
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;```#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;algorithm&amp;gt;
+#include&amp;lt;ctime&amp;gt;
+using namespace std;
+int m,r=0,q=0;
+struct treap
+{
+    int k,l,r,s,h,t;
+}T[1000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s+T[x].t;
+}
+void rotate_l(int &amp;amp;x)
+{
+    int p=T[x].r;
+    T[x].r=T[p].l;
+    T[p].l=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].l);
+}
+void rotate_r(int &amp;amp;x)
+{
+    int p=T[x].l;
+    T[x].l=T[p].r;
+    T[p].r=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].r);
+}
+void add(int &amp;amp;x,int k)
+{
+    if(x==0)
+    {
+        x=++q;
+        T[x].l=T[x].r=0;
+        T[x].s=T[x].t=1;
+        T[x].k=k;
+        T[x].h=rand()*rand()%1000000+1;
+        return;
+    }
+    if(k==T[x].k) ++T[x].t;
+    else if(k&amp;lt;T[x].k) add(T[x].l,k);
+    else if(k&amp;gt;T[x].k) add(T[x].r,k);
+    if(T[x].l!=0&amp;amp;&amp;amp;T[x].h&amp;gt;T[T[x].l].h) rotate_r(x);
+    if(T[x].r!=0&amp;amp;&amp;amp;T[x].h&amp;gt;T[T[x].r].h) rotate_l(x);
+    pushup(x);
+}
+void remove(int &amp;amp;x,int k)
+{
+    if(x==0) return;
+    if(k==T[x].k)
+    {
+        if(T[x].t&amp;gt;1)
+        {
+        	--T[x].t;
+            pushup(x);
+            return;
+        }
+        if(T[x].l==0&amp;amp;&amp;amp;T[x].r==0)
+        {
+            x=0;
+            return;
+        }
+        if(T[x].l!=0&amp;amp;&amp;amp;(T[x].r==0||T[T[x].l].h&amp;lt;T[T[x].r].h))
+        {
+            rotate_r(x);
+            remove(T[x].r,k);
+        }
+        else
+        {   
+            rotate_l(x);
+            remove(T[x].l,k);
+        }
+        pushup(x);
+        return;
+    }
+    if(k&amp;lt;T[x].k) remove(T[x].l,k);
+    else remove(T[x].r,k);
+    pushup(x);
+}
+int num(int x,int k)
+{
+    if(x==0) return 1;
+    if(k==T[x].k) return T[T[x].l].s+1;
+    if(k&amp;lt;T[x].k) return num(T[x].l,k);
+    return T[T[x].l].s+T[x].t+num(T[x].r,k);
+}
+int sum(int x,int k)
+{
+    if(x==0) return 1e9;
+    if(k&amp;lt;T[T[x].l].s+1) return sum(T[x].l,k);
+    if(k&amp;lt;=T[T[x].l].s+T[x].t) return T[x].k;
+    return sum(T[x].r,k-T[T[x].l].s-T[x].t);
+}
+int find_f(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&amp;lt;=T[x].k) return find_f(T[x].l,k);
+    int p=find_f(T[x].r,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+int find_b(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&amp;gt;=T[x].k) return find_b(T[x].r,k);
+    int p=find_b(T[x].l,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+int main()
+{
+    srand(time(NULL));
+    scanf(&amp;quot;%d&amp;quot;,&amp;amp;m);
+    for(int i=1;i&amp;lt;=m;++i)
+    {
+        int z,k;
+        scanf(&amp;quot;%d%d&amp;quot;,&amp;amp;z,&amp;amp;k);
+        if(z==1) add(r,k);
+        else if(z==2) remove(r,k);
+        else if(z==3) printf(&amp;quot;%d\n&amp;quot;,num(r,k));
+        else if(z==4) printf(&amp;quot;%d\n&amp;quot;,sum(r,k));
+        else if(z==5) printf(&amp;quot;%d\n&amp;quot;,find_f(r,k));
+        else if(z==6) printf(&amp;quot;%d\n&amp;quot;,find_b(r,k));
+    }
+    return 0;
+}&lt;/code&gt;&lt;/pre&gt;
+">平衡树Treap</a>
+      </div>
+      
+      <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/Scan-line/"" data-c="
           &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;  模板题：&lt;a href=&#34;https://www.luogu.com.cn/problem/P5490&#34;&gt;P5490 【模板】扫描线&lt;/a&gt;&lt;br&gt;
@@ -1763,27 +2067,27 @@ int main()
         <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/maximum-flow-Dinic/"" data-c="
           &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;  模板题：&lt;a href=&#34;https://www.luogu.com.cn/problem/P3376&#34;&gt;P3376 【模板】网络最大流&lt;/a&gt;&lt;br&gt;
-  一个图中，每条边都有一定的承载能力，也就是流量，流过这条边的流量不得超过这条边的最大流量，从源点到汇点的最大流量就叫做最大流。&lt;br&gt;
+  一个图中，每条边都有一定的承载能力，也就是容量，流过这条边的流量不得超过这条边的最大流量，从源点到汇点的最大流量就叫做最大流。&lt;br&gt;
   最大流问题有很多种解法，而Dinic是一种简单又比较实用的方法，但是多数解法都有一个思想：残留网络。&lt;/p&gt;
 &lt;h2 id=&#34;残留网络&#34;&gt;残留网络&lt;/h2&gt;
-&lt;p&gt;  增广路指的就是一条从源点到汇点，且经过的边最小流量不为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量。但是这种算法是错误的，见下图：&lt;br&gt;
+&lt;p&gt;  增广路指的就是一条从源点到汇点，且经过的边最小容量不为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的路径.显而易见，我们可以通过每一次搜索增广路，然后将经过的边的流量减去这条增广路的流量，这条增广路的流量就是经过的所有边的容量的最小值。但是这种算法是错误的，见下图：&lt;br&gt;
 &lt;img src=&#34;https://2745518585.github.io/post-images/1644904878284.png&#34; alt=&#34;1&#34; width=&#34;300&#34; height=&#34;250&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
   如果我们按照上述算法，可能就会找到这个路径：&lt;br&gt;
 &lt;img src=&#34;https://2745518585.github.io/post-images/1644904897886.png&#34; alt=&#34;2&#34; width=&#34;300&#34; height=&#34;250&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
   这样找出来的最大流为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;1&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，而真实的最大流为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;2&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，显然不正确。这是因为我们第一次找到的增广路影响了后面寻找更多增广路。如果我们让后续寻找更多增广路时可以“反悔”，也就是修改之前的增广路，这个问题就解决了。为了实现这个方案，残留网络就出现了。&lt;br&gt;
-  我们对于每一条边都增加一条流量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 反向边，找到增广路后经过的边流量要减去此增广路的流量，其反向边的流量还要加上此增广路的流量。所有反向边组成的图就是残留网络。于是刚刚的图就变成了这个图：&lt;br&gt;
+  我们对于每一条边都增加一条容量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 反向边，找到增广路后经过的边流量要减去此增广路的流量，其反向边的流量还要加上此增广路的流量。所有反向边组成的图就是残留网络。于是刚刚的图就变成了这个图：&lt;br&gt;
 &lt;img src=&#34;https://2745518585.github.io/post-images/1644904912038.png&#34; alt=&#34;3&#34; width=&#34;300&#34; height=&#34;250&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
 &lt;img src=&#34;https://2745518585.github.io/post-images/1644904927153.png&#34; alt=&#34;4&#34; width=&#34;300&#34; height=&#34;250&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
   对于这个图，我们还可以找到一条增广路：&lt;br&gt;
 &lt;img src=&#34;https://2745518585.github.io/post-images/1644904941056.png&#34; alt=&#34;5&#34; width=&#34;300&#34; height=&#34;250&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
   于是我们就正确求解出了这个图的最大流。&lt;br&gt;
-  残留网络并不是简单地增加了一条运输流量的边，它是让之后寻找增广路时可以使水流沿着这条边流回去，也就是将之前的增广路“反悔”了。所以这种思想是正确的。&lt;/p&gt;
+  残留网络并不是简单地增加了一条运输流量的边，它是让之后寻找增广路时可以使水流沿着这条边流回去，也就是将之前的增广路“反悔”了。所以这种思想是正确的。为什么反边的容量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 呢？因为只有再原边有流量的时候才能反悔，原边流量多少才能反悔多少。&lt;/p&gt;
 &lt;h2 id=&#34;dinic&#34;&gt;Dinic&lt;/h2&gt;
 &lt;p&gt;  Dinic算法就成功实现了这种思想。寻找增广路就是寻找一条可行解，而不是最优解，若使用bfs会几乎遍历整张图，而dfs就可以很快找到一条增广路。但是dfs也容易被卡，因为可能会绕远路甚至流回已经过的点，就会浪费时间。所以Dinic结合了bfs与dfs，新增了分层图这个概念。&lt;br&gt;
-  DInic算法会首先进行一次bfs，按照搜索的先后顺序分层，构建分层图。然后进行dfs，此时dfs有一个限制，就是流量只会从上一层流到下一层。这样可能已经找不到增广路了，但实际上还有许多增广路没被发现。这时就需要再一次进行bfs，注意bfs不会经过流量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的边，这样就会构建一个新的分层图，再进行dfs。最后直到一次bfs无法到达汇点，即不存在增广路，Dinic结束。此时的总流量就是最大流。&lt;br&gt;
+  DInic算法会首先进行一次bfs，按照搜索的先后顺序分层，构建分层图。然后进行dfs，此时dfs有一个限制，就是流量只会从上一层流到下一层。这样可能已经找不到增广路了，但实际上还有许多增广路没被发现。这时就需要再一次进行bfs，注意bfs不会经过容量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的边，这样就会构建一个新的分层图，再进行dfs。最后直到一次bfs无法到达汇点，即不存在增广路，Dinic结束。此时的总流量就是最大流。&lt;br&gt;
   Dinic成功解决了之前dfs被卡的问题，因为流量只能从高的点向低的点流，并且bfs次数较少。不过Dinic还是要进行数次bfs，所以出现了更优的算法ISAP，可以只进行一次bfs。&lt;/p&gt;
 &lt;h2 id=&#34;优化&#34;&gt;优化&lt;/h2&gt;
-&lt;p&gt;  dfs过程中我们会一直流直到把一条边流完再转到下一条边，如果一条边有流量但是却没有增广路，说明这条边的下一个点已经没有更多流量了，我们就可以把连接的这个点的高度标记为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; ，下一次就不会再搜索到这个点了。&lt;br&gt;
+&lt;p&gt;  dfs过程中我们会一直流直到把一条边流完再转到下一条边，如果一条边有容量但是却没有增广路，说明这条边的下一个点已经没有更多容量了，我们就可以把连接的这个点的高度标记为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; ，下一次就不会再搜索到这个点了。&lt;br&gt;
   不过Dinic还是很慢，甚至比EK还慢，这时候我们就需要拯救Dinic的当前弧优化。上面说到，dfs过程中会一直流直到把一条边流完再转到下一条边，当搜索到一条边的时候说明这条边之前的所有边都已经没有增广路了，我们就可以直接将 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;t&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.61508em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 指向这条边，这样下一次就不会再次搜索已经没有流量的边了。&lt;/p&gt;
 &lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;

@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
-<title>对拍器 | 赵悦岑&#39;s Blog</title>
+<title>平衡树Treap | 赵悦岑&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1645878837504">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -41,8 +41,8 @@
 
 
 
-  <meta name="description" content="对拍器" />
-  <meta name="keywords" content="对拍器" />
+  <meta name="description" content="平衡树Treap" />
+  <meta name="keywords" content="平衡树,Treap" />
 </head>
 
 <body>
@@ -193,7 +193,8 @@
       <div class="sidebar-body gemini" id="sidebar_body">
         
           
-            
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -223,6 +224,205 @@
 
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3">基本思想</a></li>
+<li><a href="#treap%E7%9A%84%E5%82%A8%E5%AD%98%E5%8F%8A%E6%9B%B4%E6%96%B0">Treap的储存及更新</a></li>
+<li><a href="#%E6%97%8B%E8%BD%AC%E6%93%8D%E4%BD%9C">旋转操作</a></li>
+<li><a href="#%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C">插入操作</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C">删除操作</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E7%9A%84%E6%8E%92%E5%90%8D">查询一个元素的排名</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E7%9B%B8%E5%BA%94%E6%8E%92%E5%90%8D%E7%9A%84%E5%85%83%E7%B4%A0">查询相应排名的元素</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E7%9A%84%E5%89%8D%E9%A9%B1%E5%92%8C%E5%90%8E%E7%BB%A7">查询一个元素的前驱和后继</a></li>
+<li><a href="#treap%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8">Treap函数的调用</a></li>
+<li><a href="#code">code</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
           
         
       </div>
@@ -310,14 +510,14 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://2745518585.github.io/post/Beat-counter/"> 对拍器 </a>
+    <a class="post-title-link" href="https://2745518585.github.io/post/Balanced-tree-Treap/"> 平衡树Treap </a>
   </h1>
   <div class="post-meta">
     
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2022-02-20 12:24:31">2022-02-20</span>
+      <span class="publish-time" data-t="2022-02-21 12:55:50">2022-02-21</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -325,8 +525,9 @@
       <i class="fa fa-folder-o"></i>
       <span class="pc-show language" data-lan="category-in">标签:</span>
        
-      <a href="https://2745518585.github.io/tag/Beat-counter/">
-        <span>对拍器</span>
+      <a href="https://2745518585.github.io/tag/Balanced-tree/"> <span>平衡树</span> </a>、   
+      <a href="https://2745518585.github.io/tag/Treap/">
+        <span>Treap</span>
       </a>
        
     </span>
@@ -335,7 +536,7 @@
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
       <span
-        >5<span class="language" data-lan="minute"
+        >15<span class="language" data-lan="minute"
           >分钟</span
         ></span
       >
@@ -344,7 +545,7 @@
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
       <span
-        >783<span class="pc-show language" data-lan="words"
+        >3078<span class="pc-show language" data-lan="words"
           >字数</span
         ></span
       >
@@ -354,193 +555,305 @@
 </section>
 
             <div class="post-body next-md-body" id="post_body">
-              <p>run.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'t','a','s','k','k','i','l','l',' ','/','f',' ','/','p','i','d',' ','.','e','x','e'};
-int main()
+              <h2 id="前言">前言</h2>
+<p>  模板题：<a href="https://www.luogu.com.cn/problem/P3369">P3369 【模板】普通平衡树</a><br>
+  在一堆元素中查找一个元素，线性查找需要 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间，于是人们就发明了BST二叉搜索树，一个节点左子树上的元素的值总小于此节点的值，此节点的右子树上的元素的值总小于此节点的值。这样根据一个元素的值就可以快速（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>）在BST上查找到一个元素。BST有一个特点，就是它的中序遍历序列就是所有元素排序后的结果。不过同样的一些元素组成的BST两个BST记录的是同一组数。<br>
+<img src="https://2745518585.github.io/post-images/1645420993668.png" alt="1" loading="lazy"><br>
+  不过这样还是容易被卡，比如所有元素按照大小顺序加入BST，这个BST就会退化为一个链，复杂度就退化为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 了，如下图。<br>
+<img src="https://2745518585.github.io/post-images/1645421150258.png" alt="2" width="300" height="300" loading="lazy"><br>
+  这时候我们就需要适当调整这个BST的形状，让这个BST更加平衡，于是又出现了平衡树，这里介绍一种较简单的平衡树，它就是Treap。</p>
+<h2 id="基本思想">基本思想</h2>
+<p>  Treap其实是一个合成词“Tree+Heap”，翻译过来就是树堆，它既有BST的性质，也有堆的性质。Treap会在插入元素的时候给每个元素一个随机的优先级，然后通过旋转操作，使得它满足BST的同时，还要满足一个节点的优先级小于它的所有儿子的优先级。由于优先级是随机的，所以这个BST的形状是随机的，就不会出现被卡成一条链的情况（只要人品正常）。</p>
+<h2 id="treap的储存及更新">Treap的储存及更新</h2>
+<pre><code class="language-cpp">struct treap
 {
-    char c[1001],d[1001],e[1001];
-    cin&gt;&gt;c;
-    freopen(&quot;run_time.txt&quot;,&quot;r&quot;,stdin);
-    int x;
-    scanf(&quot;%d&quot;,&amp;x);
-    freopen(&quot;run_name.in&quot;,&quot;w&quot;,stdout);
-    cout&lt;&lt;c;
-    printf(&quot; %d&quot;,x);
-    freopen(&quot;run_result.txt&quot;,&quot;w&quot;,stdout);
-    if(system(&quot;run_complain.exe&quot;))
-    {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
-        printf(&quot;\nComplain Error\n\n&quot;);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
-    }
-    int m=strlen(c);
-    for(int i=0;i&lt;17;++i)
-    {
-        d[i]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+17]=c[i];
-    }
-    for(int i=0;i&lt;4;++i)
-    {
-        d[m+17+i]=p[i+17];
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x/10);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-	}
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x/2);
-    if(system(d))
-	{
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-	Sleep(x);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x*2);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-    printf(&quot;\nTime Limit Error\nover %dms\n\n&quot;,x*2);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-    return 0;
+    int x,l,r,s,k,t;
+}T[1000001];
+</code></pre>
+<p>  平衡树的储存如上。Treap的每个节点总共需要储存这几个值：这个节点的元素的值，这个节点的左、右儿子，这个节点的子树上总共的元素个数，这个节点的优先级和这个节点的元素个数。<br>
+  平衡树需要动态更新当前子树的节点个数，我们就需要一个类似线段树的pushup函数，代码如下：</p>
+<pre><code class="language-cpp">void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s+T[x].t;
 }
 </code></pre>
-<p>run_complain.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-char p[100]=&quot;g++ .cpp -o .exe -Wall -std=c++11 -O2 -Wl,--stack=2147483647&quot;;
-int main()
+<h2 id="旋转操作">旋转操作</h2>
+<p>  Treap中非常难懂的一部分就是它的旋转操作，它可以改变BST的形状。旋转分为左旋与右旋。右旋操作其实就是将这个节点的父节点变为这个点的右子节点，这个点调整到原父节点的位置，并将这个点的右节点调整为其原父节点的左节点。如下图，从左图到右图的操作就是将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 号节点进行右旋。<br>
+<img src="https://2745518585.github.io/post-images/1645530952402.png" alt="3" loading="lazy"><br>
+  左旋的操作刚好和右旋相反。我们可以发现，第一个BST的中序遍历为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">4,2,5,1,3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span></span></span></span> ，而第二个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">4,2,5,1,3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span></span></span></span>，这两个BST实质上记录的东西实质上是一样的，但是它的形状已经改变了。我们就可以通过旋转操作改变一个BST的形状。<br>
+  由于旋转操作要改变指向当前节点的指针，所以我们要使用传址的方法，这样在旋转改变当前节点的时候在调用它的函数中的指针也会改变。<br>
+  旋转操作的代码如下：</p>
+<pre><code class="language-cpp">void rotate_l(int &amp;x)
 {
-    char c[1001],d[1001];
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    cin&gt;&gt;c;
-    int m=strlen(c);
-    for(int i=0;i&lt;4;++i)
-    {
-        d[i]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+4]=c[i];
-    }
-    for(int i=4;i&lt;12;++i)
-    {
-        d[i+m]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+m+12]=c[i];
-    }
-    for(int i=12;i&lt;61;++i)
-    {
-        d[i+m*2]=p[i];
-    }
-    return system(d);
+    int p=T[x].r;
+    T[x].r=T[p].l;
+    T[p].l=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].l);
+}
+void rotate_r(int &amp;x)
+{
+    int p=T[x].l;
+    T[x].l=T[p].r;
+    T[p].r=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].r);
 }
 </code></pre>
-<p>run_runner:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
-int main()
+<h2 id="插入操作">插入操作</h2>
+<p>  Treap的插入操作很简单，只需要一直找到对应元素值与插入值相等的位置或者发现不存在值相等的元素即可。如果我们要插入的元素值为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，每到一个节点，如果对应元素值等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，就把这个点的元素个数加一；如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小于这个点的元素值，那么就进入这个点的左子节点；如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大于这个点的元素值，那么就进入这个点的右子节点；如果这个点的编号为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，那么表明不存在与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 相等的元素，就新建一个节点，并随机赋优先级。<br>
+  插入操作看似很简单，但是这样有可能不满足堆的性质，我们就需要进行旋转操作。如果左节点的优先级比这个节点小，那么就将这个节点右旋；如果右子节点的优先级比这个节点小，那么就将这个节点左旋。并且更新Treap的状态。<br>
+  同样，插入操作由于要旋转，也要通过传址的方法传参。</p>
+<pre><code class="language-cpp">void add(int &amp;x,int k)
 {
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    char c[100001];
-    cin&gt;&gt;c;
-    int m=strlen(c);
-    for(int i=0;i&lt;24;++i)
+    if(x==0)
     {
-        c[m+i]=p[i];
+        x=++q;
+        T[x].l=T[x].r=0;
+        T[x].s=T[x].t=1;
+        T[x].k=k;
+        T[x].h=rand()*rand()%1000000+1;
+        return;
     }
-    system(c);
-    return 0;
+    if(k==T[x].k) ++T[x].t;
+    else if(k&lt;T[x].k) add(T[x].l,k);
+    else if(k&gt;T[x].k) add(T[x].r,k);
+    if(T[x].l!=0&amp;&amp;T[x].h&gt;T[T[x].l].h) rotate_r(x);
+    if(T[x].r!=0&amp;&amp;T[x].h&gt;T[T[x].r].h) rotate_l(x);
+    pushup(x);
 }
 </code></pre>
-<p>run_check.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
-int main()
+<h2 id="删除操作">删除操作</h2>
+<p>  Treap的删除操作和插入操作相似，要一直找到对应元素值与删除值相等的位置，然后把这个位置的元素个数减一，如果个数为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 了，就删除这个节点，并将优先级较小的子节点放在这个位置，不过这时需要注意左右子节点是否存在。如果不存在这个节点，就说明没有这个元素。同样，最后的时候要更新结点个数。</p>
+<pre><code class="language-cpp">void remove(int &amp;x,int k)
 {
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    char c[1001];
-    int x;
-    cin&gt;&gt;c&gt;&gt;x;
-    int m=strlen(c);
-    for(int i=0;i&lt;24;++i)
+    if(x==0) return;
+    if(k==T[x].k)
     {
-        c[m+i]=p[i];
-    }
-    double t0=clock();
-    if(system(c))
-    {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
-        printf(&quot;\nRuntime Error\n\n&quot;);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
-    }
-    double t1=clock();
-    if(t1-t0&gt;=x)
-    {
-        if(system(&quot;fc /a /w run.out data.out&quot;))
+        if(T[x].t&gt;1)
         {
-            freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-            printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
-            printf(&quot;\nWrong Answer\n\n&quot;);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-            return 0;
+        	--T[x].t;
+            pushup(x);
+            return;
+        }
+        if(T[x].l==0&amp;&amp;T[x].r==0)
+        {
+            x=0;
+            return;
+        }
+        if(T[x].l!=0&amp;&amp;(T[x].r==0||T[T[x].l].h&lt;T[T[x].r].h))
+        {
+            rotate_r(x);
+            remove(T[x].r,k);
         }
         else
-        {
-            freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-            printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
-            printf(&quot;\nCorrect Answer\n\n&quot;);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-            return 0;
+        {   
+            rotate_l(x);
+            remove(T[x].l,k);
         }
+        pushup(x);
+        return;
     }
-    if(system(&quot;fc /a /w run.out data.out&quot;))
+    if(k&lt;T[x].k) remove(T[x].l,k);
+    else remove(T[x].r,k);
+    pushup(x);
+}
+</code></pre>
+<h2 id="查询一个元素的排名">查询一个元素的排名</h2>
+<p>  在Treap中查询一个元素的排名，只需要像之前一样一直访问直到找到这个元素即可。根节点在当前子树的排名就是左子树的大小加一，而左子树的所有节点的排名就是这个节点在左子树中的排名，右子树的所有节点的排名就是这个节点在右子树的排名加上左子树以及根节点的大小。由于访问不需要修改节点，就不需要再传址了。</p>
+<pre><code class="language-cpp">int num(int x,int k)
+{
+    if(x==0) return 1;
+    if(k==T[x].k) return T[T[x].l].s+1;
+    if(k&lt;T[x].k) return num(T[x].l,k);
+    return T[T[x].l].s+T[x].t+num(T[x].r,k);
+}
+</code></pre>
+<h2 id="查询相应排名的元素">查询相应排名的元素</h2>
+<p>  要查询相应排名的元素，只需要在每一次判断这个元素在当前节点的根节点、左子树还是右子树上。如果当前子树中的排名小于左子树的大小，那么这个元素就在左子树中，这个元素在左子树中的排名就是当前子树中的排名；如果不在左子树中但是排名小于等于左子树大小加上根节点的大小，那么这个元素就是根节点的元素值；否则就在右子树中，在右子树中的排名就是在当前子树中的排名减去左子树的大小和根节点的大小。</p>
+<pre><code class="language-cpp">int sum(int x,int k)
+{
+    if(x==0) return 1e9;
+    if(k&lt;T[T[x].l].s+1) return sum(T[x].l,k);
+    if(k&lt;=T[T[x].l].s+T[x].t) return T[x].k;
+    return sum(T[x].r,k-T[T[x].l].s-T[x].t);
+}
+</code></pre>
+<h2 id="查询一个元素的前驱和后继">查询一个元素的前驱和后继</h2>
+<p>  一个点的前驱指的是小于这个元素值的最大的元素，后继指的是大于这个元素值的最小的元素。要找到一个点的前驱，当这个点在这个子树中时，如果要找的元素值小于等于根节点的元素值，说明这个元素在左子树中，就搜索左子树，否则在右子树中或者就是根节点，就搜索右子树。如果在左子树中但是最后没有找到，也就是返回了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，说明这个节点没有在这个子树中，返回 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。如果在右子树中没有找到，说明这个元素的前驱就是根节点。最后，返回找到的元素或者 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。后继的查询操作刚好相反。</p>
+<pre><code class="language-cpp">int find_f(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&lt;=T[x].k) return find_f(T[x].l,k);
+    int p=find_f(T[x].r,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+int find_b(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&gt;=T[x].k) return find_b(T[x].r,k);
+    int p=find_b(T[x].l,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+</code></pre>
+<h2 id="treap函数的调用">Treap函数的调用</h2>
+<p>  我们总共学习了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 个Treap的相关函数。调用的时候我们需要调用Treap的根节点。由于Treap的形状在时刻变化，所以我们需要用一个变量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 来记录根节点，初始值为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。</p>
+<pre><code class="language-cpp">int main()
+{
+    srand(time(NULL));
+    scanf(&quot;%d&quot;,&amp;m);
+    for(int i=1;i&lt;=m;++i)
     {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED);
-        printf(&quot;\nWrong Answer\n%dms\n\n&quot;,int(t1-t0));
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
+        int z,k;
+        scanf(&quot;%d%d&quot;,&amp;z,&amp;k);
+        if(z==1) add(r,k);
+        else if(z==2) remove(r,k);
+        else if(z==3) printf(&quot;%d\n&quot;,num(r,k));
+        else if(z==4) printf(&quot;%d\n&quot;,sum(r,k));
+        else if(z==5) printf(&quot;%d\n&quot;,find_f(r,k));
+        else if(z==6) printf(&quot;%d\n&quot;,find_b(r,k));
     }
-    freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_GREEN);
-    printf(&quot;\nAccepted\n%dms\n\n&quot;,int(t1-t0));
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
     return 0;
 }
 </code></pre>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">```#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;ctime&gt;
+using namespace std;
+int m,r=0,q=0;
+struct treap
+{
+    int k,l,r,s,h,t;
+}T[1000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s+T[x].t;
+}
+void rotate_l(int &amp;x)
+{
+    int p=T[x].r;
+    T[x].r=T[p].l;
+    T[p].l=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].l);
+}
+void rotate_r(int &amp;x)
+{
+    int p=T[x].l;
+    T[x].l=T[p].r;
+    T[p].r=x;
+    T[p].s=T[x].s;
+    x=p;
+    pushup(x);
+    pushup(T[x].r);
+}
+void add(int &amp;x,int k)
+{
+    if(x==0)
+    {
+        x=++q;
+        T[x].l=T[x].r=0;
+        T[x].s=T[x].t=1;
+        T[x].k=k;
+        T[x].h=rand()*rand()%1000000+1;
+        return;
+    }
+    if(k==T[x].k) ++T[x].t;
+    else if(k&lt;T[x].k) add(T[x].l,k);
+    else if(k&gt;T[x].k) add(T[x].r,k);
+    if(T[x].l!=0&amp;&amp;T[x].h&gt;T[T[x].l].h) rotate_r(x);
+    if(T[x].r!=0&amp;&amp;T[x].h&gt;T[T[x].r].h) rotate_l(x);
+    pushup(x);
+}
+void remove(int &amp;x,int k)
+{
+    if(x==0) return;
+    if(k==T[x].k)
+    {
+        if(T[x].t&gt;1)
+        {
+        	--T[x].t;
+            pushup(x);
+            return;
+        }
+        if(T[x].l==0&amp;&amp;T[x].r==0)
+        {
+            x=0;
+            return;
+        }
+        if(T[x].l!=0&amp;&amp;(T[x].r==0||T[T[x].l].h&lt;T[T[x].r].h))
+        {
+            rotate_r(x);
+            remove(T[x].r,k);
+        }
+        else
+        {   
+            rotate_l(x);
+            remove(T[x].l,k);
+        }
+        pushup(x);
+        return;
+    }
+    if(k&lt;T[x].k) remove(T[x].l,k);
+    else remove(T[x].r,k);
+    pushup(x);
+}
+int num(int x,int k)
+{
+    if(x==0) return 1;
+    if(k==T[x].k) return T[T[x].l].s+1;
+    if(k&lt;T[x].k) return num(T[x].l,k);
+    return T[T[x].l].s+T[x].t+num(T[x].r,k);
+}
+int sum(int x,int k)
+{
+    if(x==0) return 1e9;
+    if(k&lt;T[T[x].l].s+1) return sum(T[x].l,k);
+    if(k&lt;=T[T[x].l].s+T[x].t) return T[x].k;
+    return sum(T[x].r,k-T[T[x].l].s-T[x].t);
+}
+int find_f(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&lt;=T[x].k) return find_f(T[x].l,k);
+    int p=find_f(T[x].r,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+int find_b(int x,int k)
+{
+    if(x==0) return 0;
+    if(k&gt;=T[x].k) return find_b(T[x].r,k);
+    int p=find_b(T[x].l,k);
+    if(p==0) return T[x].k;
+    return p;
+}
+int main()
+{
+    srand(time(NULL));
+    scanf(&quot;%d&quot;,&amp;m);
+    for(int i=1;i&lt;=m;++i)
+    {
+        int z,k;
+        scanf(&quot;%d%d&quot;,&amp;z,&amp;k);
+        if(z==1) add(r,k);
+        else if(z==2) remove(r,k);
+        else if(z==3) printf(&quot;%d\n&quot;,num(r,k));
+        else if(z==4) printf(&quot;%d\n&quot;,sum(r,k));
+        else if(z==5) printf(&quot;%d\n&quot;,find_f(r,k));
+        else if(z==6) printf(&quot;%d\n&quot;,find_b(r,k));
+    }
+    return 0;
+}</code></pre>
 
             </div>
             
@@ -557,7 +870,7 @@ int main()
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://2745518585.github.io/post/Beat-counter/" title="对拍器">https://2745518585.github.io/post/Beat-counter/</a>
+      <a href="https://2745518585.github.io/post/Balanced-tree-Treap/" title="平衡树Treap">https://2745518585.github.io/post/Balanced-tree-Treap/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -566,21 +879,19 @@ int main()
   </ul>
   <div class="tags">
     
-      <a href="https://2745518585.github.io/tag/Beat-counter/"># 对拍器</a>
+      <a href="https://2745518585.github.io/tag/Balanced-tree/"># 平衡树</a>
+    
+      <a href="https://2745518585.github.io/tag/Treap/"># Treap</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">面积并扫描线</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="最小费用最大流" href="https://2745518585.github.io/post/minimum-cost-maximum-flow/">最小费用最大流</a>
-        <a class="nav-mobile-next" title="最小费用最大流" href="https://2745518585.github.io/post/minimum-cost-maximum-flow/">下一篇</a>
+        <a class="nav-pc-next" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">面积并扫描线</a>
+        <a class="nav-mobile-next" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

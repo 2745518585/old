@@ -9,7 +9,7 @@
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
 <title>平衡树Treap | 赵悦岑&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1645880020503">
+<link rel="shortcut icon" href="/favicon.ico?v=1646198138308">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -211,7 +211,7 @@
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">14</span>
+        <span class="site-item-stat-count">15</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -233,7 +233,7 @@
 <li>
 <ul>
 <li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
-<li><a href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3">基本思想</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF">基本思路</a></li>
 <li><a href="#treap%E7%9A%84%E5%82%A8%E5%AD%98%E5%8F%8A%E6%9B%B4%E6%96%B0">Treap的储存及更新</a></li>
 <li><a href="#%E6%97%8B%E8%BD%AC%E6%93%8D%E4%BD%9C">旋转操作</a></li>
 <li><a href="#%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C">插入操作</a></li>
@@ -562,7 +562,7 @@
   不过这样还是容易被卡，比如所有元素按照大小顺序加入BST，这个BST就会退化为一个链，复杂度就退化为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 了，如下图。<br>
 <img src="https://2745518585.github.io/post-images/1645421150258.png" alt="2" width="300" height="300" loading="lazy"><br>
   这时候我们就需要适当调整这个BST的形状，让这个BST更加平衡，于是又出现了平衡树，这里介绍一种较简单的平衡树，它就是Treap。</p>
-<h2 id="基本思想">基本思想</h2>
+<h2 id="基本思路">基本思路</h2>
 <p>  Treap其实是一个合成词“Tree+Heap”，翻译过来就是树堆，它既有BST的性质，也有堆的性质。Treap会在插入元素的时候给每个元素一个随机的优先级，然后通过旋转操作，使得它满足BST的同时，还要满足一个节点的优先级小于它的所有儿子的优先级。由于优先级是随机的，所以这个BST的形状是随机的，就不会出现被卡成一条链的情况（只要人品正常）。</p>
 <h2 id="treap的储存及更新">Treap的储存及更新</h2>
 <pre><code class="language-cpp">struct treap
@@ -888,8 +888,8 @@ int main()
     <div class="nav-prev">
       
         <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="上下界网络流" href="https://2745518585.github.io/post/shang-xia-jie-wang-luo-liu/">上下界网络流</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="上下界网络流" href="https://2745518585.github.io/post/shang-xia-jie-wang-luo-liu/">上一篇</a>
+        <a class="nav-pc-next" title="上下界网络流" href="https://2745518585.github.io/post/Upper-and-lower-bound-network-flow/">上下界网络流</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="上下界网络流" href="https://2745518585.github.io/post/Upper-and-lower-bound-network-flow/">上一篇</a>
       
     </div>
     <div class="nav-next">
@@ -1407,9 +1407,151 @@ int main()
     <div class="result" id="result">
       
       <div class="item">
-        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/shang-xia-jie-wang-luo-liu/"" data-c="
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/Upper-and-lower-bound-network-flow/"" data-c="
           &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
-&lt;p&gt;  在一般的网络流问题中，每条边都有一定的容量，也就是流量上限。而有的问题中，每条边还需要限制一个“流量下限”，也就是流过这条边的流量必须大于等于流量上限且小于等于流量下限。&lt;/p&gt;
+&lt;p&gt;  在一般的网络流问题中，每条边都有一定的容量，也就是流量上限。而有的问题中，每条边还需要限制一个“流量下限”，也就是流过这条边的流量必须大于等于流量上限且小于等于流量下限。这样的问题需要新的思路来解决，我们需要将其转换为朴素的最大流。&lt;br&gt;
+  上下界网络流分为几个问题：无源汇上下界可行流、有源汇上下界可行流、有源汇上下界最大流与有源汇上下界最小流。&lt;/p&gt;
+&lt;h2 id=&#34;无源汇上下界可行流&#34;&gt;无源汇上下界可行流&lt;/h2&gt;
+&lt;p&gt;  我们知道上下界网络流问题中每条边都有流量下限，所以是不是可以将最小流量流满，然后再跑最大流？显然不行，因为将最小流量流满后的图不一定满足流量守恒，也就是一个点流入的流量等于流出的流量（除源点、汇点）。如下图：&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1646025559934.png&#34; alt=&#34;1&#34; width=&#34;400&#34; height=&#34;500&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  这个图就会变成下面两个图，第一幅是流满最小流量的图，第二幅是剩下最大流量的图。&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1646025571550.png&#34; alt=&#34;2&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  显然，第一幅图并不满足流量守恒，这样第二幅图跑出来了原图也不一定有解。第一幅图中 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;1&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 号点流入流量比流出流量少了 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;15&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;15&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;2&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 号点流入流量比流出流量少了 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;10&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;10&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;3&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 号点流入流量比流出流量多了 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;15&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;15&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;4&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 号点流入流量比流出流量多了 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;10&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;10&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;。多的流量去哪里，少的流量从哪里来？我们可以用新建的超级源点和超级汇点，用源点补充少的流量，汇点吸走多的流量，如果这个点流入流量较多就连一条边到汇点，这个点流出流量较多从源点向这个点连一条边。但是超级源点和汇点并不存在，流量也不能这样流。所以源点补充的流量应该从第二幅图中来，汇点多出的流量也应该流到第二幅图中去。所以我们在第二幅图中也建立超级源点和汇点，并像第一幅图一样连边，只不过附加边方向反向，超级源点和超级汇点互换。如下图：&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1646027066785.png&#34; alt=&#34;3&#34; width=&#34;500&#34; height=&#34;500&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1646027073745.png&#34; alt=&#34;4&#34; width=&#34;500&#34; height=&#34;500&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  如何判断是否存在可行流？我们只需要在第二幅图中从源点到汇点跑最大流，如果从源点流出的按所有边已经流满，也就是流入汇点的所有边都流满了，就说明存在可行流。因为这样就说明第二幅图可以提供第一幅图的超级源点和超级汇点需要的流量，反之则无法满足第一幅图的超级源汇点所需流量，原图也就不存在可行流。由于从源点流出的边的总容量和流入汇点的边的总容量相等，所以只需要判断一边即可。上图就不存在可行流。&lt;/p&gt;
+&lt;h2 id=&#34;有源汇上下界可行流&#34;&gt;有源汇上下界可行流&lt;/h2&gt;
+&lt;p&gt;  如果我们在上图把 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;1&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 号点设为源点，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;4&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 号点设为汇点，情况就又不一样了。源点和汇点的特点是源点可以流出无限流量，汇点可以接收无限流量，源点流出的流量和汇点流入的流量相等。如何实现？我们只需要从汇点向源点连一条容量为无穷的边，就可以保证源点和汇点的流量相等。注意这条容量为正无穷的边是在建立了超级源点与超级汇点之后建立的，不影响与超级源点和超级汇点的连边。&lt;br&gt;
+&lt;img src=&#34;https://2745518585.github.io/post-images/1646028137696.png&#34; alt=&#34;5&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+  判断方法同上无源汇上下界可行流。这样我们就可以发现原图有解了。从源点流出或汇点流入的流量就是从源点流向汇点的流量。&lt;/p&gt;
+&lt;h2 id=&#34;有源汇上下界最大流&#34;&gt;有源汇上下界最大流&lt;/h2&gt;
+&lt;p&gt;  我们现在这个图中跑一边有源汇上下界可行流，找到从汇点到源点的附加边的实际流量，也就是这条边反向边的容量。但是我们只能得到一个可行流，并不是最大流，所以我们要再在残留网络上从源点到汇点跑一边最大流，注意这时要先删去附加边。跑出来的最大流加上原来附加边的实际流量就是最大流。&lt;br&gt;
+  我们可以发现图中汇点到源点除了附加边，还有一条容量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;15&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;15&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的边，则就导致可能有流量从汇点到源点的部分流量这种边流过，我们也就无法得到真实的可行流的流量，但是这个对于最后的最大流没有影响，因为如果有流量从这些边流到源点，跑最大流的时候也一定能沿着反向边流过相同的流量到达终点，最后的和就没有变化。&lt;/p&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;algorithm&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+int n,m,p=1,s1,s2,t1,t2,t[10001],t0[10001],f[10001],b[10001];
+struct str
+{
+    int m,q,r;
+}a[1000001];
+void road(int x,int y,int r)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+}
+bool bfs()
+{
+    queue&amp;lt;int&amp;gt; Q;
+    Q.push(s1);
+    for(int i=1;i&amp;lt;=n;++i) f[i]=0;
+    f[s1]=1;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;amp;&amp;amp;a[i].r!=0)
+            {
+                f[a[i].m]=f[k]+1;
+                Q.push(a[i].m);
+            }
+        }
+    }
+    return f[s2]!=0;
+}
+int dfs(int x,int r)
+{
+    if(x==s2) return r;
+    int s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(f[a[i].m]==f[x]+1&amp;amp;&amp;amp;a[i].r!=0)
+        {
+            int z=dfs(a[i].m,min(r,a[i].r));
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s; 
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&amp;quot;%d%d%d%d&amp;quot;,&amp;amp;n,&amp;amp;m,&amp;amp;t1,&amp;amp;t2);
+    s1=n+1;
+    s2=n+2;
+    for(int i=1;i&amp;lt;=m;++i)
+    {
+        int x,y,r1,r2;
+        scanf(&amp;quot;%d%d%d%d&amp;quot;,&amp;amp;x,&amp;amp;y,&amp;amp;r1,&amp;amp;r2);
+        road(x,y,r2-r1);
+        road(y,x,0);
+        b[x]+=r1;
+        b[y]-=r1;
+    }
+    for(int i=1;i&amp;lt;=n;++i)
+    {
+        if(b[i]&amp;lt;0)
+        {
+            road(s1,i,-b[i]);
+            road(i,s1,0);
+        }
+        else if(b[i]&amp;gt;0)
+        {
+            road(i,s2,b[i]);
+            road(s2,i,0);
+        }
+    }
+    road(t2,t1,1e9);
+    road(t1,t2,0);
+    n+=2;
+    while(bfs())
+    {
+        for(int i=1;i&amp;lt;=n;++i) t0[i]=t[i];
+        dfs(s1,1e9);
+    }
+    for(int i=t[s1];i!=0;i=a[i].q)
+    {
+        if(a[i].r!=0)
+        {
+            printf(&amp;quot;please go home to sleep&amp;quot;);
+            return 0;
+        }
+    }
+    n-=2;
+    s1=t1;
+    s2=t2;
+    int r=0;
+    for(int i=t[s2];i!=0;i=a[i].q)
+    {
+        if(a[i].m==s1)
+        {
+            r+=a[i^1].r;
+            a[i].r=a[i^1].r=0;
+        }
+    }
+    while(bfs())
+    {
+        for(int i=1;i&amp;lt;=n;++i) t0[i]=t[i];
+        r+=dfs(s1,1e9);
+    }
+    printf(&amp;quot;%d&amp;quot;,r);
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
 ">上下界网络流</a>
       </div>
       
@@ -1422,7 +1564,7 @@ int main()
   不过这样还是容易被卡，比如所有元素按照大小顺序加入BST，这个BST就会退化为一个链，复杂度就退化为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;O&lt;/mi&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;O(n)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 了，如下图。&lt;br&gt;
 &lt;img src=&#34;https://2745518585.github.io/post-images/1645421150258.png&#34; alt=&#34;2&#34; width=&#34;300&#34; height=&#34;300&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
   这时候我们就需要适当调整这个BST的形状，让这个BST更加平衡，于是又出现了平衡树，这里介绍一种较简单的平衡树，它就是Treap。&lt;/p&gt;
-&lt;h2 id=&#34;基本思想&#34;&gt;基本思想&lt;/h2&gt;
+&lt;h2 id=&#34;基本思路&#34;&gt;基本思路&lt;/h2&gt;
 &lt;p&gt;  Treap其实是一个合成词“Tree+Heap”，翻译过来就是树堆，它既有BST的性质，也有堆的性质。Treap会在插入元素的时候给每个元素一个随机的优先级，然后通过旋转操作，使得它满足BST的同时，还要满足一个节点的优先级小于它的所有儿子的优先级。由于优先级是随机的，所以这个BST的形状是随机的，就不会出现被卡成一条链的情况（只要人品正常）。&lt;/p&gt;
 &lt;h2 id=&#34;treap的储存及更新&#34;&gt;Treap的储存及更新&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;struct treap
@@ -2296,6 +2438,8 @@ int main()
 &lt;h2 id=&#34;优化&#34;&gt;优化&lt;/h2&gt;
 &lt;p&gt;  dfs过程中我们会一直流直到把一条边流完再转到下一条边，如果一条边有容量但是却没有增广路，说明这条边的下一个点已经没有更多容量了，我们就可以把连接的这个点的高度标记为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; ，下一次就不会再搜索到这个点了。&lt;br&gt;
   不过Dinic还是很慢，甚至比EK还慢，这时候我们就需要拯救Dinic的当前弧优化。上面说到，dfs过程中会一直流直到把一条边流完再转到下一条边，当搜索到一条边的时候说明这条边之前的所有边都已经没有增广路了，我们就可以直接将 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;t&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.61508em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 指向这条边，这样下一次就不会再次搜索已经没有流量的边了。&lt;/p&gt;
+&lt;h2 id=&#34;无向图&#34;&gt;无向图&lt;/h2&gt;
+&lt;p&gt;  无向图的最大流可以通过建立两组边来实现，但是也可以更简单地去掉流量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的反向边，也就是对于一条容量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;r&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.43056em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的无向边，从起点到终点建立一条容量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;r&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.43056em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的无向边，再从终点到起点建立一条容量为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;r&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.43056em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 的无向边即可。&lt;/p&gt;
 &lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
 #include&amp;lt;algorithm&amp;gt;

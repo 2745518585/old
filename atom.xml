@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-03-16T06:33:34.958Z</updated>
+    <updated>2022-03-16T07:00:22.196Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -12,8 +12,8 @@
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
     <entry>
         <title type="html"><![CDATA[平衡树Splay]]></title>
-        <id>https://2745518585.github.io/post/ping-heng-shu-splay/</id>
-        <link href="https://2745518585.github.io/post/ping-heng-shu-splay/">
+        <id>https://2745518585.github.io/post/Balanced-tree-Splay/</id>
+        <link href="https://2745518585.github.io/post/Balanced-tree-Splay/">
         </link>
         <updated>2022-03-15T05:23:25.000Z</updated>
         <content type="html"><![CDATA[<h2 id="前言">前言</h2>

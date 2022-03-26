@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-03-16T07:00:22.196Z</updated>
+    <updated>2022-03-26T12:57:44.365Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -11,6 +11,114 @@
     <icon>https://2745518585.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
     <entry>
+        <title type="html"><![CDATA[[NOI Online 2022 提高组] 丹钓战]]></title>
+        <id>https://2745518585.github.io/post/P8251-solution/</id>
+        <link href="https://2745518585.github.io/post/P8251-solution/">
+        </link>
+        <updated>2022-03-26T05:15:28.000Z</updated>
+        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P8251">P8251 [NOI Online 2022 提高组] 丹钓战</a><br>
+  这道题我的方法是<strong>主席树</strong>，请不了解主席树的同学移步这道题： <a href="https://www.luogu.com.cn/problem/P3834">P3834 【模板】可持久化线段树 2</a></p>
+<h2 id="分析">分析</h2>
+<h3 id="模拟入栈">模拟入栈</h3>
+<p>  首先我们可以发现，这个栈的元素 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 一定是单调下降的，如果要模拟入栈的操作，我们可以通过二分查找第一个比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 大的元素来模拟，可以在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n\log n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span></span></span></span> 的复杂度内完成一次模拟。但是同时还要满足任意两个相邻元素的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 不同，我们只需要在找到第一个比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 大的元素后，弹出栈顶直到栈顶元素的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 不相等。注意要首先把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span> 入栈，防止越界。<br>
+  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 代表 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 序列，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span> 代表栈。</p>
+<pre><code class="language-cpp">int l=0,r=t,z;
+while(l&lt;r)
+ {
+    z=(l+r+1)&gt;&gt;1;
+    if(b[i]&lt;b[c[z]]) l=z;
+    else r=z-1;
+}
+while(a[c[l]]==a[i]) --l;
+</code></pre>
+<h2 id="查询">查询</h2>
+<p>  如果我们先把所有元素按顺序入栈，由于任意的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 都应该是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>n</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,n]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">]</span></span></span></span> 的一部分，并且栈中的元素编号一定递减，所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∀</mi><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">\forall [l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∀</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span>，最终形成的栈一定是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 形成的栈的一部分，具体来说就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 形成的栈去掉所有编号比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 小的元素。如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 号元素想要在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 形成的栈中成为第一个，那么 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 所形成的的栈中在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 之前的元素的编号必然都比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 小，只有这样前面所有元素才会被删去。所以用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span> 来储存每个数入栈后前一个元素的编号，那么 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 中成功二元组的个数就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>∈</mo><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo><mo separator="true">,</mo><msub><mi>d</mi><mi>k</mi></msub><mo>&lt;</mo><mi>l</mi></mrow><annotation encoding="application/x-tex">k \in [l,r],d_k &lt; l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 成立的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 的个数。</p>
+<h2 id="优化">优化</h2>
+<p>  但是上面这种方法的复杂度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>×</mo><mi>q</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n\times q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> ，显然过不了。通过上面的分析，我们发现查询的实质是求 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span> 中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 中小于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 的数的个数。有什么数据结构能实现？主席树！于是这道题就变成了主席树的板子题。然后，就没有然后了。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+int read()
+{
+    char c=getchar();int x=0;bool f=0;
+    for(;!isdigit(c);c=getchar())f^=!(c^45);
+    for(;isdigit(c);c=getchar())x=(x&lt;&lt;1)+(x&lt;&lt;3)+(c^48);
+    if(f)x=-x;return x;
+}
+int n,m,p,t,a[500001],b[500001],c[500001],rt[500001];
+struct tree
+{
+    int l,r,s;
+}T[30000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
+}
+void build(int &amp;x,int l,int r)
+{
+    x=++p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
+}
+void modify(int &amp;x,int l,int r,int q)
+{
+    T[++p]=T[x];
+    ++T[p].s;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q);
+    else modify(T[x].r,z+1,r,q);
+}
+int num(int x,int l,int r,int k)
+{
+    if(l==r) return 0;
+    int z=l+r&gt;&gt;1;
+    if(k==z) return T[T[x].l].s;
+    if(k&lt;z) return num(T[x].l,l,z,k);
+    return T[T[x].l].s+num(T[x].r,z+1,r,k);
+}
+int main()
+{
+    freopen(&quot;stack.in&quot;,&quot;r&quot;,stdin);
+    freopen(&quot;stack.out&quot;,&quot;w&quot;,stdout);
+    n=read(),m=read();
+    for(int i=1;i&lt;=n;++i) a[i]=read();
+    for(int i=1;i&lt;=n;++i) b[i]=read();
+    a[0]=0;
+    b[0]=1e9;
+    c[0]=0;
+    build(rt[0],0,n);
+    for(int i=1;i&lt;=n;++i)
+    {
+        int l=0,r=t,z;
+        while(l&lt;r)
+        {
+            z=(l+r+1)&gt;&gt;1;
+            if(b[i]&lt;b[c[z]]) l=z;
+            else r=z-1;
+        }
+        while(a[c[l]]==a[i]) --l;
+        t=l+1;
+        c[t]=i;
+        rt[i]=rt[i-1];
+        modify(rt[i],0,n,c[l]);
+    }
+    for(int i=1;i&lt;=m;++i)
+    {
+        int l=read(),r=read();
+        printf(&quot;%d\n&quot;,num(rt[r],0,n,l-1)-num(rt[l-1],0,n,l-1));
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[平衡树Splay]]></title>
         <id>https://2745518585.github.io/post/Balanced-tree-Splay/</id>
         <link href="https://2745518585.github.io/post/Balanced-tree-Splay/">
@@ -18,26 +126,26 @@
         <updated>2022-03-15T05:23:25.000Z</updated>
         <content type="html"><![CDATA[<h2 id="前言">前言</h2>
 <p>  模板题：<a href="https://www.luogu.com.cn/problem/P3369">P3369 【模板】普通平衡树</a><br>
-  我们已经学会了使用Treap来实现平衡树的功能，但是还有很多其他其它的平衡树，比如Splay，Splay不仅有平衡树功能，还可以用于其它地方，这是其它平衡树无法做到的。</p>
+  我们已经学会了使用 Treap 来实现平衡树的功能，但是还有很多其他其它的平衡树，比如 Splay，Splay 不仅有平衡树功能，还可以用于其它地方，这是其它平衡树无法做到的。</p>
 <h2 id="基本思路">基本思路</h2>
-<p>  Splay的核心是提根操作，也就是把一个节点提到根节点，每一次操作后都将当前节点提到根节点，这样Splay的形状就是在不断变化的，就可以较好地防止被卡。<br>
-  Splay的提根操作不止是讲一个节点提到根节点，它可以将一个节点提到它的某个祖先的儿子节点，这样在一些操作时直接将要操作的节点提到指定位置就可以很简单地解决问题。</p>
+<p>  Splay 的核心是提根操作，也就是把一个节点提到根节点，每一次操作后都将当前节点提到根节点，这样 Splay 的形状就是在不断变化的，就可以较好地防止被卡。<br>
+  Splay 的提根操作不止是讲一个节点提到根节点，它可以将一个节点提到它的某个祖先的儿子节点，这样在一些操作时直接将要操作的节点提到指定位置就可以很简单地解决问题。</p>
 <h2 id="储存与更新">储存与更新</h2>
 <pre><code class="language-cpp">struct splay
 {
     int k,a[2],f,s,t;
 }T[10000001];
 </code></pre>
-<p>  Splay需要储存当前节点的元素值 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，左右儿子 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span>，父节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，当前节点子树的元素总数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>，当前节点的元素个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span>。<br>
-  Splay的更新方法与Treap相同。</p>
+<p>  Splay 需要储存当前节点的元素值 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，左右儿子 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span>，父节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，当前节点子树的元素总数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>，当前节点的元素个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span>。<br>
+  Splay 的更新方法与Treap相同。</p>
 <pre><code class="language-cpp">void pushup(int x)
 {
     T[x].s=T[T[x].a[0]].s+T[T[x].a[1]].s+T[x].t;
 }
 </code></pre>
 <h2 id="提根操作">提根操作</h2>
-<p>  Splay的提根操作同样也要用到Treap中的旋转操作，但是它不分左旋和右旋，旋转都是将当前节点旋转到它的父节点的位置。这样一直旋转，直到旋转到对应位置就停止即可。实际上我们会把当前节点旋转到目标节点的儿子节点，要判断当前节点的父节点是否为目标节点。<br>
-  Splay的旋转操作比较麻烦，因为我们需要在旋转的同时判断当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 与其父节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span>、祖父节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span> 的关系。用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 来储存当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的左儿子还是右儿子，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 表示左儿子，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 表示右儿子。首先 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 连接到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span> 的下面，替换 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的位置；接着把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的儿子接到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 下面；最后把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 接在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的下面。这里用了一个技巧：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>^<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 其实就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 除了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 的另一个儿子，当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>  为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 是，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>^<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 。<br>
+<p>  Splay 的提根操作同样也要用到 Treap 中的旋转操作，但是它不分左旋和右旋，旋转都是将当前节点旋转到它的父节点的位置。这样一直旋转，直到旋转到对应位置就停止即可。实际上我们会把当前节点旋转到目标节点的儿子节点，要判断当前节点的父节点是否为目标节点。<br>
+  Splay 的旋转操作比较麻烦，因为我们需要在旋转的同时判断当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 与其父节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span>、祖父节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span> 的关系。用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 来储存当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的左儿子还是右儿子，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 表示左儿子，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 表示右儿子。首先 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 连接到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span> 的下面，替换 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的位置；接着把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的儿子接到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 下面；最后把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 接在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的下面。这里用了一个技巧：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>^<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 其实就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 除了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 的另一个儿子，当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>  为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 是，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>^<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 。<br>
   由于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的儿子就是根节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">rt</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span></span></span></span>，所以如果目标是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，当前节点就是根节点，需要在最后判断。</p>
 <pre><code class="language-cpp">void rotate(int x)
 {
@@ -58,7 +166,7 @@ void splay(int x,int k)
 }
 </code></pre>
 <h2 id="建树操作">建树操作</h2>
-<p>  不知道为什么，Splay不加上下界就会WA，但是Treap就不会。我们需要在最开始时插入两个节点：正无穷和负无穷，来防止越界。根节点最好手动添加，另一个就用插入操作即可。</p>
+<p>  不知道为什么，Splay 不加上下界就会 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi>W</mi><mi>A</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{WA}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord" style="color:red;"><span class="mord mathdefault" style="margin-right:0.13889em;color:red;">W</span><span class="mord mathdefault" style="color:red;">A</span></span></span></span></span>，但是 Treap 就不会。我们需要在最开始时插入两个节点：正无穷和负无穷，来防止越界。根节点最好手动添加，另一个就用插入操作即可。</p>
 <pre><code class="language-cpp">void build()
 {
     rt=q=1;
@@ -69,7 +177,7 @@ void splay(int x,int k)
 }
 </code></pre>
 <h2 id="插入操作">插入操作</h2>
-<p>  Splay的很多操作与Treap极其类似，包括插入操作，只需要在最后的时候进行提根改变Splay的形状即可。</p>
+<p>  Splay 的很多操作与 Treap 极其类似，包括插入操作，只需要在最后的时候进行提根改变Splay的形状即可。</p>
 <pre><code class="language-cpp">void add(int &amp;x,int f,int k)
 {
     if(x==0)
@@ -93,7 +201,7 @@ void splay(int x,int k)
 }
 </code></pre>
 <h2 id="删除操作">删除操作</h2>
-<p>  利用Splay可以改变形状的特点，就可以用独特的方法来删除节点。如果通过提根来使要删除的节点成为叶子结点，就可以直接删除这个点。我们可以先找到这个节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的前驱 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 与后继 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 之间只有一个节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>。我们先把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 提到根节点，再将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 提到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 的儿子节点。由于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>[</mo><mi>r</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>k</mi><mo>&gt;</mo><mi>T</mi><mo>[</mo><mi>l</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>k</mi></mrow><annotation encoding="application/x-tex">T[r].k&gt;T[l].k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> ，所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 一定是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 的右子节点。而 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 的左子树，也就是比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 大而比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 小的部分就只有一个节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>，直接删除或元素个数减一即可。</p>
+<p>  利用 Splay 可以改变形状的特点，就可以用独特的方法来删除节点。如果通过提根来使要删除的节点成为叶子结点，就可以直接删除这个点。我们可以先找到这个节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的前驱 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 与后继 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 之间只有一个节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>。我们先把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 提到根节点，再将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 提到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 的儿子节点。由于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>[</mo><mi>r</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>k</mi><mo>&gt;</mo><mi>T</mi><mo>[</mo><mi>l</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>k</mi></mrow><annotation encoding="application/x-tex">T[r].k&gt;T[l].k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> ，所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 一定是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 的右子节点。而 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 的左子树，也就是比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 大而比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 小的部分就只有一个节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>，直接删除或元素个数减一即可。</p>
 <pre><code class="language-cpp">void remove(int k)
 {
     int l=find_f(rt,rt,k),r=find_b(rt,rt,k);
@@ -110,7 +218,7 @@ void splay(int x,int k)
 }
 </code></pre>
 <h2 id="查询排名">查询排名</h2>
-<p>  在Splay中，查询一个元素的排名十分简单，就只需要将这个元素 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的前驱 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 提到根节点，那么根节点与左子树中的元素一定比这个元素小。而且不存在一个元素比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 大而比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 小，也就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 没有左儿子，说明比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 小的元素全部都在根节点与左子树中。所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的排名就是左子树的大小加上根节点的元素个数。</p>
+<p>  在 Splay 中，查询一个元素的排名十分简单，就只需要将这个元素 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的前驱 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 提到根节点，那么根节点与左子树中的元素一定比这个元素小。而且不存在一个元素比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 大而比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 小，也就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 没有左儿子，说明比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 小的元素全部都在根节点与左子树中。所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的排名就是左子树的大小加上根节点的元素个数。</p>
 <pre><code class="language-cpp">int num(int k)
 {
     splay(find_f(rt,rt,k),0);
@@ -118,22 +226,22 @@ void splay(int x,int k)
 }
 </code></pre>
 <h2 id="查询对应排名的元素">查询对应排名的元素</h2>
-<p>  Splay的这个操作和Treap相同，只需要找到这个节点后将其提根即可。</p>
+<p>  Splay 的这个操作和 Treap 相同，只需要找到这个节点后将其提根即可。</p>
 <pre><code class="language-cpp">int sum(int x,int k)
 {
-    if(x==0)
+    if(x==0) return 0;
+    if(k&lt;T[T[x].a[0]].s+1) return sum(T[x].a[0],k);
+    if(k&lt;=T[T[x].a[0]].s+T[x].t)
     {
         splay(x,0);
-        return 0;
+        return x;
     }
-    if(k&lt;T[T[x].a[0]].s+1) return sum(T[x].a[0],k);
-    if(k&lt;=T[T[x].a[0]].s+T[x].t) return x;
     return sum(T[x].a[1],k-T[T[x].a[0]].s-T[x].t);
 }
 </code></pre>
 <h2 id="查询前驱和后继">查询前驱和后继</h2>
-<p>  Splay查询前驱后后继的操作也和Treap相同，只需要记录当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的根节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，并在找到了不存在的节点，也就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，那么就将这个点的上一个点也就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span> 提根。对于后继的操作也一模一样。<br>
-  由于Splay很多操作都要用到前驱和后继，所以这里的前驱和后继返回的都是节点编号，而不是元素的值。</p>
+<p>  Splay 查询前驱后后继的操作也和 Treap 相同，只需要记录当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 的根节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，并在找到了不存在的节点，也就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，那么就将这个点的上一个点也就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span> 提根。对于后继的操作也一模一样。<br>
+  由于 Splay 很多操作都要用到前驱和后继，所以这里的前驱和后继返回的都是节点编号，而不是元素的值。</p>
 <pre><code class="language-cpp">int find_f(int x,int f,int k)
 {
     if(x==0)
@@ -160,7 +268,7 @@ int find_b(int x,int f,int k)
 }
 </code></pre>
 <h2 id="splay的调用">Splay的调用</h2>
-<p>  Splay的这些操作调用方法与Treap一样，只有前驱和后继是返回的节点编号，需要转换为元素值。</p>
+<p>  Splay 的这些操作调用方法与 Treap 一样，只有前驱、后继和相应排名的元素是返回的节点编号，需要转换为元素值。</p>
 <pre><code class="language-cpp">int main()
 {
     build();
@@ -277,13 +385,13 @@ void remove(int k)
 }
 int sum(int x,int k)
 {
-    if(x==0)
+    if(x==0) return 0;
+    if(k&lt;T[T[x].a[0]].s+1) return sum(T[x].a[0],k);
+    if(k&lt;=T[T[x].a[0]].s+T[x].t)
     {
         splay(x,0);
-        return 0;
+        return x;
     }
-    if(k&lt;T[T[x].a[0]].s+1) return sum(T[x].a[0],k);
-    if(k&lt;=T[T[x].a[0]].s+T[x].t) return x;
     return sum(T[x].a[1],k-T[T[x].a[0]].s-T[x].t);
 }
 int num(int k)
@@ -524,6 +632,231 @@ int main()
   1 2 3 5<br>
   【数据范围】<br>
   <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>⩽</mo><mi>n</mi><mo>⩽</mo><mn>10000</mn><mo separator="true">,</mo><mn>1</mn><mo>⩽</mo><mi>m</mi><mo>⩽</mo><mn>2000000</mn><mo separator="true">,</mo><mn>1</mn><mo>⩽</mo><mi>k</mi><mo>⩽</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">1\leqslant n \leqslant 10000,1\leqslant m \leqslant 2000000,1\leqslant k \leqslant 100</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.78111em;vertical-align:-0.13667em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⩽</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.7733399999999999em;vertical-align:-0.13667em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⩽</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⩽</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.7733399999999999em;vertical-align:-0.13667em;"></span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⩽</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">2</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⩽</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83111em;vertical-align:-0.13667em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⩽</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span></span></span></span></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[可持续化线段树]]></title>
+        <id>https://2745518585.github.io/post/Sustainable-segment-tree/</id>
+        <link href="https://2745518585.github.io/post/Sustainable-segment-tree/">
+        </link>
+        <updated>2022-03-10T05:40:48.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="可持续化线段树">可持续化线段树</h1>
+<h2 id="前言">前言</h2>
+<p>&amp;#8195； 模板题：<a href="https://www.luogu.com.cn/problem/P3919">P3919 【模板】可持久化线段树 1（可持久化数组）</a><br>
+  我们学习了很多的数据结构，它们支持修改、查询的操作。但是如果我们想在过去的某个版本上进行操作，我们就需要可持续化数据结构，比如说可持续化线段树，它支持在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间内进行操作。</p>
+<h2 id="基本思想">基本思想</h2>
+<p>  朴素的方法实现可持续化需要记录每个版本，修改一次就需要 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间来复制，不能接受。但是我们可以发现，线段树上每一次操作都只改变树上的一条链，如果我们只复制这条链，就只需要 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间来复制了。<br>
+  我们要在只复制一条链的情况下保持原树和新树都是完整的，就需要把没有改变的所有点与新的链连在一起，并记录每一个版本的根节点。由于每一次修改都要改变根节点，所以每一个版本都对应一个根节点，这个根节点的子树就是一颗完整的线段树。如下图：<br>
+<img src="https://2745518585.github.io/post-images/1648270217949.jpg" alt="0" width="450" loading="lazy"><br>
+<img src="https://2745518585.github.io/post-images/1648270221355.jpg" alt="1" width="450" loading="lazy"><br>
+  （图片来自网络）</p>
+<h2 id="储存及更新">储存及更新</h2>
+<p>  可持续化线段树不再像线段树那样储存左端点与右端点，而是左儿子与右儿子，因为可持续化线段树不再满足完全二叉树那样的编号规律，但是左右端点都可以轻松算出来。</p>
+<pre><code class="language-cpp">struct tree
+{
+    int l,r,s;
+}T[100000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
+}
+</code></pre>
+<h2 id="建树">建树</h2>
+<p>  可持续化线段树的建立和线段树几乎一样，只是新节点的编号要单独算，这个过程要传址，就像平衡树那样。</p>
+<pre><code class="language-cpp">void build(int &amp;x,int l,int r)
+{
+    x=++p;
+    if(l==r)
+    {
+        T[x].s=a[l];
+        return;
+    }
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
+}
+</code></pre>
+<h2 id="修改">修改</h2>
+<p>  可持续化线段树的单点修改需要把所修改节点到根节点的所有节点全部备份一遍、更改，注意这个过程还要传递当前区间的左右端点，同时也要传址。</p>
+<pre><code class="language-cpp">void modify(int &amp;x,int l,int r,int q,int k)
+{
+    T[++p]=T[x];
+    T[p].s=k;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q,k);
+    else modify(T[x].r,z+1,r,q,k);
+}
+</code></pre>
+<h2 id="查询">查询</h2>
+<p>  查询操作就和线段树十分相似了，只是同时需要传递左右端点。</p>
+<pre><code class="language-cpp">int sum(int x,int l,int r,int l0,int r0)
+{
+    if(l&gt;=l0&amp;&amp;r&lt;=r0) return T[x].s;
+    int z=l+r&gt;&gt;1,s=0;
+    if(l0&lt;=z) s+=sum(T[x].l,l,z,l0,r0);
+    if(r0&gt;z) s+=sum(T[x].r,z+1,r,l0,r0);
+    return s;
+}
+</code></pre>
+<h2 id="调用">调用</h2>
+<p>  可持续化线段树调用的根节点是指定版本的根节点复制过来的根节点，这样调用的时候就会在这个根节点下面新建节点，同时这个根节点也会在操作后指向新的节点。不过板子题比较特殊的是查询操作也要新建版本，我们只需要把根节点复制一遍即可，其它节点都不用变。可持续化线段树一般也要建树，对应的根节点为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，这样可以防止在一些操作中越界。</p>
+<pre><code class="language-cpp">build(rt[0],1,n);
+for(int i=1;i&lt;=m;++i)
+{
+    int d,z,x,y;
+    scanf(&quot;%d%d%d%d&quot;,&amp;d,&amp;z,&amp;x,&amp;y);
+    rt[i]=rt[d];
+    if(z==1)
+    {
+         modify(rt[i],1,n,x,y);
+    }
+    else
+    {
+        printf(&quot;%d\n&quot;,sum(rt[i],1,n,x,y));
+    }
+}
+</code></pre>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+int n,m,p=0,a[1000001],b[1000001],rt[1000001];
+struct tree
+{
+    int l,r,s;
+}T[100000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
+}
+void build(int &amp;x,int l,int r)
+{
+    x=++p;
+    if(l==r)
+    {
+        T[x].s=a[l];
+        return;
+    }
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
+}
+void modify(int &amp;x,int l,int r,int q,int k)
+{
+    T[++p]=T[x];
+    T[p].s=k;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q,k);
+    else modify(T[x].r,z+1,r,q,k);
+}
+int sum(int x,int l,int r,int l0,int r0)
+{
+    if(l&gt;=l0&amp;&amp;r&lt;=r0) return T[x].s;
+    int z=l+r&gt;&gt;1,s=0;
+    if(l0&lt;=z) s+=sum(T[x].l,l,z,l0,r0);
+    if(r0&gt;z) s+=sum(T[x].r,z+1,r,l0,r0);
+    return s;
+}
+int main()
+{
+    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+    for(int i=1;i&lt;=n;++i)
+    {
+        scanf(&quot;%d&quot;,&amp;a[i]);
+    }
+    build(rt[0],1,n);
+    for(int i=1;i&lt;=m;++i)
+    {
+        int d,z,x,y;
+        scanf(&quot;%d%d%d%d&quot;,&amp;d,&amp;z,&amp;x,&amp;y);
+        rt[i]=rt[d];
+        if(z==1)
+        {
+            modify(rt[i],1,n,x,y);
+        }
+        else
+        {
+            printf(&quot;%d\n&quot;,sum(rt[i],1,n,x,y));
+        }
+    }
+    return 0;
+}
+</code></pre>
+<h1 id="主席树">主席树</h1>
+<h2 id="前言-2">前言</h2>
+<p>&amp;#8195； 模板题：<a href="https://www.luogu.com.cn/problem/P3834">P3834 【模板】可持久化线段树 2</a><br>
+  主席树是可持续化线段树的一种经典应用，但是它不是用来解决需要操作历史版本的问题的，而是用来解决一个不可修改的序列的，经典问题就是一个数在区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 的排名和区间第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小，不带修改操作的话主席树就是最好的解法。</p>
+<h2 id="基本思想-2">基本思想</h2>
+<p>  要找一个数在区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 的排名，我们很容易想到对于每个数做前缀和的方法，但是要从第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个数转移到第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 个数，就需要转移 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span> 次（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span> 是所有数离散化后的数的个数），不能接受。但是我们发现，每一次转移都只有一个数发生了改变，其它的都与上一个版本相同。而可持续化线段树就是在历史版本上用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>log</mi><mo>⁡</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\log n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span></span></span></span> 的时间复制并修改一个版本上的一个点。<br>
+  主席树的基本思想是把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>∼</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1\sim n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 这 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个点看做 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个版本，对于版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 记录每个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>∼</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">1\sim q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span> 在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>i</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">i</span><span class="mclose">]</span></span></span></span> 中出现的次数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span>，而主席树维护的就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 数组。为什么要这样做？如果我们要找离散化后的数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 在区间 [l,r] 中的排名，我们只需要在版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">l-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 中找到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,x-1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span> 的和，同时在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 中找到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 的和，相减即为答案。而主席树版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 与版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 之间只有原序列 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 的第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 上的数对应的位置的值改变了，相当于单点修改。但是在查询的时候有可能要访问到版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 所以我们要先建立 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 号版本，防止越界。<br>
+  要解决区间第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小的问题，我们只需要在线段树上进行二分。同时维护版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">l-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 的当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">x1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">1</span></span></span></span> 与版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 上的当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">x2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">2</span></span></span></span>，如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">x2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">2</span></span></span></span> 的左子树的和减去 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">x1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">1</span></span></span></span> 左子树的和小于等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，表明区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>∼</mo><msub><mi>a</mi><mi>q</mi></msub></mrow><annotation encoding="application/x-tex">1\sim a_q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 的数的总数比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 多，答案在左子树上，否则在右子树上。</p>
+<h2 id="code-2">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+int n,m,p=0,a[1000001],b[1000001],rt[1000001];
+struct tree
+{
+    int l,r,s;
+}T[10000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
+}
+void build(int &amp;x,int l,int r)
+{
+    x=++p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
+}
+void modify(int &amp;x,int l,int r,int q)
+{
+    T[++p]=T[x];
+    ++T[p].s;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q);
+    else modify(T[x].r,z+1,r,q);
+}
+int sum(int x1,int x2,int l,int r,int q)
+{
+    if(l==r) return b[l];
+    int z=l+r&gt;&gt;1,k=T[T[x2].l].s-T[T[x1].l].s;
+    if(q&lt;=k) return sum(T[x1].l,T[x2].l,l,z,q);
+    else return sum(T[x1].r,T[x2].r,z+1,r,q-k);
+}
+int main()
+{
+    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+    for(int i=1;i&lt;=n;++i)
+    {
+        scanf(&quot;%d&quot;,&amp;a[i]);
+        b[i]=a[i];
+    }
+    sort(b+1,b+n+1);
+    int q=unique(b+1,b+n+1)-b-1;
+    build(rt[0],1,q);
+    for(int i=1;i&lt;=n;++i)
+    {
+        rt[i]=rt[i-1];
+        modify(rt[i],1,q,lower_bound(b+1,b+q+1,a[i])-b);
+    }
+    for(int i=1;i&lt;=m;++i)
+    {
+        int l,r,k;
+        scanf(&quot;%d%d%d&quot;,&amp;l,&amp;r,&amp;k);
+        printf(&quot;%d\n&quot;,sum(rt[l-1],rt[r],1,q,k));
+    }
+    return 0;
+}
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -997,30 +1330,30 @@ int main()
         <updated>2022-02-21T04:55:50.000Z</updated>
         <content type="html"><![CDATA[<h2 id="前言">前言</h2>
 <p>  模板题：<a href="https://www.luogu.com.cn/problem/P3369">P3369 【模板】普通平衡树</a><br>
-  在一堆元素中查找一个元素，线性查找需要 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间，于是人们就发明了BST二叉搜索树，一个节点左子树上的元素的值总小于此节点的值，此节点的右子树上的元素的值总小于此节点的值。这样根据一个元素的值就可以快速（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>）在BST上查找到一个元素。BST有一个特点，就是它的中序遍历序列就是所有元素排序后的结果。不过同样的一些元素组成的BST两个BST记录的是同一组数。<br>
+  在一堆元素中查找一个元素，线性查找需要 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间，于是人们就发明了 BST 二叉搜索树，一个节点左子树上的元素的值总小于此节点的值，此节点的右子树上的元素的值总小于此节点的值。这样根据一个元素的值就可以快速（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>）在 BST 上查找到一个元素。BST 有一个特点，就是它的中序遍历序列就是所有元素排序后的结果。不过同样的一些元素组成的 BST 两个 BST 记录的是同一组数。<br>
 <img src="https://2745518585.github.io/post-images/1645420993668.png" alt="1" loading="lazy"><br>
-  不过这样还是容易被卡，比如所有元素按照大小顺序加入BST，这个BST就会退化为一个链，复杂度就退化为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 了，如下图。<br>
+  不过这样还是容易被卡，比如所有元素按照大小顺序加入 BST，这个 BST 就会退化为一个链，复杂度就退化为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 了，如下图。<br>
 <img src="https://2745518585.github.io/post-images/1645421150258.png" alt="2" width="300" loading="lazy"><br>
-  这时候我们就需要适当调整这个BST的形状，让这个BST更加平衡，于是又出现了平衡树，这里介绍一种较简单的平衡树，它就是Treap。</p>
+  这时候我们就需要适当调整这个 BST 的形状，让这个 BST 更加平衡，于是又出现了平衡树，这里介绍一种较简单的平衡树，它就是 Treap。</p>
 <h2 id="基本思路">基本思路</h2>
-<p>  Treap其实是一个合成词“Tree+Heap”，翻译过来就是树堆，它既有BST的性质，也有堆的性质。Treap会在插入元素的时候给每个元素一个随机的优先级，然后通过旋转操作，使得它满足BST的同时，还要满足一个节点的优先级小于它的所有儿子的优先级。由于优先级是随机的，所以这个BST的形状是随机的，就不会出现被卡成一条链的情况（只要人品正常）。</p>
+<p>  Treap 其实是一个合成词“Tree+Heap”，翻译过来就是树堆，它既有 BST 的性质，也有堆的性质。Treap 会在插入元素的时候给每个元素一个随机的优先级，然后通过旋转操作，使得它满足 BST 的同时，还要满足一个节点的优先级小于它的所有儿子的优先级。由于优先级是随机的，所以这个 BST 的形状是随机的，就不会出现被卡成一条链的情况（只要人品正常）。</p>
 <h2 id="储存及更新">储存及更新</h2>
 <pre><code class="language-cpp">struct treap
 {
     int x,l,r,s,k,t;
 }T[1000001];
 </code></pre>
-<p>  平衡树的储存如上。Treap的每个节点总共需要储存这几个值：这个节点的元素的值 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>，这个节点的左、右儿子 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mo separator="true">,</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">l,r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span>，这个节点的子树上总共的元素个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>，这个节点的优先级 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 和这个节点的元素个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span>。<br>
-  平衡树需要动态更新当前子树的节点个数，我们就需要一个类似线段树的pushup函数，代码如下：</p>
+<p>  平衡树的储存如上。Treap 的每个节点总共需要储存这几个值：这个节点的元素的值 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>，这个节点的左、右儿子 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mo separator="true">,</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">l,r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span>，这个节点的子树上总共的元素个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>，这个节点的优先级 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 和这个节点的元素个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span>。<br>
+  平衡树需要动态更新当前子树的节点个数，我们就需要一个类似线段树的 pushup 函数，代码如下：</p>
 <pre><code class="language-cpp">void pushup(int x)
 {
     T[x].s=T[T[x].l].s+T[T[x].r].s+T[x].t;
 }
 </code></pre>
 <h2 id="旋转操作">旋转操作</h2>
-<p>  Treap中非常难懂的一部分就是它的旋转操作，它可以改变BST的形状。旋转分为左旋与右旋。右旋操作其实就是将这个节点的父节点变为这个点的右子节点，这个点调整到原父节点的位置，并将这个点的右节点调整为其原父节点的左节点。如下图，从左图到右图的操作就是将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 号节点进行右旋。<br>
+<p>  Treap中非常难懂的一部分就是它的旋转操作，它可以改变 BST 的形状。旋转分为左旋与右旋。右旋操作其实就是将这个节点的父节点变为这个点的右子节点，这个点调整到原父节点的位置，并将这个点的右节点调整为其原父节点的左节点。如下图，从左图到右图的操作就是将 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 号节点进行右旋。<br>
 <img src="https://2745518585.github.io/post-images/1645530952402.png" alt="3" loading="lazy"><br>
-  左旋的操作刚好和右旋相反。我们可以发现，第一个BST的中序遍历为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">4,2,5,1,3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span></span></span></span> ，而第二个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">4,2,5,1,3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span></span></span></span>，这两个BST实质上记录的东西实质上是一样的，但是它的形状已经改变了。我们就可以通过旋转操作改变一个BST的形状。<br>
+  左旋的操作刚好和右旋相反。我们可以发现，第一个BST的中序遍历为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">4,2,5,1,3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span></span></span></span> ，而第二个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">4,2,5,1,3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span></span></span></span>，这两个 BST 实质上记录的东西实质上是一样的，但是它的形状已经改变了。我们就可以通过旋转操作改变一个 BST 的形状。<br>
   由于旋转操作要改变指向当前节点的指针，所以我们要使用传址的方法，这样在旋转改变当前节点的时候在调用它的函数中的指针也会改变。<br>
   旋转操作的代码如下：</p>
 <pre><code class="language-cpp">void rotate_l(int &amp;x)
@@ -1045,8 +1378,8 @@ void rotate_r(int &amp;x)
 }
 </code></pre>
 <h2 id="插入操作">插入操作</h2>
-<p>  Treap的插入操作很简单，只需要一直找到对应元素值与插入值相等的位置或者发现不存在值相等的元素即可。如果我们要插入的元素值为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，每到一个节点，如果对应元素值等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，就把这个点的元素个数加一；如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小于这个点的元素值，那么就进入这个点的左子节点；如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大于这个点的元素值，那么就进入这个点的右子节点；如果这个点的编号为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，那么表明不存在与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 相等的元素，就新建一个节点，并随机赋优先级。<br>
-  插入操作看似很简单，但是这样有可能不满足堆的性质，我们就需要进行旋转操作。如果左节点的优先级比这个节点小，那么就将这个节点右旋；如果右子节点的优先级比这个节点小，那么就将这个节点左旋。并且更新Treap的状态。<br>
+<p>  Treap 的插入操作很简单，只需要一直找到对应元素值与插入值相等的位置或者发现不存在值相等的元素即可。如果我们要插入的元素值为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，每到一个节点，如果对应元素值等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，就把这个点的元素个数加一；如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小于这个点的元素值，那么就进入这个点的左子节点；如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 大于这个点的元素值，那么就进入这个点的右子节点；如果这个点的编号为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，那么表明不存在与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 相等的元素，就新建一个节点，并随机赋优先级。<br>
+  插入操作看似很简单，但是这样有可能不满足堆的性质，我们就需要进行旋转操作。如果左节点的优先级比这个节点小，那么就将这个节点右旋；如果右子节点的优先级比这个节点小，那么就将这个节点左旋。并且更新 Treap 的状态。<br>
   同样，插入操作由于要旋转，也要通过传址的方法传参。</p>
 <pre><code class="language-cpp">void add(int &amp;x,int k)
 {
@@ -1068,7 +1401,7 @@ void rotate_r(int &amp;x)
 }
 </code></pre>
 <h2 id="删除操作">删除操作</h2>
-<p>  Treap的删除操作和插入操作相似，要一直找到对应元素值与删除值相等的位置，然后把这个位置的元素个数减一，如果个数为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 了，就删除这个节点，并将优先级较小的子节点放在这个位置，不过这时需要注意左右子节点是否存在。如果不存在这个节点，就说明没有这个元素。同样，最后的时候要更新结点个数。</p>
+<p>  Treap 的删除操作和插入操作相似，要一直找到对应元素值与删除值相等的位置，然后把这个位置的元素个数减一，如果个数为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 了，就删除这个节点，并将优先级较小的子节点放在这个位置，不过这时需要注意左右子节点是否存在。如果不存在这个节点，就说明没有这个元素。同样，最后的时候要更新结点个数。</p>
 <pre><code class="language-cpp">void remove(int &amp;x,int k)
 {
     if(x==0) return;
@@ -1104,7 +1437,7 @@ void rotate_r(int &amp;x)
 }
 </code></pre>
 <h2 id="查询排名">查询排名</h2>
-<p>  在Treap中查询一个元素的排名，只需要像之前一样一直访问直到找到这个元素即可。根节点在当前子树的排名就是左子树的大小加一，而左子树的所有节点的排名就是这个节点在左子树中的排名，右子树的所有节点的排名就是这个节点在右子树的排名加上左子树以及根节点的大小。由于访问不需要修改节点，就不需要再传址了。</p>
+<p>  在 Treap 中查询一个元素的排名，只需要像之前一样一直访问直到找到这个元素即可。根节点在当前子树的排名就是左子树的大小加一，而左子树的所有节点的排名就是这个节点在左子树中的排名，右子树的所有节点的排名就是这个节点在右子树的排名加上左子树以及根节点的大小。由于访问不需要修改节点，就不需要再传址了。</p>
 <pre><code class="language-cpp">int num(int x,int k)
 {
     if(x==0) return 1;
@@ -1143,7 +1476,7 @@ int find_b(int x,int k)
 }
 </code></pre>
 <h2 id="treap函数的调用">Treap函数的调用</h2>
-<p>  我们总共学习了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 个Treap的相关函数。调用的时候我们需要调用Treap的根节点。由于Treap的形状在时刻变化，所以我们需要用一个变量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 来记录根节点，初始值为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。</p>
+<p>  我们总共学习了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 个 Treap 的相关函数。调用的时候我们需要调用 Treap 的根节点。由于 Treap 的形状在时刻变化，所以我们需要用一个变量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 来记录根节点，初始值为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。</p>
 <pre><code class="language-cpp">int main()
 {
     srand(time(NULL));
@@ -1346,7 +1679,7 @@ void add(int x,ll l,ll r,int k)
 }
 </code></pre>
 <h2 id="排序">排序</h2>
-<p>  在扫描线算法中，我们总共需要两次排序：将端点的横坐标排序和横线的纵坐标排序。在进行排序之后，我们还需要将端点横坐标离散化和去重，用stl的unique函数就可以了。</p>
+<p>  在扫描线算法中，我们总共需要两次排序：将端点的横坐标排序和横线的纵坐标排序。在进行排序之后，我们还需要将端点横坐标离散化和去重，用 STL 的 unique 函数就可以了。</p>
 <pre><code class="language-cpp">struct str
 {
     ll l,r,h;
@@ -1658,204 +1991,6 @@ int main()
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_GREEN);
     printf(&quot;\nAccepted\n%dms\n\n&quot;,int(t1-t0));
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[最小费用最大流]]></title>
-        <id>https://2745518585.github.io/post/minimum-cost-maximum-flow/</id>
-        <link href="https://2745518585.github.io/post/minimum-cost-maximum-flow/">
-        </link>
-        <updated>2022-02-19T05:14:26.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
-<p>  模板题：<a href="https://www.luogu.com.cn/problem/P3381">P3381 【模板】最小费用最大流</a><br>
-  最小费用最大流问题，简称费用流。费用流问题是在最大流的基础上给每条边添加一个边权，也就是费用，总费用就是流过每条边的流量乘上费用的和，在保证流量最大的情况下，求出这个最小费用。<br>
-  最大流问题可以使用每次dfs找增广路来解决，费用流就可以用SPFA来寻找增广路，这样就可以保证每一次的增广路的费用最小。由于最大流算法可以“反悔”，所以即使当前的增广路并不是全局最优的，也可以在之后的增广中“反悔”，所以最后找到的一定是最优解。不过SPFA在搜索过程中不知道最优解，所以要记录最优路线，搜索完成后再更新所有边的容量。</p>
-<h2 id="spfa">SPFA</h2>
-<p>  SPFA的过程中总共需要维护 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span> 个数组：到达每个点的流量，到达每个点的费用，与这个点是由哪个点更新来的。不过SPFA是找到费用最小的增广路，而不是流量最大，因为可以进行多次SPFA增加流量。如果当前边的流量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> ，到达每个点的最小费用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>g</mi></mrow><annotation encoding="application/x-tex">g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span></span></span></span> 的就可以做如下更新： <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>g</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo><mo>=</mo><mi>max</mi><mo>⁡</mo><mo>(</mo><mi>g</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo><mo separator="true">,</mo><mi>g</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">g[a[i].m]=\max(g[a[i].m],g[x]))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">max</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span>。如果最小费用更新成功，流量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[a[i].m]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span></span></span></span> 也要更新为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mi>f</mi><mo>[</mo><mi>x</mi><mo>]</mo><mo>)</mo><mo separator="true">,</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">min(f[x]),a[i].r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mclose">]</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> ，这个点的父亲 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo>[</mo><mi>a</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">.</mi><mi>m</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">r[a[i].m]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">[</span><span class="mord mathdefault">a</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">.</span><span class="mord mathdefault">m</span><span class="mclose">]</span></span></span></span> 则更新为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span>。这样就可以找到当前费用最小的增广路。当汇点没有被走到的时候，就说明不存在增广路了。<br>
-  进行完一次SPFA后，最大流量就要加上汇点的流量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>t</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[t]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span></span></span></span>，费用加上汇点的流量与到达汇点的费用之积 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>t</mi><mo>]</mo><mo>×</mo><mi>g</mi><mo>[</mo><mi>t</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[t] \times g[t]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span></span></span></span><br>
-  在进行了SPFA之后，我们就需要更新每条边的容量。从汇点开始，每一次都到达当前点的父亲，并把经过的所有边的容量减去 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>t</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[t]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mclose">]</span></span></span></span>，其相反边的容量加上 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>[</mo><mi>s</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">f[s]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathdefault">s</span><span class="mclose">]</span></span></span></span>。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-int n,m,s1,s2,p=1,t[10001],f[10001],g[10001],r[10001];
-bool h[10001];
-struct str
-{
-    int x,m,q,r,w;
-}a[100001];
-void road(int x,int y,int r,int w)
-{
-    a[++p].x=x;
-    a[p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-    a[p].w=w;
-}
-bool SPFA()
-{
-    queue&lt;int&gt; q;
-    q.push(s1);
-    for(int i=1;i&lt;=n;++i)
-    {
-        f[i]=1e9;
-        g[i]=1e9;
-        h[i]=false;
-        r[i]=0;
-    }
-    g[s1]=0;
-    h[s1]=true;
-    while(!q.empty())
-    {
-        int k=q.front();
-        q.pop();
-        if(h[k]==false) continue;
-        h[k]=false;
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(a[i].r&gt;0&amp;&amp;g[k]+a[i].w&lt;g[a[i].m])
-            {
-                f[a[i].m]=min(f[k],a[i].r);
-                g[a[i].m]=g[k]+a[i].w;
-                r[a[i].m]=i;
-                q.push(a[i].m);
-                h[a[i].m]=true;
-            }
-        }
-    }
-    if(f[s2]!=1e9) return true;
-    return false;
-}
-int main()
-{
-    scanf(&quot;%d%d%d%d&quot;,&amp;n,&amp;m,&amp;s1,&amp;s2);
-    for(int i=1;i&lt;=m;++i)
-    {
-        int x,y,r,w;
-        scanf(&quot;%d%d%d%d&quot;,&amp;x,&amp;y,&amp;r,&amp;w);
-        road(x,y,r,w);
-        road(y,x,0,-w);
-    }
-    int s=0,w=0;
-    while(SPFA())
-    {
-        s+=f[s2];
-        w+=f[s2]*g[s2];
-        int x=s2;
-        while(x!=s1)
-        {
-            a[r[x]].r-=f[s2];
-            a[r[x]^1].r+=f[s2];
-            x=a[r[x]].x;
-        }
-    }
-    printf(&quot;%d %d&quot;,s,w);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[最大流ISAP]]></title>
-        <id>https://2745518585.github.io/post/maximum-flow-ISAP/</id>
-        <link href="https://2745518585.github.io/post/maximum-flow-ISAP/">
-        </link>
-        <updated>2022-02-18T04:35:04.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
-<p>  模板题：<a href="https://www.luogu.com.cn/problem/P3376">P3376 【模板】网络最大流</a><br>
-  Dinic算法已经能够很好地解决最大流问题了，但是它还是有一个弊端：会进行多次且次数不确定的bfs，就会浪费时间，还可能被毒瘤出题人卡。Dinic中，bfs的作用就是将这个图分层，如果我们只在一开始时将图分层，在之后的dfs中调整每个点的高度，就可以大大减少bfs次数。</p>
-<h2 id="isap">ISAP</h2>
-<p>  ISAP就成功地优化了Dinic。不过ISAP是将汇点的高度设为1，源点最高，流量会从高度较高的点流到高度较低的点，原因会在后面解释。在dfs过程中，如果一个点仍有剩余流量却流不出去了，那么就把这个点的高度加一，这样它才能流到更多的点。如果汇点高度最高，就需要其它点的高度减一，就可能出现负数，最好避免这种情况。这样就可以避免多次分层浪费时间。<br>
-  但是ISAP不是在找不到汇点的时候结束，而是在出现断层的时候停止。断层指的是汇点的高度到源点的高度之间有一个高度没有点。由于流量都是从一层流向下一层，如果有一个高度没有点，流量就无法到达下一层，也就无法到达汇点，就可以直接停止算法。由于一开始高度是连续的，只要有剩余流量，就会增加高度，没有流量就不会，所以这个图在出现断层时一定是上一个层的所有点没有剩余流量了。<br>
-  同样，ISAP也可以添加当前弧优化，具体见最大流Dinic算法。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-int n,m,p=1,s1,s2,t[10001],t0[10001],f[10001],g[10001];
-bool u=true;
-struct str
-{
-    int m,q,r;
-}a[1000001];
-void road(int x,int y,int r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-void bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s2);
-    f[s2]=1;
-    g[1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r==0)
-            {
-                f[a[i].m]=f[k]+1;
-                ++g[f[a[i].m]];
-                Q.push(a[i].m);
-            }
-        }
-    }
-}
-int dfs(int x,int r)
-{
-    if(x==s2) return r;
-    int s=0;
-    for(int i=t0[x];i!=0;i=a[i].q)
-    {
-        t0[x]=i;
-        if(f[x]==f[a[i].m]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-            if(r==0) return s;
-        }
-    }
-    --g[f[x]];
-    if(g[f[x]]==0) u=false;
-    ++f[x];
-    ++g[f[x]];
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d%d%d&quot;,&amp;n,&amp;m,&amp;s1,&amp;s2);
-    for(int i=1;i&lt;=m;++i)
-    {
-        int x,y,r;
-        scanf(&quot;%d%d%d&quot;,&amp;x,&amp;y,&amp;r);
-        road(x,y,r);
-        road(y,x,0);
-    }
-    bfs();
-    int r=0;
-    while(u==true)
-    {
-        for(int i=1;i&lt;=n;++i) t0[i]=t[i];
-        r+=dfs(s1,1e9);
-    }
-    printf(&quot;%d&quot;,r);
     return 0;
 }
 </code></pre>

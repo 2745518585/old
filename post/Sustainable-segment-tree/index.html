@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
-<title>对拍器 | 赵悦岑&#39;s Blog</title>
+<title>可持续化线段树 | 赵悦岑&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1648299441389">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -41,8 +41,8 @@
 
 
 
-  <meta name="description" content="对拍器" />
-  <meta name="keywords" content="对拍器" />
+  <meta name="description" content="可持续化线段树" />
+  <meta name="keywords" content="可持续化线段树,主席树" />
 </head>
 
 <body>
@@ -193,7 +193,8 @@
       <div class="sidebar-body gemini" id="sidebar_body">
         
           
-            
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -223,6 +224,209 @@
 
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li><a href="#%E5%8F%AF%E6%8C%81%E7%BB%AD%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%91">可持续化线段树</a>
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3">基本思想</a></li>
+<li><a href="#%E5%82%A8%E5%AD%98%E5%8F%8A%E6%9B%B4%E6%96%B0">储存及更新</a></li>
+<li><a href="#%E5%BB%BA%E6%A0%91">建树</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9">修改</a></li>
+<li><a href="#%E6%9F%A5%E8%AF%A2">查询</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8">调用</a></li>
+<li><a href="#code">code</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%BB%E5%B8%AD%E6%A0%91">主席树</a>
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80-2">前言</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3-2">基本思想</a></li>
+<li><a href="#code-2">code</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
           
         
       </div>
@@ -310,14 +514,14 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://2745518585.github.io/post/Beat-counter/"> 对拍器 </a>
+    <a class="post-title-link" href="https://2745518585.github.io/post/Sustainable-segment-tree/"> 可持续化线段树 </a>
   </h1>
   <div class="post-meta">
     
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2022-02-20 12:24:31">2022-02-20</span>
+      <span class="publish-time" data-t="2022-03-10 13:40:48">2022-03-10</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -325,8 +529,9 @@
       <i class="fa fa-folder-o"></i>
       <span class="pc-show language" data-lan="category-in">标签:</span>
        
-      <a href="https://2745518585.github.io/tag/Beat-counter/">
-        <span>对拍器</span>
+      <a href="https://2745518585.github.io/tag/Sustainable-segment-tree/"> <span>可持续化线段树</span> </a>、   
+      <a href="https://2745518585.github.io/tag/Chairman-tree/">
+        <span>主席树</span>
       </a>
        
     </span>
@@ -335,7 +540,7 @@
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
       <span
-        >5<span class="language" data-lan="minute"
+        >11<span class="language" data-lan="minute"
           >分钟</span
         ></span
       >
@@ -344,7 +549,7 @@
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
       <span
-        >784<span class="pc-show language" data-lan="words"
+        >2164<span class="pc-show language" data-lan="words"
           >字数</span
         ></span
       >
@@ -354,190 +559,220 @@
 </section>
 
             <div class="post-body next-md-body" id="post_body">
-              <p>run.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'t','a','s','k','k','i','l','l',' ','/','f',' ','/','p','i','d',' ','.','e','x','e'};
-int main()
+              <h1 id="可持续化线段树">可持续化线段树</h1>
+<h2 id="前言">前言</h2>
+<p>&amp;#8195； 模板题：<a href="https://www.luogu.com.cn/problem/P3919">P3919 【模板】可持久化线段树 1（可持久化数组）</a><br>
+  我们学习了很多的数据结构，它们支持修改、查询的操作。但是如果我们想在过去的某个版本上进行操作，我们就需要可持续化数据结构，比如说可持续化线段树，它支持在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间内进行操作。</p>
+<h2 id="基本思想">基本思想</h2>
+<p>  朴素的方法实现可持续化需要记录每个版本，修改一次就需要 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间来复制，不能接受。但是我们可以发现，线段树上每一次操作都只改变树上的一条链，如果我们只复制这条链，就只需要 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 的时间来复制了。<br>
+  我们要在只复制一条链的情况下保持原树和新树都是完整的，就需要把没有改变的所有点与新的链连在一起，并记录每一个版本的根节点。由于每一次修改都要改变根节点，所以每一个版本都对应一个根节点，这个根节点的子树就是一颗完整的线段树。如下图：<br>
+<img src="https://2745518585.github.io/post-images/1648270217949.jpg" alt="0" width="450" loading="lazy"><br>
+<img src="https://2745518585.github.io/post-images/1648270221355.jpg" alt="1" width="450" loading="lazy"><br>
+  （图片来自网络）</p>
+<h2 id="储存及更新">储存及更新</h2>
+<p>  可持续化线段树不再像线段树那样储存左端点与右端点，而是左儿子与右儿子，因为可持续化线段树不再满足完全二叉树那样的编号规律，但是左右端点都可以轻松算出来。</p>
+<pre><code class="language-cpp">struct tree
 {
-    char c[1001],d[1001],e[1001];
-    cin&gt;&gt;c;
-    freopen(&quot;run_time.txt&quot;,&quot;r&quot;,stdin);
-    int x;
-    scanf(&quot;%d&quot;,&amp;x);
-    freopen(&quot;run_name.in&quot;,&quot;w&quot;,stdout);
-    cout&lt;&lt;c;
-    printf(&quot; %d&quot;,x);
-    freopen(&quot;run_result.txt&quot;,&quot;w&quot;,stdout);
-    if(system(&quot;run_complain.exe&quot;))
-    {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
-        printf(&quot;\nComplain Error\n\n&quot;);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
-    }
-    int m=strlen(c);
-    for(int i=0;i&lt;17;++i)
-    {
-        d[i]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+17]=c[i];
-    }
-    for(int i=0;i&lt;4;++i)
-    {
-        d[m+17+i]=p[i+17];
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x/10);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-	}
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x/2);
-    if(system(d))
-	{
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-	Sleep(x);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x*2);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-    printf(&quot;\nTime Limit Error\nover %dms\n\n&quot;,x*2);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-    return 0;
+    int l,r,s;
+}T[100000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
 }
 </code></pre>
-<p>run_complain.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-char p[100]=&quot;g++ .cpp -o .exe -Wall -std=c++11 -O2 -Wl,--stack=2147483647&quot;;
-int main()
+<h2 id="建树">建树</h2>
+<p>  可持续化线段树的建立和线段树几乎一样，只是新节点的编号要单独算，这个过程要传址，就像平衡树那样。</p>
+<pre><code class="language-cpp">void build(int &amp;x,int l,int r)
 {
-    char c[1001],d[1001];
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    cin&gt;&gt;c;
-    int m=strlen(c);
-    for(int i=0;i&lt;4;++i)
+    x=++p;
+    if(l==r)
     {
-        d[i]=p[i];
+        T[x].s=a[l];
+        return;
     }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+4]=c[i];
-    }
-    for(int i=4;i&lt;12;++i)
-    {
-        d[i+m]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+m+12]=c[i];
-    }
-    for(int i=12;i&lt;61;++i)
-    {
-        d[i+m*2]=p[i];
-    }
-    return system(d);
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
 }
 </code></pre>
-<p>run_runner.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
-int main()
+<h2 id="修改">修改</h2>
+<p>  可持续化线段树的单点修改需要把所修改节点到根节点的所有节点全部备份一遍、更改，注意这个过程还要传递当前区间的左右端点，同时也要传址。</p>
+<pre><code class="language-cpp">void modify(int &amp;x,int l,int r,int q,int k)
 {
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    char c[100001];
-    cin&gt;&gt;c;
-    int m=strlen(c);
-    for(int i=0;i&lt;24;++i)
-    {
-        c[m+i]=p[i];
-    }
-    system(c);
-    return 0;
+    T[++p]=T[x];
+    T[p].s=k;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q,k);
+    else modify(T[x].r,z+1,r,q,k);
 }
 </code></pre>
-<p>run_check.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
+<h2 id="查询">查询</h2>
+<p>  查询操作就和线段树十分相似了，只是同时需要传递左右端点。</p>
+<pre><code class="language-cpp">int sum(int x,int l,int r,int l0,int r0)
+{
+    if(l&gt;=l0&amp;&amp;r&lt;=r0) return T[x].s;
+    int z=l+r&gt;&gt;1,s=0;
+    if(l0&lt;=z) s+=sum(T[x].l,l,z,l0,r0);
+    if(r0&gt;z) s+=sum(T[x].r,z+1,r,l0,r0);
+    return s;
+}
+</code></pre>
+<h2 id="调用">调用</h2>
+<p>  可持续化线段树调用的根节点是指定版本的根节点复制过来的根节点，这样调用的时候就会在这个根节点下面新建节点，同时这个根节点也会在操作后指向新的节点。不过板子题比较特殊的是查询操作也要新建版本，我们只需要把根节点复制一遍即可，其它节点都不用变。可持续化线段树一般也要建树，对应的根节点为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，这样可以防止在一些操作中越界。</p>
+<pre><code class="language-cpp">build(rt[0],1,n);
+for(int i=1;i&lt;=m;++i)
+{
+    int d,z,x,y;
+    scanf(&quot;%d%d%d%d&quot;,&amp;d,&amp;z,&amp;x,&amp;y);
+    rt[i]=rt[d];
+    if(z==1)
+    {
+         modify(rt[i],1,n,x,y);
+    }
+    else
+    {
+        printf(&quot;%d\n&quot;,sum(rt[i],1,n,x,y));
+    }
+}
+</code></pre>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
 using namespace std;
-int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
+int n,m,p=0,a[1000001],b[1000001],rt[1000001];
+struct tree
+{
+    int l,r,s;
+}T[100000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
+}
+void build(int &amp;x,int l,int r)
+{
+    x=++p;
+    if(l==r)
+    {
+        T[x].s=a[l];
+        return;
+    }
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
+}
+void modify(int &amp;x,int l,int r,int q,int k)
+{
+    T[++p]=T[x];
+    T[p].s=k;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q,k);
+    else modify(T[x].r,z+1,r,q,k);
+}
+int sum(int x,int l,int r,int l0,int r0)
+{
+    if(l&gt;=l0&amp;&amp;r&lt;=r0) return T[x].s;
+    int z=l+r&gt;&gt;1,s=0;
+    if(l0&lt;=z) s+=sum(T[x].l,l,z,l0,r0);
+    if(r0&gt;z) s+=sum(T[x].r,z+1,r,l0,r0);
+    return s;
+}
 int main()
 {
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    char c[1001];
-    int x;
-    cin&gt;&gt;c&gt;&gt;x;
-    int m=strlen(c);
-    for(int i=0;i&lt;24;++i)
+    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+    for(int i=1;i&lt;=n;++i)
     {
-        c[m+i]=p[i];
+        scanf(&quot;%d&quot;,&amp;a[i]);
     }
-    double t0=clock();
-    if(system(c))
+    build(rt[0],1,n);
+    for(int i=1;i&lt;=m;++i)
     {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
-        printf(&quot;\nRuntime Error\n\n&quot;);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
-    }
-    double t1=clock();
-    if(t1-t0&gt;=x)
-    {
-        if(system(&quot;fc /a /w run.out data.out&quot;))
+        int d,z,x,y;
+        scanf(&quot;%d%d%d%d&quot;,&amp;d,&amp;z,&amp;x,&amp;y);
+        rt[i]=rt[d];
+        if(z==1)
         {
-            freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-            printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
-            printf(&quot;\nWrong Answer\n\n&quot;);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-            return 0;
+            modify(rt[i],1,n,x,y);
         }
         else
         {
-            freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-            printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
-            printf(&quot;\nCorrect Answer\n\n&quot;);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-            return 0;
+            printf(&quot;%d\n&quot;,sum(rt[i],1,n,x,y));
         }
     }
-    if(system(&quot;fc /a /w run.out data.out&quot;))
+    return 0;
+}
+</code></pre>
+<h1 id="主席树">主席树</h1>
+<h2 id="前言-2">前言</h2>
+<p>&amp;#8195； 模板题：<a href="https://www.luogu.com.cn/problem/P3834">P3834 【模板】可持久化线段树 2</a><br>
+  主席树是可持续化线段树的一种经典应用，但是它不是用来解决需要操作历史版本的问题的，而是用来解决一个不可修改的序列的，经典问题就是一个数在区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 的排名和区间第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小，不带修改操作的话主席树就是最好的解法。</p>
+<h2 id="基本思想-2">基本思想</h2>
+<p>  要找一个数在区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 的排名，我们很容易想到对于每个数做前缀和的方法，但是要从第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个数转移到第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 个数，就需要转移 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span> 次（<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span> 是所有数离散化后的数的个数），不能接受。但是我们发现，每一次转移都只有一个数发生了改变，其它的都与上一个版本相同。而可持续化线段树就是在历史版本上用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>log</mi><mo>⁡</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\log n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span></span></span></span> 的时间复制并修改一个版本上的一个点。<br>
+  主席树的基本思想是把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>∼</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1\sim n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 这 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个点看做 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个版本，对于版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 记录每个数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>∼</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">1\sim q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span> 在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>i</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">i</span><span class="mclose">]</span></span></span></span> 中出现的次数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span>，而主席树维护的就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 数组。为什么要这样做？如果我们要找离散化后的数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 在区间 [l,r] 中的排名，我们只需要在版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">l-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 中找到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,x-1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span> 的和，同时在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 中找到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 的和，相减即为答案。而主席树版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 与版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 之间只有原序列 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 的第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 上的数对应的位置的值改变了，相当于单点修改。但是在查询的时候有可能要访问到版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 所以我们要先建立 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 号版本，防止越界。<br>
+  要解决区间第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 小的问题，我们只需要在线段树上进行二分。同时维护版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">l-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 的当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">x1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">1</span></span></span></span> 与版本 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 上的当前节点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">x2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">2</span></span></span></span>，如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">x2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">2</span></span></span></span> 的左子树的和减去 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">x1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mord">1</span></span></span></span> 左子树的和小于等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，表明区间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>∼</mo><msub><mi>a</mi><mi>q</mi></msub></mrow><annotation encoding="application/x-tex">1\sim a_q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 的数的总数比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 多，答案在左子树上，否则在右子树上。</p>
+<h2 id="code-2">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+int n,m,p=0,a[1000001],b[1000001],rt[1000001];
+struct tree
+{
+    int l,r,s;
+}T[10000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
+}
+void build(int &amp;x,int l,int r)
+{
+    x=++p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
+}
+void modify(int &amp;x,int l,int r,int q)
+{
+    T[++p]=T[x];
+    ++T[p].s;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q);
+    else modify(T[x].r,z+1,r,q);
+}
+int sum(int x1,int x2,int l,int r,int q)
+{
+    if(l==r) return b[l];
+    int z=l+r&gt;&gt;1,k=T[T[x2].l].s-T[T[x1].l].s;
+    if(q&lt;=k) return sum(T[x1].l,T[x2].l,l,z,q);
+    else return sum(T[x1].r,T[x2].r,z+1,r,q-k);
+}
+int main()
+{
+    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
+    for(int i=1;i&lt;=n;++i)
     {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED);
-        printf(&quot;\nWrong Answer\n%dms\n\n&quot;,int(t1-t0));
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
+        scanf(&quot;%d&quot;,&amp;a[i]);
+        b[i]=a[i];
     }
-    freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_GREEN);
-    printf(&quot;\nAccepted\n%dms\n\n&quot;,int(t1-t0));
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+    sort(b+1,b+n+1);
+    int q=unique(b+1,b+n+1)-b-1;
+    build(rt[0],1,q);
+    for(int i=1;i&lt;=n;++i)
+    {
+        rt[i]=rt[i-1];
+        modify(rt[i],1,q,lower_bound(b+1,b+q+1,a[i])-b);
+    }
+    for(int i=1;i&lt;=m;++i)
+    {
+        int l,r,k;
+        scanf(&quot;%d%d%d&quot;,&amp;l,&amp;r,&amp;k);
+        printf(&quot;%d\n&quot;,sum(rt[l-1],rt[r],1,q,k));
+    }
     return 0;
 }
 </code></pre>
@@ -557,7 +792,7 @@ int main()
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://2745518585.github.io/post/Beat-counter/" title="对拍器">https://2745518585.github.io/post/Beat-counter/</a>
+      <a href="https://2745518585.github.io/post/Sustainable-segment-tree/" title="可持续化线段树">https://2745518585.github.io/post/Sustainable-segment-tree/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -566,21 +801,23 @@ int main()
   </ul>
   <div class="tags">
     
-      <a href="https://2745518585.github.io/tag/Beat-counter/"># 对拍器</a>
+      <a href="https://2745518585.github.io/tag/Sustainable-segment-tree/"># 可持续化线段树</a>
+    
+      <a href="https://2745518585.github.io/tag/Chairman-tree/"># 主席树</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
         <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">面积并扫描线</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">上一篇</a>
+        <a class="nav-pc-next" title="5.2.2 Dijkstra的优化" href="https://2745518585.github.io/post/5.2.2/">5.2.2 Dijkstra的优化</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="5.2.2 Dijkstra的优化" href="https://2745518585.github.io/post/5.2.2/">上一篇</a>
       
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="最小费用最大流" href="https://2745518585.github.io/post/minimum-cost-maximum-flow/">最小费用最大流</a>
-        <a class="nav-mobile-next" title="最小费用最大流" href="https://2745518585.github.io/post/minimum-cost-maximum-flow/">下一篇</a>
+        <a class="nav-pc-next" title="P4638 [SHOI2011]银行家" href="https://2745518585.github.io/post/p4638-solution/">P4638 [SHOI2011]银行家</a>
+        <a class="nav-mobile-next" title="P4638 [SHOI2011]银行家" href="https://2745518585.github.io/post/p4638-solution/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

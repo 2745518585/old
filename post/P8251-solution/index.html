@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
-<title>对拍器 | 赵悦岑&#39;s Blog</title>
+<title>[NOI Online 2022 提高组] 丹钓战 | 赵悦岑&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1648299441389">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -41,8 +41,8 @@
 
 
 
-  <meta name="description" content="对拍器" />
-  <meta name="keywords" content="对拍器" />
+  <meta name="description" content="[NOI Online 2022 提高组] 丹钓战" />
+  <meta name="keywords" content="可持续化线段树,主席树" />
 </head>
 
 <body>
@@ -193,7 +193,8 @@
       <div class="sidebar-body gemini" id="sidebar_body">
         
           
-            
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -223,6 +224,202 @@
 
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%88%86%E6%9E%90">分析</a>
+<ul>
+<li><a href="#%E6%A8%A1%E6%8B%9F%E5%85%A5%E6%A0%88">模拟入栈</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9F%A5%E8%AF%A2">查询</a></li>
+<li><a href="#%E4%BC%98%E5%8C%96">优化</a></li>
+<li><a href="#code">code</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
           
         
       </div>
@@ -310,14 +507,14 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://2745518585.github.io/post/Beat-counter/"> 对拍器 </a>
+    <a class="post-title-link" href="https://2745518585.github.io/post/P8251-solution/"> [NOI Online 2022 提高组] 丹钓战 </a>
   </h1>
   <div class="post-meta">
     
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2022-02-20 12:24:31">2022-02-20</span>
+      <span class="publish-time" data-t="2022-03-26 13:15:28">2022-03-26</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -325,8 +522,9 @@
       <i class="fa fa-folder-o"></i>
       <span class="pc-show language" data-lan="category-in">标签:</span>
        
-      <a href="https://2745518585.github.io/tag/Beat-counter/">
-        <span>对拍器</span>
+      <a href="https://2745518585.github.io/tag/Sustainable-segment-tree/"> <span>可持续化线段树</span> </a>、   
+      <a href="https://2745518585.github.io/tag/Chairman-tree/">
+        <span>主席树</span>
       </a>
        
     </span>
@@ -344,7 +542,7 @@
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
       <span
-        >784<span class="pc-show language" data-lan="words"
+        >989<span class="pc-show language" data-lan="words"
           >字数</span
         ></span
       >
@@ -354,190 +552,103 @@
 </section>
 
             <div class="post-body next-md-body" id="post_body">
-              <p>run.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'t','a','s','k','k','i','l','l',' ','/','f',' ','/','p','i','d',' ','.','e','x','e'};
-int main()
-{
-    char c[1001],d[1001],e[1001];
-    cin&gt;&gt;c;
-    freopen(&quot;run_time.txt&quot;,&quot;r&quot;,stdin);
-    int x;
-    scanf(&quot;%d&quot;,&amp;x);
-    freopen(&quot;run_name.in&quot;,&quot;w&quot;,stdout);
-    cout&lt;&lt;c;
-    printf(&quot; %d&quot;,x);
-    freopen(&quot;run_result.txt&quot;,&quot;w&quot;,stdout);
-    if(system(&quot;run_complain.exe&quot;))
-    {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
-        printf(&quot;\nComplain Error\n\n&quot;);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
-    }
-    int m=strlen(c);
-    for(int i=0;i&lt;17;++i)
-    {
-        d[i]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+17]=c[i];
-    }
-    for(int i=0;i&lt;4;++i)
-    {
-        d[m+17+i]=p[i+17];
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x/10);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-	}
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x/2);
-    if(system(d))
-	{
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-	Sleep(x);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    system(&quot;start /b run_runner.exe&quot;);
-    Sleep(x*2);
-    if(system(d))
-    {
-        system(&quot;run_check.exe&quot;);
-        return 0;
-    }
-    freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-    printf(&quot;\nTime Limit Error\nover %dms\n\n&quot;,x*2);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-    return 0;
+              <p>  <a href="https://www.luogu.com.cn/problem/P8251">P8251 [NOI Online 2022 提高组] 丹钓战</a><br>
+  这道题我的方法是<strong>主席树</strong>，请不了解主席树的同学移步这道题： <a href="https://www.luogu.com.cn/problem/P3834">P3834 【模板】可持久化线段树 2</a></p>
+<h2 id="分析">分析</h2>
+<h3 id="模拟入栈">模拟入栈</h3>
+<p>  首先我们可以发现，这个栈的元素 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 一定是单调下降的，如果要模拟入栈的操作，我们可以通过二分查找第一个比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 大的元素来模拟，可以在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n\log n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span></span></span></span> 的复杂度内完成一次模拟。但是同时还要满足任意两个相邻元素的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 不同，我们只需要在找到第一个比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 大的元素后，弹出栈顶直到栈顶元素的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">a</span></span></span></span> 与 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 不相等。注意要首先把 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span> 入栈，防止越界。<br>
+  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 代表 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">b</span></span></span></span> 序列，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span> 代表栈。</p>
+<pre><code class="language-cpp">int l=0,r=t,z;
+while(l&lt;r)
+ {
+    z=(l+r+1)&gt;&gt;1;
+    if(b[i]&lt;b[c[z]]) l=z;
+    else r=z-1;
 }
+while(a[c[l]]==a[i]) --l;
 </code></pre>
-<p>run_complain.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
+<h2 id="查询">查询</h2>
+<p>  如果我们先把所有元素按顺序入栈，由于任意的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 都应该是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>n</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,n]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">]</span></span></span></span> 的一部分，并且栈中的元素编号一定递减，所以 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∀</mi><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">\forall [l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∀</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span>，最终形成的栈一定是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 形成的栈的一部分，具体来说就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 形成的栈去掉所有编号比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 小的元素。如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 号元素想要在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 形成的栈中成为第一个，那么 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>1</mn><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[1,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 所形成的的栈中在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 之前的元素的编号必然都比 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 小，只有这样前面所有元素才会被删去。所以用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span> 来储存每个数入栈后前一个元素的编号，那么 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 中成功二元组的个数就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>∈</mo><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo><mo separator="true">,</mo><msub><mi>d</mi><mi>k</mi></msub><mo>&lt;</mo><mi>l</mi></mrow><annotation encoding="application/x-tex">k \in [l,r],d_k &lt; l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 成立的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 的个数。</p>
+<h2 id="优化">优化</h2>
+<p>  但是上面这种方法的复杂度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>×</mo><mi>q</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n\times q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mclose">)</span></span></span></span> ，显然过不了。通过上面的分析，我们发现查询的实质是求 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span> 中 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mo separator="true">,</mo><mi>r</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[l,r]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mclose">]</span></span></span></span> 中小于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 的数的个数。有什么数据结构能实现？主席树！于是这道题就变成了主席树的板子题。然后，就没有然后了。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;algorithm&gt;
 using namespace std;
-char p[100]=&quot;g++ .cpp -o .exe -Wall -std=c++11 -O2 -Wl,--stack=2147483647&quot;;
-int main()
+int read()
 {
-    char c[1001],d[1001];
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    cin&gt;&gt;c;
-    int m=strlen(c);
-    for(int i=0;i&lt;4;++i)
-    {
-        d[i]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+4]=c[i];
-    }
-    for(int i=4;i&lt;12;++i)
-    {
-        d[i+m]=p[i];
-    }
-    for(int i=0;i&lt;m;++i)
-    {
-        d[i+m+12]=c[i];
-    }
-    for(int i=12;i&lt;61;++i)
-    {
-        d[i+m*2]=p[i];
-    }
-    return system(d);
+    char c=getchar();int x=0;bool f=0;
+    for(;!isdigit(c);c=getchar())f^=!(c^45);
+    for(;isdigit(c);c=getchar())x=(x&lt;&lt;1)+(x&lt;&lt;3)+(c^48);
+    if(f)x=-x;return x;
 }
-</code></pre>
-<p>run_runner.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
-int main()
+int n,m,p,t,a[500001],b[500001],c[500001],rt[500001];
+struct tree
 {
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    char c[100001];
-    cin&gt;&gt;c;
-    int m=strlen(c);
-    for(int i=0;i&lt;24;++i)
-    {
-        c[m+i]=p[i];
-    }
-    system(c);
-    return 0;
+    int l,r,s;
+}T[30000001];
+void pushup(int x)
+{
+    T[x].s=T[T[x].l].s+T[T[x].r].s;
 }
-</code></pre>
-<p>run_check.cpp:</p>
-<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
-#include&lt;windows.h&gt;
-using namespace std;
-int p[100]={'.','e','x','e',' ','&lt;',' ','d','a','t','a','.','i','n',' ','&gt;',' ','r','u','n','.','o','u','t'};
+void build(int &amp;x,int l,int r)
+{
+    x=++p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    build(T[x].l,l,z);
+    build(T[x].r,z+1,r);
+}
+void modify(int &amp;x,int l,int r,int q)
+{
+    T[++p]=T[x];
+    ++T[p].s;
+    x=p;
+    if(l==r) return;
+    int z=l+r&gt;&gt;1;
+    if(q&lt;=z) modify(T[x].l,l,z,q);
+    else modify(T[x].r,z+1,r,q);
+}
+int num(int x,int l,int r,int k)
+{
+    if(l==r) return 0;
+    int z=l+r&gt;&gt;1;
+    if(k==z) return T[T[x].l].s;
+    if(k&lt;z) return num(T[x].l,l,z,k);
+    return T[T[x].l].s+num(T[x].r,z+1,r,k);
+}
 int main()
 {
-    freopen(&quot;run_name.in&quot;,&quot;r&quot;,stdin);
-    char c[1001];
-    int x;
-    cin&gt;&gt;c&gt;&gt;x;
-    int m=strlen(c);
-    for(int i=0;i&lt;24;++i)
+    freopen(&quot;stack.in&quot;,&quot;r&quot;,stdin);
+    freopen(&quot;stack.out&quot;,&quot;w&quot;,stdout);
+    n=read(),m=read();
+    for(int i=1;i&lt;=n;++i) a[i]=read();
+    for(int i=1;i&lt;=n;++i) b[i]=read();
+    a[0]=0;
+    b[0]=1e9;
+    c[0]=0;
+    build(rt[0],0,n);
+    for(int i=1;i&lt;=n;++i)
     {
-        c[m+i]=p[i];
-    }
-    double t0=clock();
-    if(system(c))
-    {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
-        printf(&quot;\nRuntime Error\n\n&quot;);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
-    }
-    double t1=clock();
-    if(t1-t0&gt;=x)
-    {
-        if(system(&quot;fc /a /w run.out data.out&quot;))
+        int l=0,r=t,z;
+        while(l&lt;r)
         {
-            freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-            printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
-            printf(&quot;\nWrong Answer\n\n&quot;);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-            return 0;
+            z=(l+r+1)&gt;&gt;1;
+            if(b[i]&lt;b[c[z]]) l=z;
+            else r=z-1;
         }
-        else
-        {
-            freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE);
-            printf(&quot;\nTime Limit Error\n%dms\n&quot;,int(t1-t0));
-            printf(&quot;\nCorrect Answer\n\n&quot;);
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-            return 0;
-        }
+        while(a[c[l]]==a[i]) --l;
+        t=l+1;
+        c[t]=i;
+        rt[i]=rt[i-1];
+        modify(rt[i],0,n,c[l]);
     }
-    if(system(&quot;fc /a /w run.out data.out&quot;))
+    for(int i=1;i&lt;=m;++i)
     {
-        freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED);
-        printf(&quot;\nWrong Answer\n%dms\n\n&quot;,int(t1-t0));
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return 0;
+        int l=read(),r=read();
+        printf(&quot;%d\n&quot;,num(rt[r],0,n,l-1)-num(rt[l-1],0,n,l-1));
     }
-    freopen(&quot;CON.out&quot;,&quot;w&quot;,stdout);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_GREEN);
-    printf(&quot;\nAccepted\n%dms\n\n&quot;,int(t1-t0));
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
     return 0;
 }
 </code></pre>
@@ -557,7 +668,7 @@ int main()
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://2745518585.github.io/post/Beat-counter/" title="对拍器">https://2745518585.github.io/post/Beat-counter/</a>
+      <a href="https://2745518585.github.io/post/P8251-solution/" title="[NOI Online 2022 提高组] 丹钓战">https://2745518585.github.io/post/P8251-solution/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -566,21 +677,19 @@ int main()
   </ul>
   <div class="tags">
     
-      <a href="https://2745518585.github.io/tag/Beat-counter/"># 对拍器</a>
+      <a href="https://2745518585.github.io/tag/Sustainable-segment-tree/"># 可持续化线段树</a>
+    
+      <a href="https://2745518585.github.io/tag/Chairman-tree/"># 主席树</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">面积并扫描线</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="面积并扫描线" href="https://2745518585.github.io/post/Scan-line/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="最小费用最大流" href="https://2745518585.github.io/post/minimum-cost-maximum-flow/">最小费用最大流</a>
-        <a class="nav-mobile-next" title="最小费用最大流" href="https://2745518585.github.io/post/minimum-cost-maximum-flow/">下一篇</a>
+        <a class="nav-pc-next" title="平衡树Splay" href="https://2745518585.github.io/post/Balanced-tree-Splay/">平衡树Splay</a>
+        <a class="nav-mobile-next" title="平衡树Splay" href="https://2745518585.github.io/post/Balanced-tree-Splay/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

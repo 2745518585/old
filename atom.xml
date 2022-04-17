@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-04-17T03:58:33.382Z</updated>
+    <updated>2022-04-17T04:01:50.097Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -12,8 +12,8 @@
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
     <entry>
         <title type="html"><![CDATA[P5030 长脖子鹿放置]]></title>
-        <id>https://2745518585.github.io/post/solution-P5030/</id>
-        <link href="https://2745518585.github.io/post/solution-P5030/">
+        <id>https://2745518585.github.io/post/P5030-solution/</id>
+        <link href="https://2745518585.github.io/post/P5030-solution/">
         </link>
         <updated>2022-04-17T03:52:22.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P5030">P5030 长脖子鹿放置</a></p>
@@ -144,8 +144,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P4304 [TJOI2013]攻击装置]]></title>
-        <id>https://2745518585.github.io/post/solution-P4304/</id>
-        <link href="https://2745518585.github.io/post/solution-P4304/">
+        <id>https://2745518585.github.io/post/P4304-solution/</id>
+        <link href="https://2745518585.github.io/post/P4304-solution/">
         </link>
         <updated>2022-04-17T03:50:07.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P4304">P4304 [TJOI2013]攻击装置</a></p>
@@ -271,8 +271,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P3355 骑士共存问题]]></title>
-        <id>https://2745518585.github.io/post/solution-P3355/</id>
-        <link href="https://2745518585.github.io/post/solution-P3355/">
+        <id>https://2745518585.github.io/post/P3355-solution/</id>
+        <link href="https://2745518585.github.io/post/P3355-solution/">
         </link>
         <updated>2022-04-17T03:42:36.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P3355">P3355 骑士共存问题</a></p>
@@ -402,8 +402,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P2774 方格取数问题]]></title>
-        <id>https://2745518585.github.io/post/solution-P2774/</id>
-        <link href="https://2745518585.github.io/post/solution-P2774/">
+        <id>https://2745518585.github.io/post/P2774-solution/</id>
+        <link href="https://2745518585.github.io/post/P2774-solution/">
         </link>
         <updated>2022-04-17T03:25:18.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2774">P2774 方格取数问题</a></p>
@@ -533,8 +533,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P2472 [SCOI2007] 蜥蜴]]></title>
-        <id>https://2745518585.github.io/post/solution-P2472/</id>
-        <link href="https://2745518585.github.io/post/solution-P2472/">
+        <id>https://2745518585.github.io/post/P2472-solution/</id>
+        <link href="https://2745518585.github.io/post/P2472-solution/">
         </link>
         <updated>2022-04-16T11:39:42.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2472">P2472 [SCOI2007] 蜥蜴</a></p>
@@ -681,8 +681,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P1402 酒店之王]]></title>
-        <id>https://2745518585.github.io/post/solution-P1402/</id>
-        <link href="https://2745518585.github.io/post/solution-P1402/">
+        <id>https://2745518585.github.io/post/P1402-solution/</id>
+        <link href="https://2745518585.github.io/post/P1402-solution/">
         </link>
         <updated>2022-04-16T11:30:44.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P1402">P1402 酒店之王</a></p>
@@ -806,8 +806,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P1231 教辅的组成]]></title>
-        <id>https://2745518585.github.io/post/solution-P1231/</id>
-        <link href="https://2745518585.github.io/post/solution-P1231/">
+        <id>https://2745518585.github.io/post/P1231-solution/</id>
+        <link href="https://2745518585.github.io/post/P1231-solution/">
         </link>
         <updated>2022-04-16T11:14:44.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P1231">P1231 教辅的组成</a></p>
@@ -944,8 +944,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P2754 [CTSC1999]家园 / 星际转移问题]]></title>
-        <id>https://2745518585.github.io/post/solution-P2754/</id>
-        <link href="https://2745518585.github.io/post/solution-P2754/">
+        <id>https://2745518585.github.io/post/P2754-solution/</id>
+        <link href="https://2745518585.github.io/post/P2754-solution/">
         </link>
         <updated>2022-04-16T10:36:23.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2754">P2754 [CTSC1999]家园 / 星际转移问题</a></p>
@@ -1066,8 +1066,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P2763 试题库问题]]></title>
-        <id>https://2745518585.github.io/post/solution-P2763/</id>
-        <link href="https://2745518585.github.io/post/solution-P2763/">
+        <id>https://2745518585.github.io/post/P2763-solution/</id>
+        <link href="https://2745518585.github.io/post/P2763-solution/">
         </link>
         <updated>2022-04-16T04:34:23.000Z</updated>
         <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2763">P2763 试题库问题</a></p>

@@ -9,7 +9,7 @@
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
 <title>P3648 [APIO2014]序列分割 | 赵悦岑&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1650109545791">
+<link rel="shortcut icon" href="/favicon.ico?v=1650167883938">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -192,7 +192,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">34</span>
+        <span class="site-item-stat-count">38</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -1134,6 +1134,515 @@ int main()
     <div class="result" id="result">
       
       <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/solution-P5030/"" data-c="
+          &lt;p&gt;  &lt;a href=&#34;https://www.luogu.com.cn/problem/P5030&#34;&gt;P5030 长脖子鹿放置&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;  这道题和 P3355 很像，但是分组方法不一样。我们来看两个互相攻击的点有什么特点：&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;mo&gt;⇔&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;(x,y) \Leftrightarrow (x+1,y+3)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⇔&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;mo&gt;⇔&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;(x,y) \Leftrightarrow (x-1,y+3)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⇔&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;mo&gt;⇔&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;(x,y) \Leftrightarrow (x-3,y+1)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⇔&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;⋯&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;\cdots&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.31em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;minner&#34;&gt;⋯&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;。显然，任意两个相互攻击的点横纵坐标的奇偶性都不相同。这样我们只需要按横坐标的奇偶性分组即可，虽然可以分成 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;4&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 组，但是没有必要，只要保证同一组内不相互攻击即可。&lt;/p&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;algorithm&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+typedef long long ll;
+const int N=50001,M=2000001;
+int n,m,q,p=1,s1,s2,t[N],t0[N],f[N];
+short dx[8]={-3,-1,1,3,3,1,-1,-3},dy[8]={-1,-3,-3,-1,1,3,3,1};
+bool b[N];
+struct str
+{
+    int m,q;
+    ll r;
+}a[M];
+bool check(int x,int y)
+{
+    return x&amp;gt;=1&amp;amp;&amp;amp;x&amp;lt;=m&amp;amp;&amp;amp;y&amp;gt;=1&amp;amp;&amp;amp;y&amp;lt;=n;
+}
+int sum(int x,int y)
+{
+    return (x-1)*n+y;
+}
+void road(int x,int y,ll r)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+}
+bool bfs()
+{
+    queue&amp;lt;int&amp;gt; Q;
+    Q.push(s1);
+    for(int i=1;i&amp;lt;=s2;++i) f[i]=0;
+    f[s1]=1;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;amp;&amp;amp;a[i].r!=0)
+            {
+                f[a[i].m]=f[k]+1;
+                Q.push(a[i].m);
+            }
+        }
+    }
+    return f[s2]!=0;
+}
+ll dfs(int x,ll r)
+{
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(f[a[i].m]==f[x]+1&amp;amp;&amp;amp;a[i].r!=0)
+        {
+            int z=dfs(a[i].m,min(r,a[i].r));
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s; 
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&amp;quot;%d%d%d&amp;quot;,&amp;amp;m,&amp;amp;n,&amp;amp;q);
+    s1=m*n+1;
+    s2=m*n+2;
+    for(int i=1;i&amp;lt;=q;++i)
+    {
+        int x,y;
+        scanf(&amp;quot;%d%d&amp;quot;,&amp;amp;x,&amp;amp;y);
+        if(b[sum(x,y)]==true) --i,--q;
+        b[sum(x,y)]=true;
+    }
+    for(int i=1;i&amp;lt;=m;++i)
+    {
+        for(int j=1;j&amp;lt;=n;++j)
+        {
+            if(b[sum(i,j)]==true) continue;
+            if(i&amp;amp;1)
+            {
+                road(s1,sum(i,j),1);
+                road(sum(i,j),s1,0);
+                for(int k=0;k&amp;lt;=7;++k)
+                {
+                    if(check(i+dx[k],j+dy[k]))
+                    {
+                        road(sum(i,j),sum(i+dx[k],j+dy[k]),1e18);
+                        road(sum(i+dx[k],j+dy[k]),sum(i,j),0);
+                    }
+                }
+            }
+            else
+            {
+                road(sum(i,j),s2,1);
+                road(s2,sum(i,j),0);
+            }
+        }
+    }
+    ll r=0;
+    while(bfs())
+    {
+        for(int i=1;i&amp;lt;=s2;++i) t0[i]=t[i];
+        r+=dfs(s1,1e18);
+    }
+    printf(&amp;quot;%lld&amp;quot;,m*n-q-r);
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+">P5030 长脖子鹿放置</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/solution-P4304/"" data-c="
+          &lt;p&gt;  &lt;a href=&#34;https://www.luogu.com.cn/problem/P4304&#34;&gt;P4304 [TJOI2013]攻击装置&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;  同 P3355，双倍经验。&lt;/p&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;algorithm&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+typedef long long ll;
+const int N=50001,M=2000001;
+int n,m,p=1,s1,s2,t[N],t0[N],f[N];
+short dx[8]={-2,-1,1,2,2,1,-1,-2},dy[8]={-1,-2,-2,-1,1,2,2,1};
+struct str
+{
+    int m,q;
+    ll r;
+}a[M];
+bool check(int x,int y)
+{
+    return x&amp;gt;=1&amp;amp;&amp;amp;x&amp;lt;=n&amp;amp;&amp;amp;y&amp;gt;=1&amp;amp;&amp;amp;y&amp;lt;=n;
+}
+int sum(int x,int y)
+{
+    return (x-1)*n+y;
+}
+void road(int x,int y,ll r)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+}
+bool bfs()
+{
+    queue&amp;lt;int&amp;gt; Q;
+    Q.push(s1);
+    for(int i=1;i&amp;lt;=s2;++i) f[i]=0;
+    f[s1]=1;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;amp;&amp;amp;a[i].r!=0)
+            {
+                f[a[i].m]=f[k]+1;
+                Q.push(a[i].m);
+            }
+        }
+    }
+    return f[s2]!=0;
+}
+ll dfs(int x,ll r)
+{
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(f[a[i].m]==f[x]+1&amp;amp;&amp;amp;a[i].r!=0)
+        {
+            int z=dfs(a[i].m,min(r,a[i].r));
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s; 
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&amp;quot;%d&amp;quot;,&amp;amp;n);
+    s1=n*n+1;
+    s2=n*n+2;
+    for(int i=1;i&amp;lt;=n;++i)
+    {
+        scanf(&amp;quot;\n&amp;quot;);
+        for(int j=1;j&amp;lt;=n;++j)
+        {
+            char c=getchar();
+            if(c==&#39;1&#39;) continue;
+            ++m;
+            if((i+j)&amp;amp;1)
+            {
+                road(s1,sum(i,j),1);
+                road(sum(i,j),s1,0);
+                for(int k=0;k&amp;lt;=7;++k)
+                {
+                    if(check(i+dx[k],j+dy[k]))
+                    {
+                        road(sum(i,j),sum(i+dx[k],j+dy[k]),1e18);
+                        road(sum(i+dx[k],j+dy[k]),sum(i,j),0);
+                    }
+                }
+            }
+            else
+            {
+                road(sum(i,j),s2,1);
+                road(s2,sum(i,j),0);
+            }
+        }
+    }
+    ll r=0;
+    while(bfs())
+    {
+        for(int i=1;i&amp;lt;=s2;++i) t0[i]=t[i];
+        r+=dfs(s1,1e18);
+    }
+    printf(&amp;quot;%lld&amp;quot;,m-r);
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+">P4304 [TJOI2013]攻击装置</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/solution-P3355/"" data-c="
+          &lt;p&gt;  &lt;a href=&#34;https://www.luogu.com.cn/problem/P3355&#34;&gt;P3355 骑士共存问题&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;  这道题和 P2774 是一个类型的题，只是分组方式不同。我们来看两个互相攻击的点有什么特点：&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;mo&gt;⇔&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;(x,y) \Leftrightarrow (x+1,y+2)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⇔&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;mo&gt;⇔&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;(x,y) \Leftrightarrow (x-1,y+2)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⇔&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;mo&gt;⇔&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;(x,y) \Leftrightarrow (x-2,y+1)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⇔&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8388800000000001em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;⋯&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;\cdots&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.31em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;minner&#34;&gt;⋯&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;。不难发现，两个相互攻击的点横纵坐标之和奇偶性不同，我们就可以通过横纵坐标的奇偶性来分组。这道题还多了障碍物的限制，只要有障碍物的点不向外连边即可。&lt;/p&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;algorithm&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+typedef long long ll;
+const int N=50001,M=2000001;
+int n,m,p=1,s1,s2,t[N],t0[N],f[N];
+short dx[8]={-2,-1,1,2,2,1,-1,-2},dy[8]={-1,-2,-2,-1,1,2,2,1};
+bool b[201][201];
+struct str
+{
+    int m,q;
+    ll r;
+}a[M];
+bool check(int x,int y)
+{
+    return x&amp;gt;=1&amp;amp;&amp;amp;x&amp;lt;=n&amp;amp;&amp;amp;y&amp;gt;=1&amp;amp;&amp;amp;y&amp;lt;=n;
+}
+int sum(int x,int y)
+{
+    return (x-1)*n+y;
+}
+void road(int x,int y,ll r)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+}
+bool bfs()
+{
+    queue&amp;lt;int&amp;gt; Q;
+    Q.push(s1);
+    for(int i=1;i&amp;lt;=s2;++i) f[i]=0;
+    f[s1]=1;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;amp;&amp;amp;a[i].r!=0)
+            {
+                f[a[i].m]=f[k]+1;
+                Q.push(a[i].m);
+            }
+        }
+    }
+    return f[s2]!=0;
+}
+ll dfs(int x,ll r)
+{
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(f[a[i].m]==f[x]+1&amp;amp;&amp;amp;a[i].r!=0)
+        {
+            int z=dfs(a[i].m,min(r,a[i].r));
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s; 
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&amp;quot;%d%d&amp;quot;,&amp;amp;n,&amp;amp;m);
+    s1=n*n+1;
+    s2=n*n+2;
+    for(int i=1;i&amp;lt;=m;++i)
+    {
+        int x,y;
+        scanf(&amp;quot;%d%d&amp;quot;,&amp;amp;x,&amp;amp;y);
+        b[x][y]=true;
+    }
+    for(int i=1;i&amp;lt;=n;++i)
+    {
+        for(int j=1;j&amp;lt;=n;++j)
+        {
+            if(b[i][j]==true) continue;
+            if((i+j)&amp;amp;1)
+            {
+                road(s1,sum(i,j),1);
+                road(sum(i,j),s1,0);
+                for(int k=0;k&amp;lt;=7;++k)
+                {
+                    if(check(i+dx[k],j+dy[k]))
+                    {
+                        road(sum(i,j),sum(i+dx[k],j+dy[k]),1e18);
+                        road(sum(i+dx[k],j+dy[k]),sum(i,j),0);
+                    }
+                }
+            }
+            else
+            {
+                road(sum(i,j),s2,1);
+                road(s2,sum(i,j),0);
+            }
+        }
+    }
+    ll r=0;
+    while(bfs())
+    {
+        for(int i=1;i&amp;lt;=s2;++i) t0[i]=t[i];
+        r+=dfs(s1,1e18);
+    }
+    printf(&amp;quot;%lld&amp;quot;,n*n-m-r);
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+">P3355 骑士共存问题</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/solution-P2774/"" data-c="
+          &lt;p&gt;  &lt;a href=&#34;https://www.luogu.com.cn/problem/P2774&#34;&gt;P2774 方格取数问题&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;  这实际上也是一道网络流的问题，但是和以前做的题都不一样，同时也很难想到怎么做。题目中要求任意两个相邻的方格不能同时取，如果我们把一个方格放在 A 组，另一个方块放在 B 组，那么所有和 A 中方格相邻的方格都要放在 B 组，和 B 中方格相邻的都要放在 A 组。我们可以发现，统一组中方格横纵坐标的和奇偶性相同，这样我们就可以直接分组了。于是我们就把这个图分成了两组，只有两组之间有关系，同一组的方格没有关系，是不是很像二分图？我们把所有相邻的方格都用一条边连上，问题转换为删去一些节点，使得两组之间连通，求出删去节点权值的最小值。&lt;br&gt;
+  于是我们又可以自然而然地想到最小割（最小割=最大流），但是最小割删去的是边，而不是点。我们转化一下，将源点和 A 组所有点相连，汇点和 B 组所有点相连，容量均为该点对应的数，这样删去一条边的代价刚好是对应点的数值。但是我们不能删去两组之间的边，为了不删去这些边，把这些边的容量设为正无穷，就永远不可能删去这些边了。由于最小割 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;=&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.36687em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 最大流，所以我们只需要跑一遍最大流即可。注意只能由 A 组连向 B 组或 B 组连向 A 组，不能同时连。&lt;/p&gt;
+&lt;h2 id=&#34;code&#34;&gt;code&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include&amp;lt;cstdio&amp;gt;
+#include&amp;lt;algorithm&amp;gt;
+#include&amp;lt;queue&amp;gt;
+using namespace std;
+typedef long long ll;
+const int N=10001,M=1000001;
+int n,m,p=1,s1,s2,t[N],t0[N],f[N];
+ll q;
+struct str
+{
+    int m,q;
+    ll r;
+}a[M];
+void road(int x,int y,ll r)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+}
+bool bfs()
+{
+    queue&amp;lt;int&amp;gt; Q;
+    Q.push(s1);
+    for(int i=1;i&amp;lt;=s2;++i) f[i]=0;
+    f[s1]=1;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(f[a[i].m]==0&amp;amp;&amp;amp;a[i].r!=0)
+            {
+                f[a[i].m]=f[k]+1;
+                Q.push(a[i].m);
+            }
+        }
+    }
+    return f[s2]!=0;
+}
+ll dfs(int x,ll r)
+{
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(f[a[i].m]==f[x]+1&amp;amp;&amp;amp;a[i].r!=0)
+        {
+            int z=dfs(a[i].m,min(r,a[i].r));
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s; 
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&amp;quot;%d%d&amp;quot;,&amp;amp;m,&amp;amp;n);
+    s1=m*n+1;
+    s2=m*n+2;
+    for(int i=1;i&amp;lt;=m;++i)
+    {
+        for(int j=1;j&amp;lt;=n;++j)
+        {
+            int r;
+            scanf(&amp;quot;%d&amp;quot;,&amp;amp;r);
+            q+=r;
+            if((i+j)&amp;amp;1)
+            {
+                road(s1,(i-1)*n+j,r);
+                road((i-1)*n+j,s1,0);
+                if(i!=1)
+                {
+                    road((i-1)*n+j,(i-2)*n+j,1e18);
+                    road((i-2)*n+j,(i-1)*n+j,0);
+                }
+                if(j!=1)
+                {
+                    road((i-1)*n+j,(i-1)*n+j-1,1e18);
+                    road((i-1)*n+j-1,(i-1)*n+j,0);
+                }
+                if(i!=m)
+                {
+                    road((i-1)*n+j,i*n+j,1e18);
+                    road(i*n+j,(i-1)*n+j,0);
+                }
+                if(j!=n)
+                {
+                    road((i-1)*n+j,(i-1)*n+j+1,1e18);
+                    road((i-1)*n+j+1,(i-1)*n+j,0);
+                }
+            }
+            else
+            {
+                road((i-1)*n+j,s2,r);
+                road(s2,(i-1)*n+j,0);
+            }
+        }
+    }
+    ll r=0;
+    while(bfs())
+    {
+        for(int i=1;i&amp;lt;=s2;++i) t0[i]=t[i];
+        r+=dfs(s1,1e18);
+    }
+    printf(&amp;quot;%lld&amp;quot;,q-r);
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+">P2774 方格取数问题</a>
+      </div>
+      
+      <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/solution-P2472/"" data-c="
           &lt;p&gt;  &lt;a href=&#34;https://www.luogu.com.cn/problem/P2472&#34;&gt;P2472 [SCOI2007] 蜥蜴&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
@@ -1514,17 +2023,21 @@ int main()
       </div>
       
       <div class="item">
-        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/maximum-flow-Dinic-problemlist/"" data-c="
+        <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/maximum-flow-problemlist/"" data-c="
           &lt;p&gt;  这是 &lt;a href=&#34;https://2745518585.github.io/post/maximum-flow-Dinic&#34;&gt;最大流&lt;/a&gt; 的几道经典题目，建议按照顺序来做。&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P2740-solution&#34;&gt;P2740 [USACO4.2]草地排水Drainage Ditches&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P1343-solution&#34;&gt;P1343 地震逃生&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P2936-solution&#34;&gt;P2936 [USACO09JAN]Total Flow S&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P3254-solution&#34;&gt;P3254 圆桌问题&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P2763-solution&#34;&gt;P2763 试题库问题&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;  [P2754 [CTSC1999]家园 / 星际转移问题]](https://2745518585.github.io/post/P2754-solution)&lt;/p&gt;
+&lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P2754-solution&#34;&gt;P2754 [CTSC1999]家园 / 星际转移问题&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P1231-solution&#34;&gt;P1231 教辅的组成&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P1402-solution&#34;&gt;P1402 酒店之王&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P2472-solution&#34;&gt;P2472 [SCOI2007] 蜥蜴&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P2774-solution&#34;&gt;P2774 方格取数问题&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P3355-solution&#34;&gt;P3355 骑士共存问题&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P4304-solution&#34;&gt;P4304 [TJOI2013]攻击装置&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;  &lt;a href=&#34;https://2745518585.github.io/post/P5030-solution&#34;&gt;P5030 长脖子鹿放置&lt;/a&gt;&lt;/p&gt;
 ">最大流题单</a>
       </div>
       
@@ -4410,6 +4923,7 @@ int main()
         <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/maximum-flow-ISAP/"" data-c="
           &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;  模板题：&lt;a href=&#34;https://www.luogu.com.cn/problem/P3376&#34;&gt;P3376 【模板】网络最大流&lt;/a&gt;&lt;br&gt;
+  &lt;a href=&#34;https://2745518585.github.io/post/maximum-flow-problemlist/&#34;&gt;最大流题单&lt;/a&gt;&lt;br&gt;
   Dinic 算法已经能够很好地解决最大流问题了，但是它还是有一个弊端：会进行多次且次数不确定的 bfs，就会浪费时间，还可能被毒瘤出题人卡。Dinic 中，bfs 的作用就是将这个图分层，如果我们只在一开始时将图分层，在之后的 dfs 中调整每个点的高度，就可以大大减少bfs次数。&lt;/p&gt;
 &lt;h2 id=&#34;isap&#34;&gt;ISAP&lt;/h2&gt;
 &lt;p&gt;  ISAP 就成功地优化了 Dinic。不过 ISAP 是将汇点的高度设为 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;1&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，源点最高，流量会从高度较高的点流到高度较低的点，原因会在后面解释。在 dfs 过程中，如果一个点仍有剩余流量却流不出去了，那么就把这个点的高度加一，这样它才能流到更多的点。如果汇点高度最高，就需要其它点的高度减一，就可能出现负数，最好避免这种情况。这样就可以避免多次分层浪费时间。&lt;br&gt;
@@ -4508,7 +5022,7 @@ int main()
         <a class="result-title" style="opacity: 0;" href="https://2745518585.github.io/post/maximum-flow-Dinic/"" data-c="
           &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;  模板题：&lt;a href=&#34;https://www.luogu.com.cn/problem/P3376&#34;&gt;P3376 【模板】网络最大流&lt;/a&gt;&lt;br&gt;
-  &lt;a href=&#34;https://2745518585.github.io/post/maximum-flow-Dinic-problemlist/&#34;&gt;最大流题单&lt;/a&gt;&lt;br&gt;
+  &lt;a href=&#34;https://2745518585.github.io/post/maximum-flow-problemlist/&#34;&gt;最大流题单&lt;/a&gt;&lt;br&gt;
   一个图中，每条边都有一定的承载能力，也就是容量，流过这条边的流量不得超过这条边的最大流量，从源点到汇点的最大流量就叫做最大流。&lt;br&gt;
   最大流问题有很多种解法，而 Dinic 是一种简单又比较实用的方法，但是多数解法都有一个思想：残留网络。&lt;/p&gt;
 &lt;h2 id=&#34;残留网络&#34;&gt;残留网络&lt;/h2&gt;

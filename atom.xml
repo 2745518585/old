@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-04-17T04:01:50.097Z</updated>
+    <updated>2022-05-10T05:54:07.874Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -10,6 +10,970 @@
     <logo>https://2745518585.github.io/images/avatar.png</logo>
     <icon>https://2745518585.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[费用流题单]]></title>
+        <id>https://2745518585.github.io/post/minimum-cost-maximum-flow-problemlist/</id>
+        <link href="https://2745518585.github.io/post/minimum-cost-maximum-flow-problemlist/">
+        </link>
+        <updated>2022-05-10T05:45:38.000Z</updated>
+        <content type="html"><![CDATA[<p>  这是 <a href="https://2745518585.github.io/post/minimum-cost-maximum-flow-EK">费用流</a> 的几道经典题目，建议按照顺序来做。</p>
+<p>  <a href="https://2745518585.github.io/post/solution-P1251">P1251 餐巾计划问题</a></p>
+<p>  <a href="https://2745518585.github.io/post/solution-P4015">P4015 运输问题</a></p>
+<p>  <a href="https://2745518585.github.io/post/solution-P4014">P4014 分配问题</a></p>
+<p>  <a href="https://2745518585.github.io/post/solution-P2604">P2604 [ZJOI2010]网络扩容</a></p>
+<p>  <a href="https://2745518585.github.io/post/solution-P4012">P4012 深海机器人问题</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[P4012 深海机器人问题]]></title>
+        <id>https://2745518585.github.io/post/P4012-solution/</id>
+        <link href="https://2745518585.github.io/post/P4012-solution/">
+        </link>
+        <updated>2022-05-10T05:38:13.000Z</updated>
+        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P4012">P4012 深海机器人问题</a></p>
+<h2 id="分析">分析</h2>
+<p>  这道题是网格类的费用流，将深海机器人看做流量，每个生物标本看做 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 点费用即可。但要注意每个生物标本只能采集一次，也就意味着流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 时费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，多余 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 的流量费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。所以我们又要用到同 <a href="https://2745518585.github.io/post/P2604-solution/">P2604</a> 的拆边思想，然后按题意连边跑最大费用最大流即可。<br>
+  注意，这道题的坐标十分诡异，有的储存方法必须要反过来，有的就不能反，在写的时候仔细想一下。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+typedef long long ll;
+const int N=100001,M=1000001;
+int n,m,p=1,t1,t2,s1,s2,t[N],t0[N];
+ll v,f[N];
+bool h[N];
+struct road
+{
+    int m,q;
+    ll r,w;
+}a[M];
+int sum(int x,int y)
+{
+    return (x-1)*n+y;
+}
+void road(int x,int y,ll r,ll w)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+    a[p].w=w;
+}
+bool SPFA()
+{
+    queue&lt;int&gt; Q;
+    Q.push(s1);
+    for(int i=1;i&lt;=s2;++i)
+    {
+        f[i]=-1e18;
+        h[i]=false;
+    }
+    f[s1]=0;
+    h[s1]=true;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r&gt;0&amp;&amp;f[k]+a[i].w&gt;f[a[i].m])
+            {
+                f[a[i].m]=f[k]+a[i].w;
+                Q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=-1e18) return true;
+    return false;
+}
+ll dfs(int x,ll r)
+{
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(h[a[i].m]==false&amp;&amp;a[i].r&gt;0&amp;&amp;f[a[i].m]==f[x]+a[i].w)
+        {
+            h[a[i].m]=true;
+            ll z=dfs(a[i].m,min(r,a[i].r));
+            h[a[i].m]=false;
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+                v+=z*a[i].w;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s;
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&quot;%d%d%d%d&quot;,&amp;t1,&amp;t2,&amp;m,&amp;n);
+    ++m,++n;
+    s1=m*n+1,s2=m*n+2;
+    for(int i=1;i&lt;=m;++i)
+    {
+        for(int j=1;j&lt;=n-1;++j)
+        {
+            ll w;
+            scanf(&quot;%lld&quot;,&amp;w);
+            road(sum(i,j),sum(i,j+1),1,w);
+            road(sum(i,j+1),sum(i,j),0,-w);
+            road(sum(i,j),sum(i,j+1),1e18,0);
+            road(sum(i,j+1),sum(i,j),0,0);
+        }
+    }
+    for(int i=1;i&lt;=n;++i)
+    {
+        for(int j=1;j&lt;=m-1;++j)
+        {
+            ll w;
+            scanf(&quot;%lld&quot;,&amp;w);
+            road(sum(j,i),sum(j+1,i),1,w);
+            road(sum(j+1,i),sum(j,i),0,-w);
+            road(sum(j,i),sum(j+1,i),1e18,0);
+            road(sum(j+1,i),sum(j,i),0,0);
+        }
+    }
+    for(int i=1;i&lt;=t1;++i)
+    {
+        int x,y;
+        ll r;
+        scanf(&quot;%lld%d%d&quot;,&amp;r,&amp;x,&amp;y);
+        road(s1,sum(x+1,y+1),r,0);
+        road(sum(x+1,y+1),s1,0,0);
+    }
+    for(int i=1;i&lt;=t2;++i)
+    {
+        int x,y;
+        ll r;
+        scanf(&quot;%lld%d%d&quot;,&amp;r,&amp;x,&amp;y);
+        road(sum(x+1,y+1),s2,r,0);
+        road(s2,sum(x+1,y+1),0,0);
+    }
+    while(SPFA())
+    {
+        for(int i=1;i&lt;=s2;++i) 
+        {
+            t0[i]=t[i];
+            h[i]=false;
+        }
+        dfs(s1,1e18);
+    }
+    printf(&quot;%lld&quot;,v);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[P2604 [ZJOI2010]网络扩容]]></title>
+        <id>https://2745518585.github.io/post/P2604-solution/</id>
+        <link href="https://2745518585.github.io/post/P2604-solution/">
+        </link>
+        <updated>2022-05-10T05:25:28.000Z</updated>
+        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2604">P2604 [ZJOI2010]网络扩容</a></p>
+<h2 id="分析">分析</h2>
+<p>  我们先来分析一下这个问题：我们要在一个图中跑费用流，当一条边流量在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span> 以下时，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，当这条边容量超过 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span> 时，超过部分的费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>w</mi></mrow><annotation encoding="application/x-tex">w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span>。我们可以发现，图中每一条边都有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 种计费方式，而且是分段的一次函数。这时候我们要用到经典的“拆边”，将这条边拆成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 条边，一条边的容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，另一条边容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>w</mi></mrow><annotation encoding="application/x-tex">w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span>。如果这条边的流量不超过 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span>，那么为了费用最小，所有流量都会从第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 条边流过。而如果流量超过 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span>，多余的部分就会从第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 条边流过，且多余部分费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>w</mi></mrow><annotation encoding="application/x-tex">w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span>。这种方法有时非常好用，但是仅限于此分段函数的斜率单调不下降的时候，也就是费用逐渐变大，否则无法使用（在最大费用最大流时相反）。<br>
+  注意在跑完第一遍最大流之后的初始化。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+typedef long long ll;
+const int N=10001,M=100001;
+int n,m,r0,p=1,v,s1,s2,t[N],t0[N];
+ll f[N],b[N][4];
+bool h[N];
+struct str
+{
+    int m,q;
+    ll r,w;
+}a[M];
+void road(int x,int y,ll r,ll w)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+    a[p].w=w;
+}
+bool SPFA()
+{
+    queue&lt;int&gt; Q;
+    Q.push(s1);
+    for(int i=1;i&lt;=n+1;++i)
+    {
+        f[i]=1e18;
+        h[i]=false;
+    }
+    f[s1]=0;
+    h[s1]=true;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r&gt;0&amp;&amp;f[k]+a[i].w&lt;f[a[i].m])
+            {
+                f[a[i].m]=f[k]+a[i].w;
+                Q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e18) return true;
+    return false;
+}
+ll dfs(int x,ll r)
+{
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(h[a[i].m]==false&amp;&amp;a[i].r&gt;0&amp;&amp;f[a[i].m]==f[x]+a[i].w)
+        {
+            h[a[i].m]=true;
+            ll z=dfs(a[i].m,min(r,a[i].r));
+            h[a[i].m]=false;
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+                v+=z*a[i].w;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s; 
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&quot;%d%d%d&quot;,&amp;n,&amp;m,&amp;r0);
+    s1=1,s2=n;
+    for(int i=1;i&lt;=m;++i)
+    {
+        int x,y;
+        ll r,w;
+        scanf(&quot;%d%d%lld%lld&quot;,&amp;x,&amp;y,&amp;r,&amp;w);
+        b[i][0]=x,b[i][1]=y,b[i][2]=r,b[i][3]=w;
+        road(x,y,r,0);
+        road(y,x,0,0);
+    }
+    ll r=0;
+    while(SPFA())
+    {
+        for(int i=1;i&lt;=n+1;++i) 
+        {
+            t0[i]=t[i];
+            h[i]=false;
+        }
+        r+=dfs(s1,1e18);
+    }
+    printf(&quot;%lld &quot;,r);
+    s1=n+1;
+    road(s1,1,r0,0);
+    road(1,s1,0,0);
+    for(int i=1;i&lt;=m;++i)
+    {
+        road(b[i][0],b[i][1],1e18,b[i][3]);
+        road(b[i][1],b[i][0],0,-b[i][3]);
+    }
+    v=0;
+    while(SPFA())
+    {
+        for(int i=1;i&lt;=n+1;++i) 
+        {
+            t0[i]=t[i];
+            h[i]=false;
+        }
+        r+=dfs(s1,1e18);
+    }
+    printf(&quot;%lld&quot;,v);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[P4014 分配问题]]></title>
+        <id>https://2745518585.github.io/post/P4014-solution/</id>
+        <link href="https://2745518585.github.io/post/P4014-solution/">
+        </link>
+        <updated>2022-05-10T05:19:27.000Z</updated>
+        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P4014">P4014 分配问题</a></p>
+<h2 id="分析">分析</h2>
+<p>  这道题其实是 <a href="https://2745518585.github.io/post/P4015-solution/">P4015</a> 的简化版，P4015 是仓库中可以有多个货物，商店也可能需要多个货物，而这道题中工件最多 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个，工人也只能做 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个工件。所以只需要把上一题所有的边流量变为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，然后跑最大费用最大流即可。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+int n,s1,s2,p=1,t[10001],f[10001],g[10001],r[10001];
+bool h[10001];
+struct str
+{
+    int x,m,q,r1,r2,w;
+}a[100001];
+void road(int x,int y,int r,int w)
+{
+    a[++p].x=x;
+    a[p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r1=r;
+    a[p].r2=r;
+    a[p].w=w;
+}
+bool SPFA()
+{
+    queue&lt;int&gt; q;
+    q.push(s1);
+    for(int i=1;i&lt;=n*2+2;++i)
+    {
+        f[i]=1e9;
+        g[i]=1e9;
+        h[i]=false;
+        r[i]=0;
+    }
+    g[s1]=0;
+    h[s1]=true;
+    while(!q.empty())
+    {
+        int k=q.front();
+        q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r1&gt;0&amp;&amp;g[k]+a[i].w&lt;g[a[i].m])
+            {
+                f[a[i].m]=min(f[k],a[i].r1);
+                g[a[i].m]=g[k]+a[i].w;
+                r[a[i].m]=i;
+                q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e9) return true;
+    return false;
+}
+bool SPFA2()
+{
+    queue&lt;int&gt; q;
+    q.push(s1);
+    for(int i=1;i&lt;=n*2+2;++i)
+    {
+        f[i]=1e9;
+        g[i]=-1e9;
+        h[i]=false;
+        r[i]=0;
+    }
+    g[s1]=0;
+    h[s1]=true;
+    while(!q.empty())
+    {
+        int k=q.front();
+        q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r2&gt;0&amp;&amp;g[k]+a[i].w&gt;g[a[i].m])
+            {
+                f[a[i].m]=min(f[k],a[i].r2);
+                g[a[i].m]=g[k]+a[i].w;
+                r[a[i].m]=i;
+                q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e9) return true;
+    return false;
+}
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;n);
+    s1=1;
+    s2=n*2+2;
+    for(int i=1;i&lt;=n;++i)
+    {
+        road(1,i+1,1,0);
+        road(i+1,1,0,0);
+    }
+    for(int i=1;i&lt;=n;++i)
+    {
+        road(i+n+1,n*2+2,1,0);
+        road(n*2+2,i+n+1,0,0);
+    }
+    for(int i=1;i&lt;=n;++i)
+    {
+        for(int j=1;j&lt;=n;++j)
+        {
+            int w;
+            scanf(&quot;%d&quot;,&amp;w);
+            road(i+1,j+n+1,1,w);
+            road(j+n+1,i+1,0,-w);
+        }
+    }
+    int w1=0,w2=0;
+    while(SPFA())
+    {
+        w1+=f[s2]*g[s2];
+        int x=s2;
+        while(x!=s1)
+        {
+            a[r[x]].r1-=f[s2];
+            a[r[x]^1].r1+=f[s2];
+            x=a[r[x]].x;
+        }
+    }
+    while(SPFA2())
+    {
+        w2+=f[s2]*g[s2];
+        int x=s2;
+        while(x!=s1)
+        {
+            a[r[x]].r2-=f[s2];
+            a[r[x]^1].r2+=f[s2];
+            x=a[r[x]].x;
+        }
+    }
+    printf(&quot;%d\n%d&quot;,w1,w2);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[P4015 运输问题]]></title>
+        <id>https://2745518585.github.io/post/P4015-solution/</id>
+        <link href="https://2745518585.github.io/post/P4015-solution/">
+        </link>
+        <updated>2022-05-10T05:11:03.000Z</updated>
+        <content type="html"><![CDATA[<p>  [P4015 运输问题]{https://www.luogu.com.cn/problem/P4015)</p>
+<h2 id="分析">分析</h2>
+<p>  这道题其实不难看出可以把货物看做流量来跑费用流。我们建两组点，分别代表仓库和商店，然后和源汇点连边，跑费用流即可。如果还不清楚可以看下面，我们要建这几种边：<br>
+  1. 源点向仓库 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。<br>
+  2. 仓库 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 向商店 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span></span></span></span> 连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>。<br>
+  3. 商店 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 向汇点连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+int n,n1,n2,s1,s2,p=1,t[10001],f[10001],g[10001],r[10001];
+bool h[10001];
+struct str
+{
+    int x,m,q,r1,r2,w;
+}a[100001];
+void road(int x,int y,int r,int w)
+{
+    a[++p].x=x;
+    a[p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r1=r;
+    a[p].r2=r;
+    a[p].w=w;
+}
+bool SPFA()
+{
+    queue&lt;int&gt; q;
+    q.push(s1);
+    for(int i=1;i&lt;=n;++i)
+    {
+        f[i]=1e9;
+        g[i]=1e9;
+        h[i]=false;
+        r[i]=0;
+    }
+    g[s1]=0;
+    h[s1]=true;
+    while(!q.empty())
+    {
+        int k=q.front();
+        q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r1&gt;0&amp;&amp;g[k]+a[i].w&lt;g[a[i].m])
+            {
+                f[a[i].m]=min(f[k],a[i].r1);
+                g[a[i].m]=g[k]+a[i].w;
+                r[a[i].m]=i;
+                q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e9) return true;
+    return false;
+}
+bool SPFA2()
+{
+    queue&lt;int&gt; q;
+    q.push(s1);
+    for(int i=1;i&lt;=n;++i)
+    {
+        f[i]=1e9;
+        g[i]=-1e9;
+        h[i]=false;
+        r[i]=0;
+    }
+    g[s1]=0;
+    h[s1]=true;
+    while(!q.empty())
+    {
+        int k=q.front();
+        q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r2&gt;0&amp;&amp;g[k]+a[i].w&gt;g[a[i].m])
+            {
+                f[a[i].m]=min(f[k],a[i].r2);
+                g[a[i].m]=g[k]+a[i].w;
+                r[a[i].m]=i;
+                q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e9) return true;
+    return false;
+}
+int main()
+{
+    scanf(&quot;%d%d&quot;,&amp;n1,&amp;n2);
+    n=n1+n2+2;
+    s1=1;
+    s2=n;
+    for(int i=1;i&lt;=n1;++i)
+    {
+        int r;
+        scanf(&quot;%d&quot;,&amp;r);
+        road(1,i+1,r,0);
+        road(i+1,1,0,0);
+    }
+    for(int i=1;i&lt;=n2;++i)
+    {
+        int r;
+        scanf(&quot;%d&quot;,&amp;r);
+        road(i+n1+1,n,r,0);
+        road(n,i+n1+1,0,0);
+    }
+    for(int i=1;i&lt;=n1;++i)
+    {
+        for(int j=1;j&lt;=n2;++j)
+        {
+            int w;
+            scanf(&quot;%d&quot;,&amp;w);
+            road(i+1,j+n1+1,1e9,w);
+            road(j+n1+1,i+1,0,-w);
+        }
+    }
+    int w1=0,w2=0;
+    while(SPFA())
+    {
+        w1+=f[s2]*g[s2];
+        int x=s2;
+        while(x!=s1)
+        {
+            a[r[x]].r1-=f[s2];
+            a[r[x]^1].r1+=f[s2];
+            x=a[r[x]].x;
+        }
+    }
+    while(SPFA2())
+    {
+        w2+=f[s2]*g[s2];
+        int x=s2;
+        while(x!=s1)
+        {
+            a[r[x]].r2-=f[s2];
+            a[r[x]^1].r2+=f[s2];
+            x=a[r[x]].x;
+        }
+    }
+    printf(&quot;%d\n%d&quot;,w1,w2);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[P1251 餐巾计划问题]]></title>
+        <id>https://2745518585.github.io/post/P1251-solution/</id>
+        <link href="https://2745518585.github.io/post/P1251-solution/">
+        </link>
+        <updated>2022-05-10T04:41:34.000Z</updated>
+        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P1251">P1251 餐巾计划问题</a></p>
+<h2 id="分析">分析</h2>
+<p>  这是一道及其经典的费用流问题，我们只需要把餐巾看做流量即可。但是我们会发现，餐巾还分为两类：一类是干净的餐巾，另一类是脏的餐巾，这两种不能混在一起。对于这种状态有分类的题目，我们最好使用分层图来解决，每一层都代表一种状态，这样就可以分开不同状态的流量了。这道题中由于每天早上需要赶紧餐巾，然后把脏餐巾送到晚上，而晚上收到脏餐巾，又要给其他早上提供干净餐巾，我们就可以把整个图拆成两部分：早上和晚上。<br>
+  然后我们要保证每天早上都有足够的干净餐巾，解决方法非常简单只需要从每天早上向汇点连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">r_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，同时从源点向晚上连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">r_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>。但是这样一天用不完的餐巾就没法继续使用了，我们只需要从每天早上或晚上向下一条边连边，就表示我们可以把餐巾留到后面使用。<br>
+  解决了这些，剩下的我们按题意连边即可。要连的边有以下 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 种。<br>
+  1. 第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 天早上向汇点连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">r_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。<br>
+  2. 源点向第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 天晚上连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">r_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。<br>
+  3. 第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 天晚上向第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 天晚上连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。<br>
+  4. 源点向第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 天早上连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span></span></span></span>。<br>
+  5. 第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 天晚上向第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>+</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">i+m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span></span></span></span> 天早上连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>。<br>
+  6. 第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 天晚上向第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>+</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">i+n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 天早上连边，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">inf</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span></span></span></span>，费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+typedef long long ll;
+int n,N,s1,s2,p=1,t[10001],r[10001];
+ll b[10001],f[10001],g[10001],w0,w1,w2,t1,t2;
+bool h[10001];
+struct str
+{
+    int x,m,q;
+    ll r,w;
+}a[1000001];
+void road(int x,int y,ll r,ll w)
+{
+    a[++p].x=x;
+    a[p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+    a[p].w=w;
+}
+bool SPFA()
+{
+    queue&lt;int&gt; Q;
+    Q.push(s1);
+    for(int i=1;i&lt;=N;++i)
+    {
+        f[i]=1e18;
+        g[i]=1e18;
+        h[i]=false;
+        r[i]=0;
+    }
+    g[s1]=0;
+    h[s1]=true;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r&gt;0&amp;&amp;g[k]+a[i].w&lt;g[a[i].m])
+            {
+                f[a[i].m]=min(f[k],a[i].r);
+                g[a[i].m]=g[k]+a[i].w;
+                r[a[i].m]=i;
+                Q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e18) return true;
+    return false;
+}
+int main()
+{
+    scanf(&quot;%d&quot;,&amp;n);
+    for(int i=1;i&lt;=n;++i)
+    {
+        scanf(&quot;%lld&quot;,&amp;b[i]);
+    }
+    scanf(&quot;%lld%lld%lld%lld%lld&quot;,&amp;w0,&amp;t1,&amp;w1,&amp;t2,&amp;w2);
+    s1=n*2+1;
+    s2=n*2+2;
+    N=n*2+2;
+    for(int i=1;i&lt;=n;++i)
+    {
+        road(i*2-1,s2,b[i],0);
+        road(s2,i*2-1,0,0);
+    }
+    for(int i=1;i&lt;=n;++i)
+    {
+        road(s1,i*2,b[i],0);
+        road(i*2,s1,0,0);
+    }
+    for(int i=1;i&lt;=n-1;++i)
+    {
+        road(i*2,(i+1)*2,1e18,0);
+        road((i+1)*2,i*2,0,0);
+    }
+    for(int i=1;i&lt;=n;++i)
+    {
+        road(s1,i*2-1,1e18,w0);
+        road(i*2-1,s1,0,-w0);
+    }
+    for(int i=1;i&lt;=n-t1;++i)
+    {
+        road(i*2,(i+t1)*2-1,1e18,w1);
+        road((i+t1)*2-1,i*2,0,-w1);
+    }
+    for(int i=1;i&lt;=n-t2;++i)
+    {
+        road(i*2,(i+t2)*2-1,1e18,w2);
+        road((i+t2)*2-1,i*2,0,-w2);
+    }
+    ll w=0;
+    while(SPFA())
+    {
+        w+=f[s2]*g[s2];
+        int x=s2;
+        while(x!=s1)
+        {
+            a[r[x]].r-=f[s2];
+            a[r[x]^1].r+=f[s2];
+            x=a[r[x]].x;
+        }
+    }
+    printf(&quot;%lld&quot;,w);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[树链剖分]]></title>
+        <id>https://2745518585.github.io/post/Tree-chain-subdivision/</id>
+        <link href="https://2745518585.github.io/post/Tree-chain-subdivision/">
+        </link>
+        <updated>2022-05-07T12:11:24.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>  树链剖分是用来解决树上问题的经典方法，而且常数极小。这其中的一个经典问题就是 <a href="https://www.luogu.com.cn/problem/P3379">最近公共祖先（LCA）</a>，这道题可以当做树剖的模板题。</p>
+<h2 id="基本思路">基本思路</h2>
+<p>  树链剖分，顾名思义，是把树剖分成很多条链。为什么要剖分成链？因为在解决树上问题时，一条链往往可以一次性操作，就如模板题 LCA，我们在两个点向上跳时就可以直接跳到所在链的链头。如何剖分？剖分有多种方法，其中重链剖分和长链剖分较为常见。重链剖分就是将这个节点与其子节点的子树中节点个数最多的子节点（又称“重儿子”）与这个节点连在一起组成一条链，其余子节点各自成一条链；长链剖分就是将这个节点与其子节点的子树深度最深的子节点连在一起组成一条链，其与子节点各自成一条链。<br>
+<img src="https://2745518585.github.io/post-images/Tree-chain-subdivision-1.png" alt="1" width="300" loading="lazy"><br>
+  比如这样一棵树，对它进行重链剖分后就是这个样子：<br>
+<img src="https://2745518585.github.io/post-images/Tree-chain-subdivision-2.png" alt="2" width="500" loading="lazy"><br>
+  而长链剖分后就是这个样子：<br>
+<img src="https://2745518585.github.io/post-images/Tree-chain-subdivision-3.png" alt="3" width="500" loading="lazy"></p>
+<h2 id="实现">实现</h2>
+<p>  树剖理解起来很容易，但是不容易实现。进行重链剖分对于每个节点，我们要处理一下信息：父亲，子树大小、深度、所在链头与重儿子。我们要进行两次 dfs，第一次处理基本信息：父亲、子树大小、深度与重儿子，第二次进行剖分，首先访问重儿子（顺序不能换，以后会用到），将当前节点的链头传递给重儿子；然后访问其余子节点，链头为子节点本身。这样我们就成功剖分了这棵树。<br>
+  对于长链剖分，只需要将子树大小改为最大深度即可。</p>
+<h2 id="lca">LCA</h2>
+<p>  要实现 LCA，我们需要先进行重链剖分，因为子树大小越多求这里面的点的可能越大。要找到点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 与点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的 LCA，首先判断两个点有没有在同一条链中，也就是两个点的链头是否相同。如果不相同，将深度较深的点跳转至其链头的父节点，再进行判断；如果在，那么深度较浅的那一个点就是 LCA。证明也非常简单，如果不在同一条链中，深度较深的点所在的链头一定不是另一个点的祖先，所以 LCA 也一定不在这条链中，就跳到上一条链。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+const int N=500001;
+int n,m,r,p=1,t[N];
+struct tree
+{
+    int f,s,d,t,z;
+}T[N];
+struct road
+{
+    int m,q;
+}a[N&lt;&lt;1];
+void road(int x,int y)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+}
+void dfs1(int x)
+{
+    T[x].s=1;
+    T[x].d=T[T[x].f].d+1;
+    for(int i=t[x];i!=0;i=a[i].q)
+    {
+        if(a[i].m==T[x].f) continue;
+        T[a[i].m].f=x;
+        dfs1(a[i].m);
+        T[x].s+=T[a[i].m].s;
+        if(T[a[i].m].s&gt;T[T[x].z].s) T[x].z=a[i].m;
+    }
+}
+void dfs2(int x,int k)
+{
+    T[x].t=k;
+    if(T[x].z!=0) dfs2(T[x].z,k);
+    for(int i=t[x];i!=0;i=a[i].q)
+    {
+        if(a[i].m==T[x].f||a[i].m==T[x].z) continue;
+        else dfs2(a[i].m,a[i].m);
+    }
+}
+int LCA(int x,int y)
+{
+    while(T[x].t!=T[y].t)
+    {
+        if(T[T[x].t].d&gt;=T[T[y].t].d) x=T[T[x].t].f;
+        else y=T[T[y].t].f;
+    }
+    if(T[x].d&lt;T[y].d) return x;
+    else return y;
+}
+int main()
+{
+    scanf(&quot;%d%d%d&quot;,&amp;n,&amp;m,&amp;r);
+    for(int i=1;i&lt;=n-1;++i)
+    {
+        int x,y;
+        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
+        road(x,y);
+        road(y,x);
+    }
+    dfs1(r);
+    dfs2(r,r);
+    for(int i=1;i&lt;=m;++i)
+    {
+        int x,y;
+        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
+        printf(&quot;%d\n&quot;,LCA(x,y));
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[最小费用最大流Dinic]]></title>
+        <id>https://2745518585.github.io/post/minimum-cost-maximum-flow-Dinic/</id>
+        <link href="https://2745518585.github.io/post/minimum-cost-maximum-flow-Dinic/">
+        </link>
+        <updated>2022-04-20T06:50:20.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p>  模板题：<a href="https://www.luogu.com.cn/problem/P3381">P3381 【模板】最小费用最大流</a><br>
+  <a href="https://2745518585.github.io/post/minimum-cost-maximum-flow-problemlist/">费用流题单</a><br>
+  前置知识：<a href="https://2745518585.github.io/post/minimum-cost-maximum-flow-EK/">最小费用最大流Dinic</a><br>
+  我们已经学习了用 EK 解决费用流的问题，但是 EK 每一次增广都要一次 SPFA，效率低，于是我们想，费用流能不能用 Dinic 呢？答案是肯定的。</p>
+<h2 id="基本思路">基本思路</h2>
+<p>  最大流的 Dinic 就是用一次 bfs 来分层，然后进行 dfs，而费用流的 EK 用的是多次 SPFA，如果我们把 Dinic 中的 bfs 换成 SPFA 就可以了，只需要判断这条边是否在最短路图中，也就起点到这个点的距离加上边权等于下一个点到起点的距离。但是有一个问题，最大流中的分层图是不存在环路的，但是最短路图就有可能，就有可能死循环并 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="black"><mtext>MLE</mtext></mstyle></mrow><annotation encoding="application/x-tex">\color{black}{\text{MLE}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord" style="color:black;"><span class="mord text" style="color:black;"><span class="mord" style="color:black;">MLE</span></span></span></span></span></span>，我们需要用一个数组来判断一个点是否走过，到达这个点标记真，离开后标记为假。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+#include&lt;queue&gt;
+using namespace std;
+typedef long long ll;
+const int N=10001,M=100001;
+int n,m,p=1,v,s1,s2,t[N],t0[N];
+ll f[N];
+bool h[N];
+struct str
+{
+    int m,q;
+    ll r,w;
+}a[M];
+void road(int x,int y,ll r,ll w)
+{
+    a[++p].m=y;
+    a[p].q=t[x];
+    t[x]=p;
+    a[p].r=r;
+    a[p].w=w;
+}
+bool SPFA()
+{
+    queue&lt;int&gt; Q;
+    Q.push(s1);
+    for(int i=1;i&lt;=n;++i)
+    {
+        f[i]=1e18;
+        h[i]=false;
+    }
+    f[s1]=0;
+    h[s1]=true;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
+        for(int i=t[k];i!=0;i=a[i].q)
+        {
+            if(a[i].r&gt;0&amp;&amp;f[k]+a[i].w&lt;f[a[i].m])
+            {
+                f[a[i].m]=f[k]+a[i].w;
+                Q.push(a[i].m);
+                h[a[i].m]=true;
+            }
+        }
+    }
+    if(f[s2]!=1e18) return true;
+    return false;
+}
+ll dfs(int x,ll r)
+{
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
+    {
+        t0[x]=i;
+        if(h[a[i].m]==false&amp;&amp;a[i].r&gt;0&amp;&amp;f[a[i].m]==f[x]+a[i].w)
+        {
+            h[a[i].m]=true;
+            ll z=dfs(a[i].m,min(r,a[i].r));
+            h[a[i].m]=false;
+            if(z!=0)
+            {
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
+                s+=z;
+                v+=z*a[i].w;
+            }
+            else f[a[i].m]=0;
+            if(r==0) return s; 
+        }
+    }
+    return s;
+}
+int main()
+{
+    scanf(&quot;%d%d%d%d&quot;,&amp;n,&amp;m,&amp;s1,&amp;s2);
+    for(int i=1;i&lt;=m;++i)
+    {
+        int x,y;
+        ll r,w;
+        scanf(&quot;%d%d%lld%lld&quot;,&amp;x,&amp;y,&amp;r,&amp;w);
+        road(x,y,r,w);
+        road(y,x,0,-w);
+    }
+    ll r=0;
+    while(SPFA())
+    {
+        for(int i=1;i&lt;=n;++i) 
+        {
+            t0[i]=t[i];
+            h[i]=false;
+        }
+        r+=dfs(s1,1e18);
+    }
+    printf(&quot;%lld %lld&quot;,r,v);
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[P5030 长脖子鹿放置]]></title>
         <id>https://2745518585.github.io/post/P5030-solution/</id>
@@ -264,938 +1228,6 @@ int main()
         r+=dfs(s1,1e18);
     }
     printf(&quot;%lld&quot;,m-r);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[P3355 骑士共存问题]]></title>
-        <id>https://2745518585.github.io/post/P3355-solution/</id>
-        <link href="https://2745518585.github.io/post/P3355-solution/">
-        </link>
-        <updated>2022-04-17T03:42:36.000Z</updated>
-        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P3355">P3355 骑士共存问题</a></p>
-<h2 id="分析">分析</h2>
-<p>  这道题和 P2774 是一个类型的题，只是分组方式不同。我们来看两个互相攻击的点有什么特点：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>)</mo><mo>⇔</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">(x,y) \Leftrightarrow (x+1,y+2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>)</mo><mo>⇔</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">(x,y) \Leftrightarrow (x-1,y+2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>)</mo><mo>⇔</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">(x,y) \Leftrightarrow (x-2,y+1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇔</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⋯</mo></mrow><annotation encoding="application/x-tex">\cdots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.31em;vertical-align:0em;"></span><span class="minner">⋯</span></span></span></span>。不难发现，两个相互攻击的点横纵坐标之和奇偶性不同，我们就可以通过横纵坐标的奇偶性来分组。这道题还多了障碍物的限制，只要有障碍物的点不向外连边即可。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-typedef long long ll;
-const int N=50001,M=2000001;
-int n,m,p=1,s1,s2,t[N],t0[N],f[N];
-short dx[8]={-2,-1,1,2,2,1,-1,-2},dy[8]={-1,-2,-2,-1,1,2,2,1};
-bool b[201][201];
-struct str
-{
-    int m,q;
-    ll r;
-}a[M];
-bool check(int x,int y)
-{
-    return x&gt;=1&amp;&amp;x&lt;=n&amp;&amp;y&gt;=1&amp;&amp;y&lt;=n;
-}
-int sum(int x,int y)
-{
-    return (x-1)*n+y;
-}
-void road(int x,int y,ll r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-bool bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s1);
-    for(int i=1;i&lt;=s2;++i) f[i]=0;
-    f[s1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r!=0)
-            {
-                f[a[i].m]=f[k]+1;
-                Q.push(a[i].m);
-            }
-        }
-    }
-    return f[s2]!=0;
-}
-ll dfs(int x,ll r)
-{
-    if(x==s2) return r;
-    ll s=0;
-    for(int i=t0[x];i!=0;i=a[i].q)
-    {
-        t0[x]=i;
-        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-            else f[a[i].m]=0;
-            if(r==0) return s; 
-        }
-    }
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
-    s1=n*n+1;
-    s2=n*n+2;
-    for(int i=1;i&lt;=m;++i)
-    {
-        int x,y;
-        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-        b[x][y]=true;
-    }
-    for(int i=1;i&lt;=n;++i)
-    {
-        for(int j=1;j&lt;=n;++j)
-        {
-            if(b[i][j]==true) continue;
-            if((i+j)&amp;1)
-            {
-                road(s1,sum(i,j),1);
-                road(sum(i,j),s1,0);
-                for(int k=0;k&lt;=7;++k)
-                {
-                    if(check(i+dx[k],j+dy[k]))
-                    {
-                        road(sum(i,j),sum(i+dx[k],j+dy[k]),1e18);
-                        road(sum(i+dx[k],j+dy[k]),sum(i,j),0);
-                    }
-                }
-            }
-            else
-            {
-                road(sum(i,j),s2,1);
-                road(s2,sum(i,j),0);
-            }
-        }
-    }
-    ll r=0;
-    while(bfs())
-    {
-        for(int i=1;i&lt;=s2;++i) t0[i]=t[i];
-        r+=dfs(s1,1e18);
-    }
-    printf(&quot;%lld&quot;,n*n-m-r);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[P2774 方格取数问题]]></title>
-        <id>https://2745518585.github.io/post/P2774-solution/</id>
-        <link href="https://2745518585.github.io/post/P2774-solution/">
-        </link>
-        <updated>2022-04-17T03:25:18.000Z</updated>
-        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2774">P2774 方格取数问题</a></p>
-<h2 id="分析">分析</h2>
-<p>  这实际上也是一道网络流的问题，但是和以前做的题都不一样，同时也很难想到怎么做。题目中要求任意两个相邻的方格不能同时取，如果我们把一个方格放在 A 组，另一个方块放在 B 组，那么所有和 A 中方格相邻的方格都要放在 B 组，和 B 中方格相邻的都要放在 A 组。我们可以发现，统一组中方格横纵坐标的和奇偶性相同，这样我们就可以直接分组了。于是我们就把这个图分成了两组，只有两组之间有关系，同一组的方格没有关系，是不是很像二分图？我们把所有相邻的方格都用一条边连上，问题转换为删去一些节点，使得两组之间连通，求出删去节点权值的最小值。<br>
-  于是我们又可以自然而然地想到最小割（最小割=最大流），但是最小割删去的是边，而不是点。我们转化一下，将源点和 A 组所有点相连，汇点和 B 组所有点相连，容量均为该点对应的数，这样删去一条边的代价刚好是对应点的数值。但是我们不能删去两组之间的边，为了不删去这些边，把这些边的容量设为正无穷，就永远不可能删去这些边了。由于最小割 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>=</mo></mrow><annotation encoding="application/x-tex">=</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span></span></span></span> 最大流，所以我们只需要跑一遍最大流即可。注意只能由 A 组连向 B 组或 B 组连向 A 组，不能同时连。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-typedef long long ll;
-const int N=10001,M=1000001;
-int n,m,p=1,s1,s2,t[N],t0[N],f[N];
-ll q;
-struct str
-{
-    int m,q;
-    ll r;
-}a[M];
-void road(int x,int y,ll r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-bool bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s1);
-    for(int i=1;i&lt;=s2;++i) f[i]=0;
-    f[s1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r!=0)
-            {
-                f[a[i].m]=f[k]+1;
-                Q.push(a[i].m);
-            }
-        }
-    }
-    return f[s2]!=0;
-}
-ll dfs(int x,ll r)
-{
-    if(x==s2) return r;
-    ll s=0;
-    for(int i=t0[x];i!=0;i=a[i].q)
-    {
-        t0[x]=i;
-        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-            else f[a[i].m]=0;
-            if(r==0) return s; 
-        }
-    }
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d&quot;,&amp;m,&amp;n);
-    s1=m*n+1;
-    s2=m*n+2;
-    for(int i=1;i&lt;=m;++i)
-    {
-        for(int j=1;j&lt;=n;++j)
-        {
-            int r;
-            scanf(&quot;%d&quot;,&amp;r);
-            q+=r;
-            if((i+j)&amp;1)
-            {
-                road(s1,(i-1)*n+j,r);
-                road((i-1)*n+j,s1,0);
-                if(i!=1)
-                {
-                    road((i-1)*n+j,(i-2)*n+j,1e18);
-                    road((i-2)*n+j,(i-1)*n+j,0);
-                }
-                if(j!=1)
-                {
-                    road((i-1)*n+j,(i-1)*n+j-1,1e18);
-                    road((i-1)*n+j-1,(i-1)*n+j,0);
-                }
-                if(i!=m)
-                {
-                    road((i-1)*n+j,i*n+j,1e18);
-                    road(i*n+j,(i-1)*n+j,0);
-                }
-                if(j!=n)
-                {
-                    road((i-1)*n+j,(i-1)*n+j+1,1e18);
-                    road((i-1)*n+j+1,(i-1)*n+j,0);
-                }
-            }
-            else
-            {
-                road((i-1)*n+j,s2,r);
-                road(s2,(i-1)*n+j,0);
-            }
-        }
-    }
-    ll r=0;
-    while(bfs())
-    {
-        for(int i=1;i&lt;=s2;++i) t0[i]=t[i];
-        r+=dfs(s1,1e18);
-    }
-    printf(&quot;%lld&quot;,q-r);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[P2472 [SCOI2007] 蜥蜴]]></title>
-        <id>https://2745518585.github.io/post/P2472-solution/</id>
-        <link href="https://2745518585.github.io/post/P2472-solution/">
-        </link>
-        <updated>2022-04-16T11:39:42.000Z</updated>
-        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2472">P2472 [SCOI2007] 蜥蜴</a></p>
-<h2 id="分析">分析</h2>
-<p>  这道题同样也要拆点，每个点最多能经过的蜥蜴数就是它的高度，拆点后中间边的流量设为这个石柱的高度即可。剩下的就枚举两个合法石柱并建边，把源点和有蜥蜴的点相连，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，把能跳出地图的点与汇点相连。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-int m,n,N,d,o,p=1,s1,s2,t[10001],t0[10001],f[10001];
-struct str
-{
-    int m,q,r;
-}a[1000001];
-void road(int x,int y,int r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-bool bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s1);
-    for(int i=1;i&lt;=N;++i) f[i]=0;
-    f[s1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r!=0)
-            {
-                f[a[i].m]=f[k]+1;
-                Q.push(a[i].m);
-            }
-        }
-    }
-    return f[s2]!=0;
-}
-int dfs(int x,int r)
-{
-    if(x==s2) return r;
-    int s=0;
-    for(int i=t0[x];i!=0;i=a[i].q)
-    {
-        t0[x]=i;
-        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-            else f[a[i].m]=0;
-            if(r==0) return s; 
-        }
-    }
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d%d&quot;,&amp;m,&amp;n,&amp;d);
-    N=m*n*2+2;
-    s1=N-1;
-    s2=N;
-    for(int i=1;i&lt;=m;++i)
-    {
-        scanf(&quot;\n&quot;);
-        for(int j=1;j&lt;=n;++j)
-        {
-            int r=getchar()-'0';
-            if(r!=0)
-            {
-                int a1=(i-1)*n+j;
-                road(a1+m*n,a1,r);
-                road(a1,a1+m*n,0);
-            }
-        }
-    }
-    for(int i=1;i&lt;=m;++i)
-    {
-        scanf(&quot;\n&quot;);
-        for(int j=1;j&lt;=n;++j)
-        {
-            char z=getchar();
-            if(z=='L')
-            {
-                ++o;
-                int a1=(i-1)*n+j;
-                road(s1,a1+m*n,1);
-                road(a1+m*n,s1,0);
-            }
-        }
-    }
-    for(int i=1;i&lt;=m;++i)
-    {
-        for(int j=1;j&lt;=n;++j)
-        {
-            if(i&lt;=d||i&gt;=m-d+1||j&lt;=d||j&gt;=n-d+1)
-            {
-                int a1=(i-1)*n+j;
-                road(a1,s2,1e9);
-                road(s2,a1,0);
-            }
-        }
-    }
-    for(int i=1;i&lt;=m;++i)
-    {
-        for(int j=1;j&lt;=n;++j)
-        {
-            int a1=(i-1)*n+j;
-            for(int k=1;k&lt;=m;++k)
-            {
-                for(int l=1;l&lt;=n;++l)
-                {
-                    int a2=(k-1)*n+l;
-                    if((i-k)*(i-k)+(j-l)*(j-l)&lt;=d*d)
-                    {
-                        road(a1,a2+m*n,1e9);
-                        road(a2+m*n,a1,0);
-                    }
-                }
-            }
-        }
-    }
-    int r=0;
-    while(bfs())
-    {
-        for(int i=1;i&lt;=N;++i) t0[i]=t[i];
-        r+=dfs(s1,1e9);
-    }
-    printf(&quot;%d&quot;,o-r);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[P1402 酒店之王]]></title>
-        <id>https://2745518585.github.io/post/P1402-solution/</id>
-        <link href="https://2745518585.github.io/post/P1402-solution/">
-        </link>
-        <updated>2022-04-16T11:30:44.000Z</updated>
-        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P1402">P1402 酒店之王</a></p>
-<h2 id="分析">分析</h2>
-<p>  这道题也是一道需要拆点的题，和 P1231 一样，这里不再赘述。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-int n,n1,n2,n3,p=1,s1,s2,t[10001],f[10001];
-struct str
-{
-    int m,q,r;
-}a[1000001];
-void road(int x,int y,int r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-bool bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s1);
-    for(int i=1;i&lt;=n;++i) f[i]=0;
-    f[s1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r!=0)
-            {
-                f[a[i].m]=f[k]+1;
-                Q.push(a[i].m);
-            }
-        }
-    }
-    return f[s2]!=0;
-}
-int dfs(int x,int r)
-{
-    if(x==s2) return r;
-    int s=0;
-    for(int i=t[x];i!=0;i=a[i].q)
-    {
-        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-        }
-    }
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d%d&quot;,&amp;n1,&amp;n2,&amp;n3);
-    n=n1*2+n2+n3+2;
-    s1=1;
-    s2=n;
-    for(int i=1;i&lt;=n1;++i)
-    {
-        for(int j=1;j&lt;=n2;++j)
-        {
-            int x;
-            scanf(&quot;%d&quot;,&amp;x);
-            if(x==1)
-            {
-                road(j+n1*2+1,i+1,1);
-                road(i+1,j+n1*2+1,0);
-            }
-        }
-    }
-    for(int i=1;i&lt;=n1;++i)
-    {
-        for(int j=1;j&lt;=n3;++j)
-        {
-            int x;
-            scanf(&quot;%d&quot;,&amp;x);
-            if(x==1)
-            {
-                road(i+n1+1,j+n1*2+n2+1,1);
-                road(j+n1*2+n2+1,i+n1+1,0);
-            }
-        }
-    }
-    for(int i=1;i&lt;=n1;++i)
-    {
-        road(i+1,i+n1+1,1);
-        road(i+n1+1,i+1,0);
-    }
-    for(int i=1;i&lt;=n2;++i)
-    {
-        road(1,i+n1*2+1,1);
-        road(i+n1*2+1,1,0);
-    }
-    for(int i=1;i&lt;=n3;++i)
-    {
-        road(i+n1*2+n2+1,n,1);
-        road(n,i+n1*2+n2+1,0);
-    }
-    int r=0;
-    while(bfs())
-    {
-        r+=dfs(s1,1e9);
-    }
-    printf(&quot;%d&quot;,r);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[P1231 教辅的组成]]></title>
-        <id>https://2745518585.github.io/post/P1231-solution/</id>
-        <link href="https://2745518585.github.io/post/P1231-solution/">
-        </link>
-        <updated>2022-04-16T11:14:44.000Z</updated>
-        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P1231">P1231 教辅的组成</a></p>
-<h2 id="分析">分析</h2>
-<p>  这道题咋一看非常简单，只需要将书和练习册、答案的对应关系转换成边，每条边容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，规定一个顺序：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext>源点</mtext><mo>→</mo><mtext>练习册</mtext><mo>→</mo><mtext>书</mtext><mo>→</mo><mtext>答案</mtext><mo>→</mo><mtext>汇点</mtext></mrow><annotation encoding="application/x-tex">\text{源点} \rightarrow \text{练习册} \rightarrow \text{书}\rightarrow \text{答案} \rightarrow \text{汇点}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord cjk_fallback">源点</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord cjk_fallback">练习册</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord cjk_fallback">书</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord cjk_fallback">答案</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord cjk_fallback">汇点</span></span></span></span></span>。但是我们发现，如果简单地按照上面这种方式建图，可能有多于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 的流量流过一本书，也就是这本书被选了两次，这是不允许的。如何解决？这就要用到最大流的一个经典思想：拆点。<br>
-<img src="https://2745518585.github.io/post-images/1650084681672.png" alt="1" width="400" loading="lazy"><br>
-  拆点的思想就是把一个点拆成两个点，其中入边全部连在一个点，出边连在另一个点，并把两个点用容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 的边相连，这样就可以保证流过每个点的流量最多为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>。将这个思想加入到上面建的图中，就可以解决这个问题了。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-int n,n1,n2,n3,m1,m2,p=1,s1,s2,t[10001],f[10001];
-struct str
-{
-    int m,q,r;
-}a[1000001];
-void road(int x,int y,int r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-bool bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s1);
-    for(int i=1;i&lt;=n;++i) f[i]=0;
-    f[s1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r!=0)
-            {
-                f[a[i].m]=f[k]+1;
-                Q.push(a[i].m);
-            }
-        }
-    }
-    return f[s2]!=0;
-}
-int dfs(int x,int r)
-{
-    if(x==s2) return r;
-    int s=0;
-    for(int i=t[x];i!=0;i=a[i].q)
-    {
-        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-        }
-    }
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d%d%d&quot;,&amp;n1,&amp;n2,&amp;n3,&amp;m1);
-    n=n1*2+n2+n3+2;
-    s1=1;
-    s2=n;
-    for(int i=1;i&lt;=m1;++i)
-    {
-        int x,y;
-        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-        road(y+n1*2+1,x+1,1);
-        road(x+1,y+n1*2+1,0);
-    }
-    scanf(&quot;%d&quot;,&amp;m2);
-    for(int i=1;i&lt;=m2;++i)
-    {
-        int x,y;
-        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-        road(x+n1+1,y+n1*2+n2+1,1);
-        road(y+n1*2+n2+1,x+n1+1,0);
-    }
-    for(int i=1;i&lt;=n1;++i)
-    {
-        road(i+1,i+n1+1,1);
-        road(i+n1+1,i+1,0);
-    }
-    for(int i=1;i&lt;=n2;++i)
-    {
-        road(1,i+n1*2+1,1);
-        road(i+n1*2+1,1,0);
-    }
-    for(int i=1;i&lt;=n3;++i)
-    {
-        road(i+n1*2+n2+1,n,1);
-        road(n,i+n1*2+n2+1,0);
-    }
-    int r=0;
-    while(bfs())
-    {
-        r+=dfs(s1,1e9);
-    }
-    printf(&quot;%d&quot;,r);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[最大流题单]]></title>
-        <id>https://2745518585.github.io/post/maximum-flow-problemlist/</id>
-        <link href="https://2745518585.github.io/post/maximum-flow-problemlist/">
-        </link>
-        <updated>2022-04-16T11:02:26.000Z</updated>
-        <content type="html"><![CDATA[<p>  这是 <a href="https://2745518585.github.io/post/maximum-flow-Dinic">最大流</a> 的几道经典题目，建议按照顺序来做。</p>
-<p>  <a href="https://2745518585.github.io/post/P2740-solution">P2740 [USACO4.2]草地排水Drainage Ditches</a></p>
-<p>  <a href="https://2745518585.github.io/post/P1343-solution">P1343 地震逃生</a></p>
-<p>  <a href="https://2745518585.github.io/post/P2936-solution">P2936 [USACO09JAN]Total Flow S</a></p>
-<p>  <a href="https://2745518585.github.io/post/P3254-solution">P3254 圆桌问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/P2763-solution">P2763 试题库问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/P2754-solution">P2754 [CTSC1999]家园 / 星际转移问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/P1231-solution">P1231 教辅的组成</a></p>
-<p>  <a href="https://2745518585.github.io/post/P1402-solution">P1402 酒店之王</a></p>
-<p>  <a href="https://2745518585.github.io/post/P2472-solution">P2472 [SCOI2007] 蜥蜴</a></p>
-<p>  <a href="https://2745518585.github.io/post/P2774-solution">P2774 方格取数问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/P3355-solution">P3355 骑士共存问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/P4304-solution">P4304 [TJOI2013]攻击装置</a></p>
-<p>  <a href="https://2745518585.github.io/post/P5030-solution">P5030 长脖子鹿放置</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[P2754 [CTSC1999]家园 / 星际转移问题]]></title>
-        <id>https://2745518585.github.io/post/P2754-solution/</id>
-        <link href="https://2745518585.github.io/post/P2754-solution/">
-        </link>
-        <updated>2022-04-16T10:36:23.000Z</updated>
-        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2754">P2754 [CTSC1999]家园 / 星际转移问题</a></p>
-<h2 id="分析">分析</h2>
-<p>  这道题其实也可以用网络流来做，每一个太空站（地球、月球）在每个时间都建一个点。由于人可以在太空站上停留，所以每一个点都要向下一个时间的对应点连边，容量为正无穷。对于每个太空船将当前时间的起点和终点连接起来，容量为太空船的承载能力。建出来的图如下：<br>
-<img src="https://2745518585.github.io/post-images/1650106165513.png" alt="1" loading="lazy"><br>
-  （图片来自网络）<br>
-  但是我们只能在确定时间的情况下求出最多的转移人数，无法直接求出最少天数，必须二分。但是还有另一个方法，假设我们已经跑了时间在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span></span></span></span> 以内的图，得到了最大流和残留网络，如果我们加上 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 时间的点和边，再在残留网络上跑最大流，将得到的最大流加在原来的最大流上，是不是就可以得到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 天的转移人数了？因为这相当于我们已经找到了一些増广路，继续寻找更多増广路的过程。这样我们跑出 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>∼</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">1\sim m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span></span></span></span> 时间的最大转移人数，只相当于跑了一遍时间 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span></span></span></span> 的图上的最大流。对于无解情况，我们只需要选一个比较大的数，如果都跑不出来就判无解即可。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-int N,M=200,n,m,q,p=1,s1,s2,t[10001],t0[10001],f[10001],e[201][501],y[501],z[501];
-bool u=true;
-struct str
-{
-    int m,q;
-    int r;
-}a[1000001];
-void road(int x,int y,int r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-bool bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s1);
-    for(int i=1;i&lt;=N;++i) f[i]=0;
-    f[s1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0&amp;&amp;a[i].r!=0)
-            {
-                f[a[i].m]=f[k]+1;
-                Q.push(a[i].m);
-            }
-        }
-    }
-    return f[s2]!=0;
-}
-int dfs(int x,int r)
-{
-    if(x==s2) return r;
-    int s=0;
-    for(int i=t0[x];i!=0;i=a[i].q)
-    {
-        t0[x]=i;
-        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-            else f[a[i].m]=0;
-            if(r==0) return s; 
-        }
-    }
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d%d&quot;,&amp;n,&amp;m,&amp;q);
-    n+=2;
-    for(int i=1;i&lt;=m;++i)
-    {
-        scanf(&quot;%d%d&quot;,&amp;z[i],&amp;y[i]);
-        for(int j=0;j&lt;=y[i]-1;++j)
-        {
-            scanf(&quot;%d&quot;,&amp;e[i][j]);
-            e[i][j]+=2;
-        }
-    }
-    s1=2;
-    int r=0;
-    for(int i=1;i&lt;=M;++i)
-    {
-        N=(i+1)*n;
-        s2=i*n+1;
-        for(int j=1;j&lt;=n;++j)
-        {
-            road((i-1)*n+j,i*n+j,1e9);
-            road(i*n+j,(i-1)*n+j,0);
-        }
-        for(int j=1;j&lt;=m;++j)
-        {
-            road((i-1)*n+e[j][(i-1)%y[j]],i*n+e[j][i%y[j]],z[j]);
-            road(i*n+e[j][i%y[j]],(i-1)*n+e[j][(i-1)%y[j]],0);
-        }
-        while(bfs())
-        {
-            for(int j=1;j&lt;=N;++j) t0[j]=t[j];
-            r+=dfs(s1,1e9);
-        }
-        if(r&gt;=q)
-        {
-            printf(&quot;%d&quot;,i);
-            return 0;
-        }
-    }
-    printf(&quot;0&quot;);
-    return 0;
-}
-
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[P2763 试题库问题]]></title>
-        <id>https://2745518585.github.io/post/P2763-solution/</id>
-        <link href="https://2745518585.github.io/post/P2763-solution/">
-        </link>
-        <updated>2022-04-16T04:34:23.000Z</updated>
-        <content type="html"><![CDATA[<p>  <a href="https://www.luogu.com.cn/problem/P2763">P2763 试题库问题</a></p>
-<h2 id="分析">分析</h2>
-<p>  一道网络流问题，我们把每道题和所属类型相连，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，再将源点和每道题相连，容量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，汇点和每个类型相连，容量为地 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 个类型的题数，如果跑出来的最大流和总题数相同，表示每个类型都有足够的题数，也就是有一个合法方案。<br>
-  在跑完网络流后，要输出结果，我们可以观察残留网络。一条边有流量流过，表示这条边起点表示的题目被作为这条边终点表示的类型选中了。对于每个类型，找到它的出边，如果有剩余容量，表示其反向边有流量流过。当然每个类型的出边还有到汇点的边，但是这条边一定没有剩余容量，不用考虑。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-typedef long long ll;
-int n,m,q=0,N,p=1,s1,s2,t[10001],t0[10001],f[10001],g[10001];
-bool u=true;
-struct str
-{
-    int m,q;
-    ll r;
-}a[1000001];
-void road(int x,int y,ll r)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-}
-void bfs()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s2);
-    f[s2]=1;
-    g[1]=1;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(f[a[i].m]==0)
-            {
-                f[a[i].m]=f[k]+1;
-                ++g[f[a[i].m]];
-                Q.push(a[i].m);
-            }
-        }
-    }
-}
-ll dfs(int x,ll r)
-{
-    if(x==s2) return r;
-    ll s=0;
-    for(int i=t0[x];i!=0;i=a[i].q)
-    {
-        t0[x]=i;
-        if(f[x]==f[a[i].m]+1&amp;&amp;a[i].r!=0)
-        {
-            int z=dfs(a[i].m,min(r,a[i].r));
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-            }
-            if(r==0) return s;
-        }
-    }
-    --g[f[x]];
-    if(g[f[x]]==0) u=false;
-    ++f[x];
-    ++g[f[x]];
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
-    N=n+m+2;
-    s1=N-1;
-    s2=N;
-    for(int i=1;i&lt;=m;++i)
-    {
-        road(s1,i,1);
-        road(i,s1,0);
-    }
-    for(int i=1;i&lt;=n;++i)
-    {
-        ll r;
-        scanf(&quot;%lld&quot;,&amp;r);
-        q+=r;
-        road(m+i,s2,r);
-        road(s2,m+i,0);
-    }
-    for(int i=1;i&lt;=m;++i)
-    {
-        int d;
-        scanf(&quot;%d&quot;,&amp;d);
-        for(int j=1;j&lt;=d;++j)
-        {
-            int x;
-            scanf(&quot;%d&quot;,&amp;x);
-            road(i,m+x,1);
-            road(m+x,i,0);
-        }
-    }
-    bfs();
-    ll r=0;
-    while(u==true)
-    {
-        for(int i=1;i&lt;=N;++i) t0[i]=t[i];
-        r+=dfs(s1,1e18);
-    }
-    if(r&lt;q)
-    {
-        printf(&quot;No Solution!&quot;);
-        return 0;
-    }
-    for(int i=1;i&lt;=n;++i)
-    {
-        printf(&quot;%d:&quot;,i);
-        for(int j=t[m+i];j!=0;j=a[j].q)
-        {
-            if(a[j].r==1)
-            {
-                printf(&quot; %d&quot;,a[j].m);
-            }
-        }
-        printf(&quot;\n&quot;);
-    }
     return 0;
 }
 </code></pre>

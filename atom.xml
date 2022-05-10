@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-05-10T05:54:07.874Z</updated>
+    <updated>2022-05-10T05:59:19.114Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -17,11 +17,11 @@
         </link>
         <updated>2022-05-10T05:45:38.000Z</updated>
         <content type="html"><![CDATA[<p>  这是 <a href="https://2745518585.github.io/post/minimum-cost-maximum-flow-EK">费用流</a> 的几道经典题目，建议按照顺序来做。</p>
-<p>  <a href="https://2745518585.github.io/post/solution-P1251">P1251 餐巾计划问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/solution-P4015">P4015 运输问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/solution-P4014">P4014 分配问题</a></p>
-<p>  <a href="https://2745518585.github.io/post/solution-P2604">P2604 [ZJOI2010]网络扩容</a></p>
-<p>  <a href="https://2745518585.github.io/post/solution-P4012">P4012 深海机器人问题</a></p>
+<p>  <a href="https://2745518585.github.io/post/P1251-solution">P1251 餐巾计划问题</a></p>
+<p>  <a href="https://2745518585.github.io/post/P4015-solution">P4015 运输问题</a></p>
+<p>  <a href="https://2745518585.github.io/post/P4014-solution">P4014 分配问题</a></p>
+<p>  <a href="https://2745518585.github.io/post/P2604-solution">P2604 [ZJOI2010]网络扩容</a></p>
+<p>  <a href="https://2745518585.github.io/post/P4012-solution">P4012 深海机器人问题</a></p>
 ]]></content>
     </entry>
     <entry>

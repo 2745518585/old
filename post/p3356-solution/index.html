@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
-<title>P1343 地震逃生 | 赵悦岑&#39;s Blog</title>
+<title>P3356 火星探险问题 | 赵悦岑&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1666322982476">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -41,8 +41,8 @@
 
 
 
-  <meta name="description" content="P1343 地震逃生" />
-  <meta name="keywords" content="最大流,网络流" />
+  <meta name="description" content="P3356 火星探险问题" />
+  <meta name="keywords" content="网络流,费用流" />
 </head>
 
 <body>
@@ -488,14 +488,14 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://2745518585.github.io/post/P1343-solution/"> P1343 地震逃生 </a>
+    <a class="post-title-link" href="https://2745518585.github.io/post/p3356-solution/"> P3356 火星探险问题 </a>
   </h1>
   <div class="post-meta">
     
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2022-04-13 13:37:16">2022-04-13</span>
+      <span class="publish-time" data-t="2022-05-21 13:34:45">2022-05-21</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -503,9 +503,9 @@
       <i class="fa fa-folder-o"></i>
       <span class="pc-show language" data-lan="category-in">标签:</span>
        
-      <a href="https://2745518585.github.io/tag/Maximum-flow/"> <span>最大流</span> </a>、   
-      <a href="https://2745518585.github.io/tag/Network-flows/">
-        <span>网络流</span>
+      <a href="https://2745518585.github.io/tag/Network-flows/"> <span>网络流</span> </a>、   
+      <a href="https://2745518585.github.io/tag/Minimum-cost-maximum-flow/">
+        <span>费用流</span>
       </a>
        
     </span>
@@ -514,7 +514,7 @@
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
       <span
-        >2<span class="language" data-lan="minute"
+        >5<span class="language" data-lan="minute"
           >分钟</span
         ></span
       >
@@ -523,7 +523,7 @@
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
       <span
-        >333<span class="pc-show language" data-lan="words"
+        >750<span class="pc-show language" data-lan="words"
           >字数</span
         ></span
       >
@@ -533,87 +533,155 @@
 </section>
 
             <div class="post-body next-md-body" id="post_body">
-              <p>  <a href="https://www.luogu.com.cn/problem/P1343">P1343 地震逃生</a></p>
+              <p>  <a href="https://www.luogu.com.cn/problem/P3356">P3356 火星探险问题</a></p>
 <h2 id="分析">分析</h2>
-<p>  这道题我们把学生看成流量，可以发现这道题就是最大流模板题，注意处理分的批数。</p>
+<p>  这道题的方法同 <a href="https://2745518585.github.io/post/P4012-solution/">P4012</a> ，但是还要求输出一种方案，我们就需要知道流量的流动情况。如果一条边有流量流过，那么这条边的反向边容量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 一定不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，而且流过的流量就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span>，也就是有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span></span> 个探测车经过。我们只需要从源点开始一直走反向边容量不为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的边，且每走一次容量减一，注意要判断有没有往回走，还要注意处理拆开的两个点的关系。</p>
 <h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cmath&gt;
-#include&lt;cstdio&gt;
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
 #include&lt;queue&gt;
 using namespace std;
-int n,m,p=1,t[10001],f[10001];
-struct str
+typedef long long ll;
+const int N=100001,M=1000001;
+int n,m,p=1,s1,s2,t[N],t0[N];
+ll v,f[N],q;
+bool h[N];
+struct road
 {
-    int m,q,w;
-}a[100001];
-void road(int x,int y,int w)
+    int m,q;
+    ll r,w;
+}a[M];
+int sum(int x,int y)
+{
+    return (x-1)*n+y;
+}
+void road(int x,int y,ll r,ll w)
 {
     a[++p].m=y;
     a[p].q=t[x];
     t[x]=p;
+    a[p].r=r;
     a[p].w=w;
 }
-bool bfs()
+bool SPFA()
 {
-    queue&lt;int&gt; q;
-    q.push(1);
-    for(int i=1;i&lt;=n;++i) f[i]=0;
-    f[1]=1;
-    while(!q.empty())
+    queue&lt;int&gt; Q;
+    Q.push(s1);
+    for(int i=1;i&lt;=s2;++i)
     {
-        int k=q.front();
-        q.pop();
+        f[i]=-1e18;
+        h[i]=false;
+    }
+    f[s1]=0;
+    h[s1]=true;
+    while(!Q.empty())
+    {
+        int k=Q.front();
+        Q.pop();
+        if(h[k]==false) continue;
+        h[k]=false;
         for(int i=t[k];i!=0;i=a[i].q)
         {
-            if(f[a[i].m]==0&amp;&amp;a[i].w&gt;0)
+            if(a[i].r&gt;0&amp;&amp;f[k]+a[i].w&gt;f[a[i].m])
             {
-                f[a[i].m]=f[k]+1;
-                q.push(a[i].m);
+                f[a[i].m]=f[k]+a[i].w;
+                Q.push(a[i].m);
+                h[a[i].m]=true;
             }
         }
     }
-    if(f[n]!=0) return true;
+    if(f[s2]!=-1e18) return true;
     return false;
 }
-int dfs(int x,int w)
+ll dfs(int x,ll r)
 {
-    if(x==n) return w;
-    int s=0;
-    for(int i=t[x];i!=0;i=a[i].q)
+    if(x==s2) return r;
+    ll s=0;
+    for(int i=t0[x];i!=0;i=a[i].q)
     {
-        if(f[a[i].m]==f[x]+1&amp;&amp;a[i].w&gt;0)
+        t0[x]=i;
+        if(h[a[i].m]==false&amp;&amp;a[i].r&gt;0&amp;&amp;f[a[i].m]==f[x]+a[i].w)
         {
-            int z=dfs(a[i].m,min(w,a[i].w));
+            h[a[i].m]=true;
+            ll z=dfs(a[i].m,min(r,a[i].r));
+            h[a[i].m]=false;
             if(z!=0)
             {
-                a[i].w-=z;
-                a[i^1].w+=z;
-                w-=z;
+                a[i].r-=z;
+                a[i^1].r+=z;
+                r-=z;
                 s+=z;
+                v+=z*a[i].w;
             }
             else f[a[i].m]=0;
+            if(r==0) return s;
         }
     }
     return s;
 }
+void dfs0(int x,int k)
+{
+    if(x==sum(m,n)) return;
+    for(int i=t[m*n+x];i!=0;i=a[i].q)
+    {
+        if(a[i].m==x||a[i^1].r==0) continue;
+        ++a[i].r;
+        --a[i^1].r;
+        if(a[i].m==x+1) printf(&quot;%d 1\n&quot;,k);
+        else printf(&quot;%d 0\n&quot;,k);
+        dfs0(a[i].m,k);
+        return;
+    }
+}
 int main()
 {
-    int r;
-    scanf(&quot;%d%d%d&quot;,&amp;n,&amp;m,&amp;r);
+    scanf(&quot;%lld%d%d&quot;,&amp;q,&amp;n,&amp;m);
+    s1=m*n*2+1,s2=m*n*2+2;
     for(int i=1;i&lt;=m;++i)
     {
-        int x,y,w;
-        scanf(&quot;%d%d%d&quot;,&amp;x,&amp;y,&amp;w);
-        road(x,y,w);
-        road(y,x,0);
+        for(int j=1;j&lt;=n;++j)
+        {
+            int x;
+            scanf(&quot;%d&quot;,&amp;x);
+            if(x==1) continue;
+            if(x==2)
+            {
+                road(sum(i,j),m*n+sum(i,j),1,1);
+                road(m*n+sum(i,j),sum(i,j),0,-1);
+            }
+            road(sum(i,j),m*n+sum(i,j),1e18,0);
+            road(m*n+sum(i,j),sum(i,j),0,0);
+            if(i&lt;m)
+            {
+                road(m*n+sum(i,j),sum(i+1,j),1e18,0);
+                road(sum(i+1,j),m*n+sum(i,j),0,0);
+            }
+            if(j&lt;n)
+            {
+                road(m*n+sum(i,j),sum(i,j+1),1e18,0);
+                road(sum(i,j+1),m*n+sum(i,j),0,0);
+            }
+        }
     }
-    int s=0;
-    while(bfs()==true)
+    road(s1,sum(1,1),q,0);
+    road(sum(1,1),s1,0,0);
+    road(m*n+sum(m,n),s2,q,0);
+    road(s2,m*n+sum(m,n),0,0);
+    ll r=0;
+    while(SPFA())
     {
-        s+=dfs(1,1e9);
+        for(int i=1;i&lt;=s2;++i) 
+        {
+            t0[i]=t[i];
+            h[i]=false;
+        }
+        r+=dfs(s1,1e18);
     }
-    if(s==0) printf(&quot;Orz Ni Jinan Saint Cow!&quot;);
-    else printf(&quot;%d %d&quot;,s,int(ceil(r*1.0/s)));
+    for(int i=1;i&lt;=r;++i)
+    {
+        dfs0(sum(1,1),i);
+    }
+    return 0;
 }
 </code></pre>
 
@@ -632,7 +700,7 @@ int main()
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://2745518585.github.io/post/P1343-solution/" title="P1343 地震逃生">https://2745518585.github.io/post/P1343-solution/</a>
+      <a href="https://2745518585.github.io/post/p3356-solution/" title="P3356 火星探险问题">https://2745518585.github.io/post/p3356-solution/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -641,23 +709,23 @@ int main()
   </ul>
   <div class="tags">
     
-      <a href="https://2745518585.github.io/tag/Maximum-flow/"># 最大流</a>
-    
       <a href="https://2745518585.github.io/tag/Network-flows/"># 网络流</a>
+    
+      <a href="https://2745518585.github.io/tag/Minimum-cost-maximum-flow/"># 费用流</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
         <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="P2740 [USACO4.2]草地排水Drainage Ditches" href="https://2745518585.github.io/post/P2740-solution/">P2740 [USACO4.2]草地排水Drainage Ditches</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="P2740 [USACO4.2]草地排水Drainage Ditches" href="https://2745518585.github.io/post/P2740-solution/">上一篇</a>
+        <a class="nav-pc-next" title="四边形不等式优化线性dp" href="https://2745518585.github.io/post/Quadrilateral-inequality-optimization-linear-DP/">四边形不等式优化线性dp</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="四边形不等式优化线性dp" href="https://2745518585.github.io/post/Quadrilateral-inequality-optimization-linear-DP/">上一篇</a>
       
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="基于 Gridea 的 github pages 的站点地图生成" href="https://2745518585.github.io/post/generate-Gridea&#39;s-sitemap/">基于 Gridea 的 github pages 的站点地图生成</a>
-        <a class="nav-mobile-next" title="基于 Gridea 的 github pages 的站点地图生成" href="https://2745518585.github.io/post/generate-Gridea&#39;s-sitemap/">下一篇</a>
+        <a class="nav-pc-next" title="费用流题单" href="https://2745518585.github.io/post/minimum-cost-maximum-flow-problemlist/">费用流题单</a>
+        <a class="nav-mobile-next" title="费用流题单" href="https://2745518585.github.io/post/minimum-cost-maximum-flow-problemlist/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

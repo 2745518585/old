@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="好好刷题，天天向上！">
 <meta name="theme-color" content="#000">
-<title>P4012 深海机器人问题 | 赵悦岑&#39;s Blog</title>
+<title>CSP-S 2022 游记 | 赵悦岑&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1667093722907">
 <link rel="stylesheet" href="/media/css/gemini.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -50,8 +50,8 @@
 </script>
 
 
-  <meta name="description" content="P4012 深海机器人问题" />
-  <meta name="keywords" content="网络流,费用流" />
+  <meta name="description" content="CSP-S 2022 游记" />
+  <meta name="keywords" content="" />
 </head>
 
 <body>
@@ -228,8 +228,8 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%88%86%E6%9E%90">分析</a></li>
-<li><a href="#code">code</a></li>
+<li><a href="#day-1">Day 1</a></li>
+<li><a href="#day-1-%E6%99%9A">Day 1 晚</a></li>
 </ul>
 </li>
 </ul>
@@ -497,33 +497,21 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://2745518585.github.io/post/P4012-solution/"> P4012 深海机器人问题 </a>
+    <a class="post-title-link" href="https://2745518585.github.io/post/csp-s-2022-travels/"> CSP-S 2022 游记 </a>
   </h1>
   <div class="post-meta">
     
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2022-05-10 13:38:13">2022-05-10</span>
+      <span class="publish-time" data-t="2022-10-30 08:41:54">2022-10-30</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">标签:</span>
-       
-      <a href="https://2745518585.github.io/tag/Network-flows/"> <span>网络流</span> </a>、   
-      <a href="https://2745518585.github.io/tag/Minimum-cost-maximum-flow/">
-        <span>费用流</span>
-      </a>
-       
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
       <i class="fa fa-clock-o"></i>
       <span
-        >5<span class="language" data-lan="minute"
+        >4<span class="language" data-lan="minute"
           >分钟</span
         ></span
       >
@@ -532,7 +520,7 @@
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
       <span
-        >734<span class="pc-show language" data-lan="words"
+        >960<span class="pc-show language" data-lan="words"
           >字数</span
         ></span
       >
@@ -542,151 +530,20 @@
 </section>
 
             <div class="post-body next-md-body" id="post_body">
-              <p><a href="https://www.luogu.com.cn/problem/P4012">P4012 深海机器人问题</a></p>
-<h2 id="分析">分析</h2>
-<p>这道题是网格类的费用流，将深海机器人看做流量，每个生物标本看做 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 点费用即可。但要注意每个生物标本只能采集一次，也就意味着流量为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 时费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，多余 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 的流量费用为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>。所以我们又要用到同 <a href="https://2745518585.github.io/post/P2604-solution/">P2604</a> 的拆边思想，然后按题意连边跑最大费用最大流即可。<br>
-注意，这道题的坐标十分诡异，有的储存方法必须要反过来，有的就不能反，在写的时候仔细想一下。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#include&lt;queue&gt;
-using namespace std;
-typedef long long ll;
-const int N=100001,M=1000001;
-int n,m,p=1,t1,t2,s1,s2,t[N],t0[N];
-ll v,f[N];
-bool h[N];
-struct road
-{
-    int m,q;
-    ll r,w;
-}a[M];
-int sum(int x,int y)
-{
-    return (x-1)*n+y;
-}
-void road(int x,int y,ll r,ll w)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-    a[p].r=r;
-    a[p].w=w;
-}
-bool SPFA()
-{
-    queue&lt;int&gt; Q;
-    Q.push(s1);
-    for(int i=1;i&lt;=s2;++i)
-    {
-        f[i]=-1e18;
-        h[i]=false;
-    }
-    f[s1]=0;
-    h[s1]=true;
-    while(!Q.empty())
-    {
-        int k=Q.front();
-        Q.pop();
-        if(h[k]==false) continue;
-        h[k]=false;
-        for(int i=t[k];i!=0;i=a[i].q)
-        {
-            if(a[i].r&gt;0&amp;&amp;f[k]+a[i].w&gt;f[a[i].m])
-            {
-                f[a[i].m]=f[k]+a[i].w;
-                Q.push(a[i].m);
-                h[a[i].m]=true;
-            }
-        }
-    }
-    if(f[s2]!=-1e18) return true;
-    return false;
-}
-ll dfs(int x,ll r)
-{
-    if(x==s2) return r;
-    ll s=0;
-    for(int i=t0[x];i!=0;i=a[i].q)
-    {
-        t0[x]=i;
-        if(h[a[i].m]==false&amp;&amp;a[i].r&gt;0&amp;&amp;f[a[i].m]==f[x]+a[i].w)
-        {
-            h[a[i].m]=true;
-            ll z=dfs(a[i].m,min(r,a[i].r));
-            h[a[i].m]=false;
-            if(z!=0)
-            {
-                a[i].r-=z;
-                a[i^1].r+=z;
-                r-=z;
-                s+=z;
-                v+=z*a[i].w;
-            }
-            else f[a[i].m]=0;
-            if(r==0) return s;
-        }
-    }
-    return s;
-}
-int main()
-{
-    scanf(&quot;%d%d%d%d&quot;,&amp;t1,&amp;t2,&amp;m,&amp;n);
-    ++m,++n;
-    s1=m*n+1,s2=m*n+2;
-    for(int i=1;i&lt;=m;++i)
-    {
-        for(int j=1;j&lt;=n-1;++j)
-        {
-            ll w;
-            scanf(&quot;%lld&quot;,&amp;w);
-            road(sum(i,j),sum(i,j+1),1,w);
-            road(sum(i,j+1),sum(i,j),0,-w);
-            road(sum(i,j),sum(i,j+1),1e18,0);
-            road(sum(i,j+1),sum(i,j),0,0);
-        }
-    }
-    for(int i=1;i&lt;=n;++i)
-    {
-        for(int j=1;j&lt;=m-1;++j)
-        {
-            ll w;
-            scanf(&quot;%lld&quot;,&amp;w);
-            road(sum(j,i),sum(j+1,i),1,w);
-            road(sum(j+1,i),sum(j,i),0,-w);
-            road(sum(j,i),sum(j+1,i),1e18,0);
-            road(sum(j+1,i),sum(j,i),0,0);
-        }
-    }
-    for(int i=1;i&lt;=t1;++i)
-    {
-        int x,y;
-        ll r;
-        scanf(&quot;%lld%d%d&quot;,&amp;r,&amp;x,&amp;y);
-        road(s1,sum(x+1,y+1),r,0);
-        road(sum(x+1,y+1),s1,0,0);
-    }
-    for(int i=1;i&lt;=t2;++i)
-    {
-        int x,y;
-        ll r;
-        scanf(&quot;%lld%d%d&quot;,&amp;r,&amp;x,&amp;y);
-        road(sum(x+1,y+1),s2,r,0);
-        road(s2,sum(x+1,y+1),0,0);
-    }
-    while(SPFA())
-    {
-        for(int i=1;i&lt;=s2;++i) 
-        {
-            t0[i]=t[i];
-            h[i]=false;
-        }
-        dfs(s1,1e18);
-    }
-    printf(&quot;%lld&quot;,v);
-    return 0;
-}
-</code></pre>
+              <p>寄麻了。<br>
+心肌梗死。<br>
+希望 CCF 脚造数据。</p>
+<h2 id="day-1">Day 1</h2>
+<p>进了考场，才发现高新的机房挤得要死，还不隔开坐，跟某东辰国际一样，但是某东辰国际至少有挡板，<s>瞟代码完全发现不了</s>，手都活动不开，键盘盒子还是下沉的，打起来十分奇妙。<br>
+T1 求无向图上过点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 的最大权五元环，容易想到分成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 左半边和右半边，但是还有保证点互不相同，想了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>10</mn></mrow><annotation encoding="application/x-tex">10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span> 分钟，才想到可以维护前三大值来避免重复。码的时候比较脑车可以写 bfs 的写了个 SPFA。<br>
+15:10 开了 T2，策略很显然，如果对面既有正数也有负数，就分别选最接近 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 的正数/负数，否则就选符号相反且绝对值最大的。由于是静态的，可以用 ST 表，但是我怕写挂，还是写了线段树。然后我比较懒，没有分类讨论，直接把最小/最大的非负数/负数这四个数暴力枚举，反正都有一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>log</mi><mo>⁡</mo></mrow><annotation encoding="application/x-tex">\log</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span></span></span></span> 了。<br>
+15:40 开 T3，题意比较复杂，简单来说就是可以对 一个数或一个集合中的数同时加 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，减 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，问当前是否每个数都是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>。然后我觉得可能是根号分治之类的，由于集合大小总和与点数同级，特殊处理较大的集合，但是半个小时都没想出来。然后想到可以把点分成几组（一个点可以在多个组中），我们只需要看每个组的和是否等于它的大小，但是有想了一会，想不到保证正确的分法，但感觉不好卡，想着实在想不出来就写这个。看了一眼 T4，不会。等到 17:00，仍然想不出来，于是我就按二进制的每一位分组，写出来了，但是我犯了个非常脑车的错误，就是在分组判出来没错后线性判，主要是怕 WA，但是当时忘了可能出一堆 <code>YES</code> 来卡（心肌梗死的原因）。<br>
+17:40 开 T4，好像 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo separator="true">,</mo><mi>m</mi><mo>≤</mo><mn>2000</mn></mrow><annotation encoding="application/x-tex">n,m \leq 2000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8304100000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span></span></span></span> 可以跑最短路，但是暴力建边会卡成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">n^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> 级别的，过了几分钟想到分层图，然后就写出来了。虽然还有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">8</span></span></span></span> 分可以跑树剖，但是我还没有检查，便放弃了。<br>
+18:10 开始检查，首先检查在 Linux 下的编译，好家伙，还真有一个 CE，居然是有个函数忘写 <code>void</code> 了。然后检查空间、<code>ll</code>，过了遍大样例，还把 T1 拍了一遍。希望没挂分。</p>
+<h2 id="day-1-晚">Day 1 晚</h2>
+<p>出来叶滚滚就问分，T1、T2、T4 加起来 244 分，T3 是真不知道。然后 <a href="https://sukwants.github.io/">宋冠程</a> 巨佬就来蹭车，还在和 <a href="https://song-gan.github.io/">宋鑫淦</a> 巨佬打电话，才发现 T1 脑车了，跑了个 SPFA，不过 <a href="https://feynn.github.io/">周川</a> 巨佬说他 bfs 没判连通，我 SPFA 初始化的 inf，应该没有事。<br>
+晚上和 <a href="https://sukwants.github.io/">宋冠程</a> 巨佬一起吃饭，看到了 <a href="https://www.luogu.com.cn/discuss/520101">chen_zhe 的帖子</a>。然后一直到吃完都没有发现挂分。<br>
+回了寝室，一直摆烂，结果 22:23 突然就把代码发下来了，SC 的效率咋怎么高。luogu 上已经有 T1，T2，T4 的数据，徘徊了二十分钟不敢交 <s>（期间把 zym 的 T1 交了试试水，结果过了，更慌了）</s>，然后终于交了，看起来 124 都没挂分，刚好 244。T3 交到了另一个网站上，发现 T 了，这时才想起来会被卡，然后删了线性判断一交，95 分，我当场心肌梗死了。然后就心肌梗死了一晚上，和 <a href="https://wtyakioi.github.io/">周蜀乔</a> 巨佬刷表情，刷了整整 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>10</mn></mrow><annotation encoding="application/x-tex">10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span> 分钟，摆烂了。一直到 12 点过才睡。</p>
 
             </div>
             
@@ -703,7 +560,7 @@ int main()
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://2745518585.github.io/post/P4012-solution/" title="P4012 深海机器人问题">https://2745518585.github.io/post/P4012-solution/</a>
+      <a href="https://2745518585.github.io/post/csp-s-2022-travels/" title="CSP-S 2022 游记">https://2745518585.github.io/post/csp-s-2022-travels/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -712,23 +569,15 @@ int main()
   </ul>
   <div class="tags">
     
-      <a href="https://2745518585.github.io/tag/Network-flows/"># 网络流</a>
-    
-      <a href="https://2745518585.github.io/tag/Minimum-cost-maximum-flow/"># 费用流</a>
-    
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="费用流题单" href="https://2745518585.github.io/post/minimum-cost-maximum-flow-problemlist/">费用流题单</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="费用流题单" href="https://2745518585.github.io/post/minimum-cost-maximum-flow-problemlist/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="P2604 [ZJOI2010]网络扩容" href="https://2745518585.github.io/post/P2604-solution/">P2604 [ZJOI2010]网络扩容</a>
-        <a class="nav-mobile-next" title="P2604 [ZJOI2010]网络扩容" href="https://2745518585.github.io/post/P2604-solution/">下一篇</a>
+        <a class="nav-pc-next" title="四边形不等式优化线性dp" href="https://2745518585.github.io/post/Quadrilateral-inequality-optimization-linear-DP/">四边形不等式优化线性dp</a>
+        <a class="nav-mobile-next" title="四边形不等式优化线性dp" href="https://2745518585.github.io/post/Quadrilateral-inequality-optimization-linear-DP/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

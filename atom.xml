@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-10-31T11:20:07.318Z</updated>
+    <updated>2022-11-03T06:21:35.344Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -10,6 +10,185 @@
     <logo>https://2745518585.github.io/images/avatar.png</logo>
     <icon>https://2745518585.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 赵悦岑&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[P4262 [Code+#3]白金元首与莫斯科]]></title>
+        <id>https://2745518585.github.io/post/P4262-solution/</id>
+        <link href="https://2745518585.github.io/post/P4262-solution/">
+        </link>
+        <updated>2022-11-02T23:49:45.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="题意">题意</h2>
+<p>题目描述可能不好理解，但是结合样例就很好理解了。你需要用 $2 \times 1 $  大小的矩形覆盖一个 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>×</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">n \times m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span></span></span></span> 的棋盘，障碍格不能放，可以留空。对于每一个非障碍格，求出这一格变为障碍格后矩形放置的方案数。</p>
+<h2 id="分析">分析</h2>
+<h3 id="插头-dp">插头 dp</h3>
+<p>首先先简化问题：如何在给定棋盘状态的情况下求出方案数，很容易想到插头 dp。插头 dp 是在棋盘上逐格转移的一种 dp，而状压 dp 一般是逐行转移的。由于相邻的已转移格会影响未转移格的转移，所以我们需要记住所有已转移格和未转移格的分界线，我们用状压的方法来记录。</p>
+<figure data-type="image" tabindex="1"><img src="https://2745518585.github.io/post-images/P4262-solution-1.png" alt="1" loading="lazy"></figure>
+<p>如图，绿色的线就是分界线，红色的是当前转移格。</p>
+<p>而我们记录的状态是什么？记录的就是分界线上的每个位置是否有插头。以我个人看法，插头就是一种相邻格子的双向关系，每个格子都可能有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span> 种插头，分别指向相邻的四个格子。在本题中，两个点均有插头指向对方就代表这两个格子被同一个矩形覆盖。</p>
+<p>显然，在本题中，一个格子最多有一个插头，因为两个矩形不能覆盖同一个格子，但是可以没有插头，也就是留空的情况。</p>
+<p>然后我们需要分类讨论转移的情况：首先，如果当前个是障碍格，那么只能转移没有插头的情况。</p>
+<p>否则，当前转移格的已选插头有以下 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span> 种类型：</p>
+<ol>
+<li>没有插头。</li>
+<li>有上插头，无左插头。</li>
+<li>有左插头，无上插头。</li>
+<li>上插头、左插头都有。</li>
+</ol>
+<p>分别对应下图 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span> 中情况。</p>
+<figure data-type="image" tabindex="2"><img src="https://2745518585.github.io/post-images/P4262-solution-2.png" alt="2" loading="lazy"></figure>
+<p>很显然，情况 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span> 是不合法的。现在讨论剩下 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span> 种有哪些可能的转移：</p>
+<ol>
+<li>由于它没有插头，所以它没有被覆盖，可以留空、与右边格子一起被覆盖或与下边格子一起被覆盖，也就是无插头、有右插头、有下插头，注意插头不能指向障碍格。</li>
+<li>由于已经被覆盖，所以只有一种情况：有上插头</li>
+<li>同理，只有左插头。</li>
+</ol>
+<p>然后我们看如何将分界线上的信息压缩：</p>
+<figure data-type="image" tabindex="3"><img src="https://2745518585.github.io/post-images/P4262-solution-3.png" alt="3" loading="lazy"></figure>
+<p>如图，绿线及上方的数字为原分界线与对应的二进制位置，蓝线及下方的数字为转移后的分界线与对应的二进制位置。可以发现，如果一个点是从左到右第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 个，那么左插头和上插头对应原分界线的第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 位和第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 位，下插头和右插头对应转移后分界线的第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 位和第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 位。所以我们只需要读取和修改第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 位和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> 位就可以了。</p>
+<p>但是当我们转移完一整行后，分界线会变成下图的绿线，但是下次转移需要分界线是蓝线。可以发现，所有有效位置对应的二进制位都加了 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，所以我们就需要每一行转移完之后，整体左移一位。</p>
+<figure data-type="image" tabindex="4"><img src="https://2745518585.github.io/post-images/P4262-solution-4.png" alt="4" loading="lazy"></figure>
+<p>我们的最终答案就在最后一个非障碍格处（贺的板子懒得改了）。</p>
+<p>一个优化：每转移完一格后，其实有很多状态是重复的，表现为二进制下相等。我们可以在每次转移后用一个哈希数组来去重，可以大大减少状态数。</p>
+<p>复杂度 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mi>m</mi><msup><mn>2</mn><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">nm2^m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mord mathdefault">m</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">m</span></span></span></span></span></span></span></span></span></span></span></p>
+<h3 id="本题">本题</h3>
+<p>回到本题，我们肯定不能做 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">nm</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mord mathdefault">m</span></span></span></span> 次插头 dp，但是我们可以发现，如果我们在做插头 dp 的过程中把整张图旋转半圈，我们会发现原分界线和转移后分界线互换了，也就是说转移格左上部分和右下部分的情况均可用一次插头 dp 来解决，而正着和反着各做一次，利用转移中的信息，就可以求出每个转移点两边的情况。</p>
+<p>注意，反着做插头 dp 的时候，每行末的左移要变为右移。</p>
+<p>考虑合并转移点两边的情况。我们可以发现，除了转移格旁边的位置，其他任何地方的两条分界线，要么均没有插头，要么都有插头，即转换为二进制后相等。而转移格实际上是障碍格，所以旁边 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span> 个位置均没有插头。所以将分界线二进制表达相同的乘起来，然后把合法的加起来即可。</p>
+<h2 id="code">code</h2>
+<pre><code class="language-cpp">#include&lt;cstdio&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+typedef long long ll;
+const int N=18,M=200001;
+const ll P=1e9+7;
+int m,n,R,R2,pow2[N],c[N][N],h[M&lt;&lt;4];
+ll d[N][N];
+bool a[N][N];
+struct str
+{
+    int x;
+    ll s;
+    str(){}
+    str(int x,ll s):x(x),s(s){}
+}Q[M],Q2[M],b[N][N][M];
+void add(int x,ll s)
+{
+    if(h[x]!=0) Q2[h[x]].s+=s;
+    else
+    {
+        Q2[++R2]=str(x,s);
+        h[x]=R2;
+    }
+}
+void solve1(int x,int y,int t,ll w)
+{
+    int t1=(t&gt;&gt;(y-1))%2,t2=(t&gt;&gt;y)%2;
+    if(!a[x][y])
+    {
+        if(t1==0&amp;&amp;t2==0) add(t,w);
+    }
+    else if(t1==0&amp;&amp;t2==0)
+    {
+        add(t,w);
+        if(a[x+1][y]) add(t+pow2[y-1],w);
+        if(a[x][y+1]) add(t+pow2[y],w);
+    }
+    else if(t1==0&amp;&amp;t2!=0) add(t-pow2[y],w);
+    else if(t1!=0&amp;&amp;t2==0) add(t-pow2[y-1],w);
+}
+void solve2(int x,int y,int t,ll w)
+{
+    int t1=(t&gt;&gt;(y-1))%2,t2=(t&gt;&gt;y)%2;
+    if(!a[x][y])
+    {
+        if(t1==0&amp;&amp;t2==0) add(t,w);
+    }
+    else if(t1==0&amp;&amp;t2==0)
+    {
+        add(t,w);
+        if(a[x-1][y]) add(t+pow2[y],w);
+        if(a[x][y-1]) add(t+pow2[y-1],w);
+    }
+    else if(t1==0&amp;&amp;t2!=0) add(t-pow2[y],w);
+    else if(t1!=0&amp;&amp;t2==0) add(t-pow2[y-1],w);
+}
+int main()
+{
+    pow2[0]=1;
+    for(int i=1;i&lt;=17;++i) pow2[i]=pow2[i-1]*2;
+    scanf(&quot;%d%d&quot;,&amp;m,&amp;n);
+    for(int i=1;i&lt;=m;++i)
+    {
+        for(int j=1;j&lt;=n;++j)
+        {
+            int x;
+            scanf(&quot;%d&quot;,&amp;x);
+            if(x==0) a[i][j]=true;
+        }
+    }
+    Q[++R]=str(0,1);
+    for(int i=1;i&lt;=m;++i)
+    {
+        for(int j=1;j&lt;=R;++j) Q[j].x&lt;&lt;=1;
+        for(int j=1;j&lt;=n;++j)
+        {
+            for(int k=0;k&lt;=500000;++k) h[k]=0;
+            for(int k=1;k&lt;=R;++k)
+            {
+                b[i][j][++c[i][j]]=Q[k];
+                solve1(i,j,Q[k].x,Q[k].s);
+            }
+            for(int k=1;k&lt;=R2;++k) Q[k]=Q2[k],Q[k].s%=P;
+            R=R2;
+            R2=0;
+        }
+    }
+    R=R2=0;
+    Q[++R]=str(0,1);
+    for(int i=m;i&gt;=1;--i)
+    {
+        for(int j=1;j&lt;=R;++j) Q[j].x&gt;&gt;=1;
+        for(int j=n;j&gt;=1;--j)
+        {
+            for(int k=0;k&lt;=500000;++k) h[k]=0;
+            for(int k=1;k&lt;=R;++k)
+            {
+                solve2(i,j,Q[k].x,Q[k].s);
+            }
+            if(a[i][j]==false) d[i][j]=0;
+            else
+            {
+                for(int k=0;k&lt;=500000;++k) h[k]=0;
+                for(int k=1;k&lt;=c[i][j];++k)
+                {
+                    if((b[i][j][k].x&gt;&gt;(j-1))%2!=0||(b[i][j][k].x&gt;&gt;j)%2!=0) continue;
+                    h[b[i][j][k].x]+=b[i][j][k].s;
+                }
+                ll s=0;
+                for(int k=1;k&lt;=R;++k)
+                {
+                    if((Q[k].x&gt;&gt;(j-1))%2!=0||(Q[k].x&gt;&gt;j)%2!=0) continue;
+                    s=(s+h[Q[k].x]*Q[k].s%P)%P;
+                }
+                d[i][j]=s;
+            }
+            for(int k=1;k&lt;=R2;++k) Q[k]=Q2[k],Q[k].s%=P;
+            R=R2;
+            R2=0;
+        }
+    }
+    for(int i=1;i&lt;=m;++i)
+    {
+        for(int j=1;j&lt;=n;++j)
+        {
+            printf(&quot;%d &quot;,d[i][j]);
+        }
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[CSP-S 2022 游记]]></title>
         <id>https://2745518585.github.io/post/csp-s-2022-travels/</id>
@@ -42,17 +221,18 @@ s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class=
 <h2 id="day-2">Day 2</h2>
 <p>绵阳又封了，只有待在机房划水。</p>
 <p>晚上 <a href="https://feynn.github.io/">zc</a> 巨佬来机房了，我发现他 T4 过了，问他咋做，他说他抽了一个人的代码交居然过了，得出结论，人均会 T4，就我不会。</p>
-<p>洛谷居然一整天都没有 T3 数据。</p>
-<p>然后突然发现计蒜客也可以估分，交了一发，T1 居然给我 T 掉了，但在洛谷上只跑了 500ms，可能是机子太撇了。更震惊的是，T3 给我过了，希望 CCF 的数据也能用脚造。</p>
+<p>luogu 居然一整天都没有 T3 数据。</p>
+<p>然后突然发现计蒜客也可以估分，交了一发，T1 居然给我 T 掉了，但在 luogu 上只跑了 500ms，可能是机子太撇了。更震惊的是，T3 给我过了，希望 CCF 的数据也能用脚造。</p>
 <p>看了一下 <a href="https://blog.zlx.pw/">zlx</a> 巨佬的题解，才发现 T3 脑车了，可以随机赋权值然后看和是否满足。T4 感觉如果多给一些时间应该有点思路。但是完全没有改题的心情，又开始摆烂。</p>
-<p>等到快睡觉了才发现洛谷已经有数据了，交了一发 T3，居然也过了，可能出题人根本不会想到卡我这种复杂度，只有看 rp 了。</p>
+<p>等到快睡觉了才发现 luogu 已经有数据了，交了一发 T3，居然也过了，可能出题人根本不会想到卡我这种复杂度，只有看 rp 了。</p>
 <h2 id="day-3">Day 3</h2>
-<p>下午讲 CSP，听说洛谷 T1 的数据 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>4</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 只 T 一个点，麻了，感觉 T1 各种乱搞都能过。</p>
-<p>小图灵也出分了，和洛谷一样。现在各个网站的分数如下：<br>
-洛谷：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>344</mn></mrow><annotation encoding="application/x-tex">100+100+100+44=344</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">4</span><span class="mord">4</span></span></span></span><br>
+<p>下午讲 CSP，听说有人 luogu  T1 的数据 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>4</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 只 T 一个点，麻了，感觉 T1 各种乱搞都能过。</p>
+<p>小图灵也出分了，和 luogu 一样。现在各个网站的分数如下：<br>
+luogu ：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>344</mn></mrow><annotation encoding="application/x-tex">100+100+100+44=344</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">4</span><span class="mord">4</span></span></span></span><br>
 InfOJ：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>40</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>284</mn></mrow><annotation encoding="application/x-tex">100+100+40+44=284</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">8</span><span class="mord">4</span></span></span></span><br>
 小图灵：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>344</mn></mrow><annotation encoding="application/x-tex">100+100+100+44=344</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">4</span><span class="mord">4</span></span></span></span><br>
-计蒜客：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>70</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>314</mn></mrow><annotation encoding="application/x-tex">70+100+100+44=314</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">1</span><span class="mord">4</span></span></span></span></p>
+计蒜客：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>344</mn></mrow><annotation encoding="application/x-tex">100+100+100+44=344</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">4</span><span class="mord">4</span></span></span></span><br>
+（InfOJ 数据更新后就满了，计蒜客重交也满了）。</p>
 ]]></content>
     </entry>
     <entry>
@@ -199,8 +379,8 @@ int main()
     </entry>
     <entry>
         <title type="html"><![CDATA[P3356 火星探险问题]]></title>
-        <id>https://2745518585.github.io/post/p3356-solution/</id>
-        <link href="https://2745518585.github.io/post/p3356-solution/">
+        <id>https://2745518585.github.io/post/P3356-solution/</id>
+        <link href="https://2745518585.github.io/post/P3356-solution/">
         </link>
         <updated>2022-05-21T05:34:45.000Z</updated>
         <content type="html"><![CDATA[<p><a href="https://www.luogu.com.cn/problem/P3356">P3356 火星探险问题</a></p>
@@ -1105,102 +1285,6 @@ int main()
         }
     }
     printf(&quot;%lld&quot;,w);
-    return 0;
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[树链剖分]]></title>
-        <id>https://2745518585.github.io/post/Tree-chain-subdivision/</id>
-        <link href="https://2745518585.github.io/post/Tree-chain-subdivision/">
-        </link>
-        <updated>2022-05-07T12:11:24.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="前言">前言</h2>
-<p>树链剖分是用来解决树上问题的经典方法，而且常数极小。这其中的一个经典问题就是 <a href="https://www.luogu.com.cn/problem/P3379">最近公共祖先（LCA）</a>，这道题可以当做树剖的模板题。</p>
-<h2 id="基本思路">基本思路</h2>
-<p>树链剖分，顾名思义，是把树剖分成很多条链。为什么要剖分成链？因为在解决树上问题时，一条链往往可以一次性操作，就如模板题 LCA，我们在两个点向上跳时就可以直接跳到所在链的链头。如何剖分？剖分有多种方法，其中重链剖分和长链剖分较为常见。重链剖分就是将这个节点与其子节点的子树中节点个数最多的子节点（又称“重儿子”）与这个节点连在一起组成一条链，其余子节点各自成一条链；长链剖分就是将这个节点与其子节点的子树深度最深的子节点连在一起组成一条链，其与子节点各自成一条链。<br>
-<img src="https://2745518585.github.io/post-images/Tree-chain-subdivision-1.png" alt="1" width="300" loading="lazy"><br>
-比如这样一棵树，对它进行重链剖分后就是这个样子：<br>
-<img src="https://2745518585.github.io/post-images/Tree-chain-subdivision-2.png" alt="2" width="500" loading="lazy"><br>
-而长链剖分后就是这个样子：<br>
-<img src="https://2745518585.github.io/post-images/Tree-chain-subdivision-3.png" alt="3" width="500" loading="lazy"></p>
-<h2 id="实现">实现</h2>
-<p>树剖理解起来很容易，但是不容易实现。进行重链剖分对于每个节点，我们要处理一下信息：父亲，子树大小、深度、所在链头与重儿子。我们要进行两次 dfs，第一次处理基本信息：父亲、子树大小、深度与重儿子，第二次进行剖分，首先访问重儿子（顺序不能换，以后会用到），将当前节点的链头传递给重儿子；然后访问其余子节点，链头为子节点本身。这样我们就成功剖分了这棵树。<br>
-对于长链剖分，只需要将子树大小改为最大深度即可。</p>
-<h2 id="lca">LCA</h2>
-<p>要实现 LCA，我们需要先进行重链剖分，因为子树大小越多求这里面的点的可能越大。要找到点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span> 与点 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span> 的 LCA，首先判断两个点有没有在同一条链中，也就是两个点的链头是否相同。如果不相同，将深度较深的点跳转至其链头的父节点，再进行判断；如果在，那么深度较浅的那一个点就是 LCA。证明也非常简单，如果不在同一条链中，深度较深的点所在的链头一定不是另一个点的祖先，所以 LCA 也一定不在这条链中，就跳到上一条链。</p>
-<h2 id="code">code</h2>
-<pre><code class="language-cpp">#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-const int N=500001;
-int n,m,r,p=1,t[N];
-struct tree
-{
-    int f,s,d,t,z;
-}T[N];
-struct road
-{
-    int m,q;
-}a[N&lt;&lt;1];
-void road(int x,int y)
-{
-    a[++p].m=y;
-    a[p].q=t[x];
-    t[x]=p;
-}
-void dfs1(int x)
-{
-    T[x].s=1;
-    T[x].d=T[T[x].f].d+1;
-    for(int i=t[x];i!=0;i=a[i].q)
-    {
-        if(a[i].m==T[x].f) continue;
-        T[a[i].m].f=x;
-        dfs1(a[i].m);
-        T[x].s+=T[a[i].m].s;
-        if(T[a[i].m].s&gt;T[T[x].z].s) T[x].z=a[i].m;
-    }
-}
-void dfs2(int x,int k)
-{
-    T[x].t=k;
-    if(T[x].z!=0) dfs2(T[x].z,k);
-    for(int i=t[x];i!=0;i=a[i].q)
-    {
-        if(a[i].m==T[x].f||a[i].m==T[x].z) continue;
-        else dfs2(a[i].m,a[i].m);
-    }
-}
-int LCA(int x,int y)
-{
-    while(T[x].t!=T[y].t)
-    {
-        if(T[T[x].t].d&gt;=T[T[y].t].d) x=T[T[x].t].f;
-        else y=T[T[y].t].f;
-    }
-    if(T[x].d&lt;T[y].d) return x;
-    else return y;
-}
-int main()
-{
-    scanf(&quot;%d%d%d&quot;,&amp;n,&amp;m,&amp;r);
-    for(int i=1;i&lt;=n-1;++i)
-    {
-        int x,y;
-        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-        road(x,y);
-        road(y,x);
-    }
-    dfs1(r);
-    dfs2(r,r);
-    for(int i=1;i&lt;=m;++i)
-    {
-        int x,y;
-        scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-        printf(&quot;%d\n&quot;,LCA(x,y));
-    }
     return 0;
 }
 </code></pre>

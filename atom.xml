@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2745518585.github.io</id>
     <title>赵悦岑&apos;s Blog</title>
-    <updated>2022-11-03T06:31:36.633Z</updated>
+    <updated>2022-11-07T11:47:13.590Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2745518585.github.io"/>
     <link rel="self" href="https://2745518585.github.io/atom.xml"/>
@@ -234,6 +234,24 @@ InfOJ：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><m
 小图灵：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>344</mn></mrow><annotation encoding="application/x-tex">100+100+100+44=344</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">4</span><span class="mord">4</span></span></span></span><br>
 计蒜客：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>44</mn><mo>=</mo><mn>344</mn></mrow><annotation encoding="application/x-tex">100+100+100+44=344</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">4</span><span class="mord">4</span></span></span></span><br>
 （InfOJ 数据更新后就满了，计蒜客重交也满了）。</p>
+<h2 id="day-10">Day 10</h2>
+<p>今天 <s>看起来</s> 就要出分了，中午还在联考，守着看的，结果出了个寂寞，没看新闻。然后我又可以多活一天了。</p>
+<p>晚上 HA 出分了，引起了全国 OIer 的恐慌，大概有下面几条信息：</p>
+<ol>
+<li>T1 不连通只有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>50</mn></mrow><annotation encoding="application/x-tex">50</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span><span class="mord">0</span></span></span></span> 分。</li>
+<li>T1 输入不开 <code>ll</code> 不挂分。</li>
+<li>T3 <code>puts(&quot;NO\n&quot;)</code> 有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>45</mn></mrow><annotation encoding="application/x-tex">45</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">5</span></span></span></span> 分。</li>
+</ol>
+<p>然后我们机房大佬 <a href="https://feynn.github.io/">zc</a> T1 就没判连通，然后就有了：</p>
+<figure data-type="image" tabindex="1"><img src="https://2745518585.github.io/post-images/csp-s-2022-travels-1.png" alt="1" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://2745518585.github.io/post-images/csp-s-2022-travels-2.png" alt="2" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://2745518585.github.io/post-images/csp-s-2022-travels-3.png" alt="3" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://2745518585.github.io/post-images/csp-s-2022-travels-4.png" alt="4" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://2745518585.github.io/post-images/csp-s-2022-travels-5.png" alt="5" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="https://2745518585.github.io/post-images/csp-s-2022-travels-6.png" alt="6" loading="lazy"></figure>
+<p>更多请见 <a href="https://www.luogu.com.cn/user/302383#activity">Feyn 的动态</a></p>
+<figure data-type="image" tabindex="7"><img src="https://2745518585.github.io/post-images/csp-s-2022-travels-7.png" alt="7" loading="lazy"></figure>
+<p>然后又开始恐慌了。</p>
 ]]></content>
     </entry>
     <entry>
